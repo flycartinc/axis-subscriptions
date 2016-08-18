@@ -1,0 +1,44 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+    <form method="post" action="?p_id=1">
+        <div class="axisubs-plans">
+            <div class="axisubs-plans-lists">
+                {% for item in items %}
+                    <div class="axisubs-plans-con">
+                        <div class="axisubs-plans-con-i">
+                            <div class="axisubs-plans-title">
+                                <h3>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</h3>
+                            </div>
+                            <div class="axisubs-plans-description">
+                                <p>{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</p>
+                            </div>
+                            <div class="axisubs-plans-cost">
+                                <div><span class="axisubs-plans-label-block">Price: </span><span class="axisubs-plans-text">{{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] }}</span></div>
+                            </div>
+                            {% if item['meta'][item['ID']~'_axisubs_plans_setup_cost'] > 0 %}
+                                <div class="axisubs-plans-setup_cost">
+                                    <div><span class="axisubs-plans-label-block">Setup cost: </span><span class="axisubs-plans-text">{{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}</span></div>
+                                </div>
+                            {% endif %}
+                            <div class="axisubs-plans-duration">
+                                <div><span class="axisubs-plans-label-block">Duration: </span><span class="axisubs-plans-text">{{ item['meta'][item['ID']~'_axisubs_plans_period'] }} Days</span></div>
+                            </div>
+                            <div class="axisubs-plans-duration">
+                                <!--<input type="hidden" name="slug" value="" id="slug"/>
+                                <button type="button" class="btn" onclick="jQuery('#slug').val('{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}');this.form.submit();">Subscribe</button>-->
+                                <a class="axisubs-btn" href="index.php?axisubs_plan=plans&slug={{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}&id={{ item['ID'] }}">Subscribe</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        No plans available.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

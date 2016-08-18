@@ -1,0 +1,86 @@
+.axisubs-plans-con {
+    background: #f5f5f5 none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: inline-block;
+    width: 230px;
+}
+.axisubs-plans-con-i {
+    padding: 10px;
+    text-align: center;
+}
+.axisubs-plans-title > h3 {
+    margin: 10px 0 !important;
+}
+.axisubs-plans-description > p {
+    font-size: 12px;
+    margin: 5px 0;
+}
+.axisubs-plans-duration {
+    padding: 10px 0;
+}
+.axisubs-plans-label-block {
+    font-weight: bold;
+}
+.axisubs-btn {
+    background: #007acc none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #fff;
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+.axisubs-btn:hover,
+.axisubs-btn:focus{
+    background: #0098cc none repeat scroll 0 0;
+    color: #fff;
+}
+.axisubs-block-50 {
+    display: inline-block;
+    width: 49%;
+}
+.axisubs-plan_details-title {
+    background: #000 none repeat scroll 0 0;
+    color: #fff;
+    padding: 0 10px;
+}
+.axisubs-plan_details-summary,
+.axisubs-plan-billinfo-fields{
+    background: #ddd none repeat scroll 0 0;
+    padding: 10px;
+}
+.axisubs-plan-billinfo-con {
+    margin: 15px 0;
+}
+.axisubs-billinfo-f-c {
+    display: inline-block;
+    width: 49%;
+}
+.axisubs-billinfo-f-i {
+    padding: 5px 0;
+}
+.axisubs-billinfo-f-field {
+    display: inline-block;
+}
+.axisubs-plan-payment-i-block{
+    background: #ddd none repeat scroll 0 0;
+    padding: 10px;
+}
+.axisubs-subscribed-i-block {
+    display: inline-block;
+    min-width: 160px;
+    padding: 5px 10px;
+}
+.axisubs-subscribed-i-con{
+    background: #ddd none repeat scroll 0 0;
+    border-top: 2px solid;
+}
+.axisubs-subscribed-i-con:last-child{
+    border-bottom: 2px solid;
+}
+.axisubs-data-title {
+    font-weight: bold;
+}
+.axisubs-subscribed-block-data {
+    font-size: 13px;
+}

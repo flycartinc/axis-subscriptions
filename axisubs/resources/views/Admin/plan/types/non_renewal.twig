@@ -1,0 +1,29 @@
+<div class="axisubs-fields">
+    <div class="axisubs-fields-label">
+        <label for="axisub_plan_period">Period</label>
+    </div>
+    <div class="axisubs-fields-content">
+        <input type="text" name="axisubs[plans][period]" id="axisub_plan_period" value="{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}"/>
+        <span class="help-text">In days</span>
+    </div>
+</div>
+
+<div class="axisubs-fields">
+    <div class="axisubs-fields-label">
+        <label for="axisub_plan_price">Price</label>
+    </div>
+    <div class="axisubs-fields-content">
+        <input type="text" name="axisubs[plans][price]" id="axisub_plan_price" value="{{ item['meta'][item['ID']~'_axisubs_plans_price'] }}"/>
+        <span class="help-text">Plan price</span>
+    </div>
+</div>
+
+<div class="axisubs-fields">
+    <div class="axisubs-fields-label">
+        <label for="axisub_plan_setup_cost">Setup cost</label>
+    </div>
+    <div class="axisubs-fields-content">
+        <input type="text" name="axisubs[plans][setup_cost]" id="axisub_plan_setup_cost" value="{{ item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}"/>
+        <span class="help-text">One-time setup fee charged as part of the first invoice.</span>
+    </div>
+</div>

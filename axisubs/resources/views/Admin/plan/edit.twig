@@ -1,0 +1,114 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+  <h1>{{ pagetitle }}
+  </h1>
+  <form method="post" action="?page=plans-index">
+     <div class="axisubs-fields-con">
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_name">Plan Name</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[plans][name]" id="axisub_plan_name" value="{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}"/>
+                 <span class="help-text">A descriptive name for this plan. Please note that this will be displayed to customers.</span>
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_status">Status</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <select name="axisubs[plans][status]" id="axisub_plan_status" >
+                     <option value="1" {% if item['meta'][item['ID']~'_axisubs_plans_status'] == '1' %} selected {% endif %}>Enable</option>
+                     <option value="0" {% if item['meta'][item['ID']~'_axisubs_plans_status'] == '0' %} selected {% endif %}>Disable</option>
+                 </select>
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="axisub_plan_slug">Alias</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" name="axisubs[plans][slug]" id="axisub_plan_slug" value="{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}"/>
+                  <span class="help-text">Unique identifier used in hosted page URLs and API calls.</span>
+              </div>
+         </div>
+
+         <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="axisub_plan_description">Description</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <textarea id="axisub_plan_description" name="axisubs[plans][description]">{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</textarea>
+                  <span class="help-text">Description about the plan to show in the customer portal when users change their subscription.</span>
+              </div>
+         </div>
+
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_status">Type</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <select name="axisubs[plans][type]" id="axisub_plan_status" onchange="loadFieldsOfPlanType(this.value, '{{ item['ID'] }}')">
+                     <option value="free" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'free' %} selected {% endif %}>Free</option>
+                     <option value="non_renewal" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'non_renewal' %} selected {% endif %}>Non Renewal</option>
+                     <option value="renewal" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'renewal' %} selected {% endif %}>Renewal</option>
+                     <option value="renewal_with_trial" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'renewal_with_trial' %} selected {% endif %}>Renewal with trial</option>
+                     <option value="recurring" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'recurring' %} selected {% endif %}>Recurring</option>
+                     <option value="recurring_with_trial" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'recurring_with_trial' %} selected {% endif %}>Recurring with trial</option>
+                 </select>
+             </div>
+         </div>
+         <div class="axisubs-fields-plantypes-con-o loader-ajax-o">
+             <div class="loader-ajax"></div>
+             <div class="axisubs-fields-plantypes-c">
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_add_roles">Add Role</label>
+             </div>
+             <div class="axisubs-fields-content">
+                {% set add_roles = item['meta'][item['ID']~'_axisubs_plans_add_roles']|split(',') %}
+                <select name="axisubs[plans][add_roles][]" class="widget-hot-topics" id="axisub_plan_add_roles" multiple size="5">
+                     {% for key, role_name in role_names %}
+                     <option value="{{ key }}" {% if key in add_roles %} selected {% endif %}>{{ role_name }}</option>
+                     {% endfor %}
+                 </select>
+                 <span class="help-text">Users will be added to these WordPress! User roles when their subscription to this level is enabled.</span>
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_remove_roles">Remove Role</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 {% set add_roles = item['meta'][item['ID']~'_axisubs_plans_remove_roles']|split(',') %}
+                 <select name="axisubs[plans][remove_roles][]" id="axisub_plan_remove_roles" multiple size="5">
+                     {% for key, role_name in role_names %}
+                         <option value="{{ key }}" {% if key in add_roles %} selected {% endif %}>{{ role_name }}</option>
+                     {% endfor %}
+                 </select>
+                 <span class="help-text">Users will be removed from these WordPress! User roles when their subscription to this level is disabled.</span>
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <input type="hidden" name="task" value="save"/>
+                 <input type="hidden" name="post_type" value="axisubs_plans"/>
+                 <input type="hidden" name="id" value="{{ item['ID'] }}"/>
+             </div>
+             <div class="axisubs-fields-content">
+                 <button class="btn page-title-action" type="submit">Save</button>
+             </div>
+         </div>
+      </div>
+  </form>
+{% endblock %}

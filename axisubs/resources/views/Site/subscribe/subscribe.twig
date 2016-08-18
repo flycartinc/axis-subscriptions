@@ -1,0 +1,108 @@
+<div class="axisubs wrap">
+    {% if item['ID'] > 0 %}
+        {% set id = item['ID'] %}
+    <form action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">
+        <div class="axisubs-plan_details-header">
+            <div class="axisubs-plan_details-title">
+                <h3>{{ pagetitle }}</h3>
+            </div>
+            <div class="axisubs-plan_details-summary">
+                <div class="axisubs-plan-basic-fee">
+                    <div class="axisubs-block-50">
+                        <div class="axisubs-plan-basic-fee-text">
+                            Price
+                        </div>
+                    </div>
+                    <div class="axisubs-block-50">
+                        <div class="axisubs-plan-basic-fee-amt">
+                            {{ meta[id~'_axisubs_plans_price'] }}
+                        </div>
+                    </div>
+                </div>
+                {% if ((meta[id~'_axisubs_plans_setup_cost']>0) and (meta['allow_setupcost'] == "1")) %}
+                <div class="axisubs-plan-setup-fee">
+                    <div class="axisubs-block-50">
+                        <div class="axisubs-plan-setup-fee-text">
+                            Setup Cost
+                        </div>
+                    </div>
+                    <div class="axisubs-block-50">
+                        <div class="axisubs-plan-setup-fee-amt">
+                            {{ meta[id~'_axisubs_plans_setup_cost'] }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="axisubs-plan-total-fee">
+                    <div class="axisubs-block-50">
+                        <div class="axisubs-plan-total-fee-text">
+                            Total
+                        </div>
+                    </div>
+                    <div class="axisubs-block-50">
+                        <div class="axisubs-plan-total-fee-amt">
+                            {{ meta['total_price'] }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="axisubs-plan-billinfo-con">
+            <div class="axisubs-plan_details-title">
+                <h3>Billing Info</h3>
+            </div>
+            <div class="axisubs-plan-billinfo-fields">
+                <div class="axisubs-billinfo-f-c">
+                    <div class="axisubs-billinfo-f-i">
+                        <div class="axisubs-billinfo-f-label">
+                            Customer name
+                        </div>
+                        <div class="axisubs-billinfo-f-field">
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_first_name'] }}
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_last_name'] }}
+                        </div>
+                    </div>
+                </div>
+                <div class="axisubs-billinfo-f-c">
+                    <div class="axisubs-billinfo-f-i">
+                        <div class="axisubs-billinfo-f-label">
+                            Email
+                        </div>
+                        <div class="axisubs-billinfo-f-field">
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_email'] }}
+                        </div>
+                    </div>
+                </div>
+                <div class="axisubs-billinfo-f-c">
+                    <div class="axisubs-billinfo-f-i">
+                        <div class="axisubs-billinfo-f-label">
+                            Address
+                        </div>
+                        <div class="axisubs-billinfo-f-field">
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_address_line1'] }},
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_address_line2'] }},
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_city'] }},
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_province'] }},
+                            {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_country'] }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="axisubs-plan-payment-con">
+            <input type="hidden" name="task" value="update"/>
+            <input type="hidden" name="s_id" value="{{ subscriber['ID'] }}"/>
+            <div class="axisubs-plan-payment-i-block">
+                <div class="axisubs-plan-payment-button">
+                    <button type="submit">Pay now</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% else %}
+        <div class="axisubs-plan-notfound">
+            Invalid Data
+        </div>
+    {% endif %}
+</div>

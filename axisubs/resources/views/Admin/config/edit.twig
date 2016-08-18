@@ -1,0 +1,87 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+  <h1>{{ pagetitle }}
+  </h1>
+  <form method="post" action="?page=config-index">
+     <div class="axisubs-fields-con">
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_address1">Address Line 1</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][address1]" id="axisuba_config_address1" value="{{ all['meta'][all['ID']~'_axisubs_config_address1'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_address2">Address Line 2</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][address2]" id="axisuba_config_address2" value="{{ all['meta'][all['ID']~'_axisubs_config_address2'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_city">City</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][city]" id="axisuba_config_city" value="{{ all['meta'][all['ID']~'_axisubs_config_city'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_zip">Zip / Postal code</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][zip]" id="axisuba_config_zip" value="{{ all['meta'][all['ID']~'_axisubs_config_zip'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_country">Country</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][country]" id="axisuba_config_country" value="{{ all['meta'][all['ID']~'_axisubs_config_country'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_region">Zone / Region</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][region]" id="axisuba_config_region" value="{{ all['meta'][all['ID']~'_axisubs_config_region'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_currency">Currency</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][currency]" id="axisuba_config_currency" value="{{ all['meta'][all['ID']~'_axisubs_config_currency'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_currency_code">Currency Code</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][currency_code]" id="axisuba_config_currency_code" value="{{ all['meta'][all['ID']~'_axisubs_config_currency_code'] }}"/>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <input type="hidden" name="task" value="save"/>
+                 <input type="hidden" name="post_type" value="axisubs_config"/>
+                 <input type="hidden" name="id" value="{{ all['ID'] }}"/>
+             </div>
+             <div class="axisubs-fields-content">
+                 <button class="btn page-title-action" type="submit">Save</button>
+                 <a class="btn page-title-action" href="?page=plans-index">Cancel</a>
+             </div>
+         </div>
+      </div>
+  </form>
+
+{% endblock %}
