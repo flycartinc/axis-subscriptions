@@ -7,6 +7,7 @@
  */
 
 namespace Axisubs\Models;
+use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 class Plans extends Post{
@@ -77,7 +78,13 @@ class Plans extends Post{
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $meta['allow_setupcost'] = 1;
-            $meta['total_price'] = $meta[$item->ID.'_axisubs_plans_price']+$meta[$item->ID.'_axisubs_plans_setup_cost'];
+            if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_price'])) {
+                $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
+            } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
+                $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'];
+            } else {
+                $meta['total_price'] = 0;
+            }
             $item->meta = $meta;
         }
         return $item;
@@ -149,6 +156,44 @@ class Plans extends Post{
         return $subscribers;
     }
 
+    //Get user Details
+    public static function getUserDetails(){
+        $user = Helper::getUserDetails();
+        if($user->ID){
+            $item = Post::all()->where('post_type', 'axisubs_user_'.$user->ID)->first();
+            if($item) {
+                $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+                $item->meta = $meta;
+            }
+            return $item;
+        } else {
+            return array();
+        }
+    }
+
+    //Update User Details
+    public static function updateUserDetails($data){
+        $user = Helper::getUserDetails();
+        $postDB = Post::where('post_type', 'axisubs_user_'.$user->ID)->get();
+        $postTable = $postDB->first();
+        if(empty($postTable)){
+            $postTable = new Post();
+            $postTable->post_name = 'Users';
+            $postTable->post_title = 'Users';
+            $postTable->post_type = 'axisubs_user_'.$user->ID;
+            $postTable->save();
+        }
+        foreach ($data as $key => $val) {
+            $key = $postTable->ID . '_axisubs_user_' .$user->ID.'_'.$key;
+            if(is_array($val)){
+                $postTable->meta->$key = implode(',', $val);
+            } else {
+                $postTable->meta->$key = $val;
+            }
+        }
+        $result = $postTable->save();
+    }
+
     // save Subscribe
     public static function addSubscribe($post, $plans){
         $sessionData = Session()->get('axisubs_subscribers');
@@ -171,15 +216,28 @@ class Plans extends Post{
                 $postTable->meta->$key = $val;
             }
         }
+        //For storing User details
+        Plans::updateUserDetails($post['axisubs']['subscribe']);
+
         $existAlready = Plans::getSubscribedDetails($plans->ID);
-        $price = $plans->meta[$plans->ID.'_axisubs_plans_price'];
+        if(isset($plans->meta[$plans->ID.'_axisubs_plans_price']) && $plans->meta[$plans->ID.'_axisubs_plans_price'] > 0){
+            $price = $plans->meta[$plans->ID.'_axisubs_plans_price'];
+        } else {
+            $price = 0;
+        }
+
         $now = date("Y-m-d g:i:s");
         if(count($existAlready)){
             $startDate = Plans::getEndDate($existAlready);
             $setup_cost = 0;
         } else {
             $startDate = $now;
-            $setup_cost = $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'];
+            if(isset($plans->meta[$plans->ID.'_axisubs_plans_setup_cost']) && $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'] > 0){
+                $setup_cost = $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'];
+            } else {
+                $setup_cost = 0;
+            }
+
         }
         $totalCost = $price+$setup_cost;
 

@@ -2,6 +2,9 @@
 
 {% block body %}
 <div class="axisubs wrap">
+    <div style="text-align: right;" >
+        <a class="axisubs-btn" href="{{ subscribtions_url }}">My Subscriptions</a>
+    </div>
     <form method="post" action="?p_id=1">
         <div class="axisubs-plans">
             <div class="axisubs-plans-lists">
@@ -15,7 +18,15 @@
                                 <p>{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</p>
                             </div>
                             <div class="axisubs-plans-cost">
-                                <div><span class="axisubs-plans-label-block">Price: </span><span class="axisubs-plans-text">{{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] }}</span></div>
+                                <div><span class="axisubs-plans-label-block">Price: </span>
+                                    <span class="axisubs-plans-text">
+                                        {% if item['meta'][item['ID']~'_axisubs_plans_price'] > 0 %}
+                                            {{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] }}
+                                        {% else %}
+                                            {{ currencyData['code']~'0' }}
+                                        {% endif %}
+                                    </span>
+                                </div>
                             </div>
                             {% if item['meta'][item['ID']~'_axisubs_plans_setup_cost'] > 0 %}
                                 <div class="axisubs-plans-setup_cost">
@@ -23,7 +34,15 @@
                                 </div>
                             {% endif %}
                             <div class="axisubs-plans-duration">
-                                <div><span class="axisubs-plans-label-block">Duration: </span><span class="axisubs-plans-text">{{ item['meta'][item['ID']~'_axisubs_plans_period'] }} Days</span></div>
+                                <div><span class="axisubs-plans-label-block">Duration: </span>
+                                    <span class="axisubs-plans-text">
+                                    {% if item['meta'][item['ID']~'_axisubs_plans_period'] > 0 %}
+                                        {{ item['meta'][item['ID']~'_axisubs_plans_period'] }} Days
+                                    {% else %}
+                                        Forever
+                                    {% endif %}
+                                    </span>
+                                </div>
                             </div>
                             <div class="axisubs-plans-duration">
                                 <!--<input type="hidden" name="slug" value="" id="slug"/>

@@ -11,6 +11,7 @@ use Axisubs\Models\Plans;
 use Axisubs\Helper\Currency;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
+use Axisubs\Helper\Status;
 
 class SubscribeController{
     //Show all Plans
@@ -21,22 +22,23 @@ class SubscribeController{
         $site_url = get_site_url();
         $pagetitle = "Subscriptions";
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
-        $subscribers = Plans::loadAllSubscribes();
-        return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url'));
+        if($http->get('sid')) {
+            $subscriber = Plans::loadSubscriber($http->get('sid'));
+            $planDetails = array();
+            if(isset($subscriber->meta[$subscriber->ID.'_axisubs_subscribe_plan_id'])){
+                $planDetails = Plans::loadPlan($subscriber->meta[$subscriber->ID.'_axisubs_subscribe_plan_id']);
+                $status = new Status();
+                $statusCode = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_status'];
+                $statusText = $status->getStatusText($statusCode);
+            }
+            return view('@Axisubs/Site/subscribed/singlesubscription.twig', compact('pagetitle', 'subscribtions_url', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText'));
+        } else {
+            $subscribers = Plans::loadAllSubscribes();
+            return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url'));
+        }        
     }
 
     public function showSelectedPlan(){
-        //echo 12312312323;
-        //echo 123123;
-       // echo '<pre>';print_r($plan_slug);echo '</pre>';
-//       $pagetitle = "Plans";
-//        $items = Plans::allFrontEnd();
-//        $currency = new Currency();
-//        $currencyData['code'] = $currency->getCurrencyCode();
-//        $currencyData['currency'] = $currency->getCurrency();
-//        return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData'));
-//        return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','items', 'currencyData'));
-
         return view('@Axisubs/Site/subscribe/details.twig');
     }
 }

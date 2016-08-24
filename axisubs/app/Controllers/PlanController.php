@@ -8,10 +8,12 @@
 namespace Axisubs\Controllers;
 
 use Axisubs\Models\Plans;
+use Axisubs\Models\User;
 use Axisubs\Helper\Currency;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Herbert\Framework\Response;
+use Axisubs\Helper;
 
 class PlanController{
     //Show all Plans
@@ -21,10 +23,11 @@ class PlanController{
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
         $site_url = get_site_url();
+        $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
         if($http->get('slug')=='') {
             $pagetitle = "Plans";
             $items = Plans::allFrontEndPlans();
-            return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData', 'site_url'));
+            return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData', 'site_url', 'subscribtions_url'));
         } else {
             $pagetitle = "Order Summary";
             $item = Plans::loadPlan($http->get('id'));
@@ -49,26 +52,30 @@ class PlanController{
                     return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle','subscribtions_url'));
                 } else {
                     Notifier::error('Failed to subscribe');
-                    return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url'));
+                    return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'subscribtions_url'));
                 }
+            } else if($http->get('task')=='loginUser'){
+                $subscriber = Plans::loadOldSubscriber($item);
+                $user = Plans::getUserDetails();
+                $wp_user = Helper::getUserDetails();
+                $user_id = $wp_user->ID;
+                $result = User::LoginUser($http->all());
+                if($result){
+                    Notifier::success('Login success');
+                } else {
+                    Notifier::error('Invalid credentials');
+                }
+                return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id'));
             }
             $subscriber = Plans::loadOldSubscriber($item);
-            return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url'));
+            $user = Plans::getUserDetails();
+            $wp_user = Helper::getUserDetails();
+            $user_id = $wp_user->ID;
+            return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id'));
         }
     }
 
     public function showSelectedPlan(){
-        //echo 12312312323;
-        //echo 123123;
-       // echo '<pre>';print_r($plan_slug);echo '</pre>';
-//       $pagetitle = "Plans";
-//        $items = Plans::allFrontEnd();
-//        $currency = new Currency();
-//        $currencyData['code'] = $currency->getCurrencyCode();
-//        $currencyData['currency'] = $currency->getCurrency();
-//        return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData'));
-//        return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','items', 'currencyData'));
-
         return view('@Axisubs/Site/subscribe/details.twig');
     }
 }

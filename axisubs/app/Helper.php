@@ -105,4 +105,9 @@ class Helper {
         );
     }
 
+    public static function getUserDetails()
+    {
+        $user = wp_get_current_user();
+        return $user;
+    }
 }

@@ -15,7 +15,11 @@
                     </div>
                     <div class="axisubs-block-50">
                         <div class="axisubs-plan-basic-fee-amt">
-                            {{ meta[id~'_axisubs_plans_price'] }}
+                            {% if meta[id~'_axisubs_plans_price'] is defined and meta[id~'_axisubs_plans_price'] > 0 %}
+                                {{ currencyData['code']~meta[id~'_axisubs_plans_price'] }}
+                            {% else %}
+                                {{ currencyData['code']~'0' }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -28,7 +32,7 @@
                     </div>
                     <div class="axisubs-block-50">
                         <div class="axisubs-plan-setup-fee-amt">
-                            {{ meta[id~'_axisubs_plans_setup_cost'] }}
+                            {{ currencyData['code']~meta[id~'_axisubs_plans_setup_cost'] }}
                         </div>
                     </div>
                 </div>
@@ -41,7 +45,7 @@
                     </div>
                     <div class="axisubs-block-50">
                         <div class="axisubs-plan-total-fee-amt">
-                            {{ meta['total_price'] }}
+                            {{ currencyData['code']~meta['total_price'] }}
                         </div>
                     </div>
                 </div>

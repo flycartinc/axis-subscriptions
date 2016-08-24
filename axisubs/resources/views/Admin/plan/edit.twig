@@ -111,4 +111,7 @@
          </div>
       </div>
   </form>
+    <script>
+        loadFieldsOfPlanType('{{ item['meta'][item['ID']~'_axisubs_plans_type'] }}', '{{ item['ID'] }}')
+    </script>
 {% endblock %}

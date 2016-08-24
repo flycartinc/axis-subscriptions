@@ -60,7 +60,7 @@ class AdminController
             if($planType != ''){
                 return view('@Axisubs/Admin/plan/types/'.$planType.'.twig', compact('item'));
             } else {
-                return '';
+                return view('@Axisubs/Admin/plan/types/free.twig', compact('item'));
             }
         }
     }
