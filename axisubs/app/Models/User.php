@@ -66,6 +66,11 @@ class User extends Post{
                 if(!email_exists($userRegister['email'])){
                     $userID = wp_create_user($userRegister['email'], $userPassword['password1'], $userRegister['email']);
                     if($userID){
+                        $userdata['ID'] = $userID;
+                        $userdata['first_name'] = $userRegister['first_name'];
+                        $userdata['last_name'] = $userRegister['last_name'];
+                        $userdata['user_login'] = $userRegister['email'];
+                        wp_insert_user($userdata);
                         wp_signon( array('user_login' => $userRegister['email'], 'user_password' => $userPassword['password1']), '');
                         $result['status'] = 'success';
                         $result['message'] = 'Registration successfull. Please wait..';
