@@ -70,6 +70,7 @@ class User extends Post{
                         $userdata['first_name'] = $userRegister['first_name'];
                         $userdata['last_name'] = $userRegister['last_name'];
                         $userdata['user_login'] = $userRegister['email'];
+                        $userdata['user_email'] = $userRegister['email'];
                         wp_insert_user($userdata);
                         wp_signon( array('user_login' => $userRegister['email'], 'user_password' => $userPassword['password1']), '');
                         $result['status'] = 'success';

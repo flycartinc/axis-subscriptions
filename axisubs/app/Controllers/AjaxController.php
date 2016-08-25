@@ -32,4 +32,17 @@ class AjaxController
         $result = User::registerUser($http->all());
         echo json_encode($result);
     }
+
+    public function updateProfile(Http $http){
+        $post = $http->all();
+        $result = Plans::updateUserDetails($post['axisubs']['subscribe']);
+        if($result){
+            $data['status'] = 'success';
+            $data['message'] = 'Profile updated successfully. Please wait..';
+        } else {
+            $data['status'] = 'failed';
+            $data['message'] = 'Failed to update';
+        }
+        echo json_encode($data);
+    }
 }

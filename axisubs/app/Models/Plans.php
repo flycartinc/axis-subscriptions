@@ -208,6 +208,8 @@ class Plans extends Post{
             }
         }
         $result = $postTable->save();
+
+        return $result;
     }
 
     // save Subscribe

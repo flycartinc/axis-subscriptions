@@ -38,6 +38,52 @@ function loginUser(){
     })(axisubs.jQuery);
 }
 
+function cancelProfileUpdate(){
+    disableTags('#my_profile', '1');
+    axisubs.jQuery('.axisubs-profile-view-button').show();
+    axisubs.jQuery('.axisubs-profile-update-button').hide();
+}
+function editProfile(){
+    disableTags('#my_profile', '0');
+    axisubs.jQuery('.axisubs-profile-update-button').show();
+    axisubs.jQuery('.axisubs-profile-view-button').hide();
+}
+
+//update user Details
+function updateProfile(){
+    (function ($) {
+        var meesageText = $('.axisubs-profile-message-text');
+        meesageText.hide();
+        var valid = validateRequiredFields("#my_profile");
+        if(valid) {
+            var fields = $("#my_profile").serializeArray();
+            //fields.push({'name':'ajax','value':'ajax'});
+            $.ajax({
+                type: 'post',
+                url: $('#site_url').val()+'/index.php/axisubs-site-updateprofile',
+                dataType: 'json',
+                data: fields,
+                cache: false,
+                async: false,
+                success: function (json) {
+                    removeMessageClass('.axisubs-profile-message-text');
+                    meesageText.html(json['message']).show();
+                    if (json['status'] == 'success') {
+                        meesageText.addClass('message-success');
+                        location.reload();
+                    } else {
+                        meesageText.addClass('message-danger');
+                    }
+                    console.log(json)
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+    })(axisubs.jQuery);
+}
+
 //for registering User
 function registerUser(){
     (function ($) {
@@ -103,6 +149,14 @@ function removeMessageClass(id){
             .removeClass('message-danger')
         ;
     })(axisubs.jQuery);
+}
+
+function disableTags(id, val){
+    if(val == '1'){
+        axisubs.jQuery(id+' input, '+id+'select').attr('disabled', 'disabled');
+    } else {
+        axisubs.jQuery(id+' input, '+id+'select').removeAttr('disabled');
+    }
 }
 
 // For

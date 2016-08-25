@@ -1,0 +1,189 @@
+<div class="axisubs wrap">
+    {% if(wp_userD['ID']) %}
+        {% set user_id = wp_userD['ID'] %}
+        <form id="my_profile" method="post" action="">
+            <div class="axisubs-plan-billinfo-con">
+                <div class="axisubs-plan_details-title">
+                    <h3>Profile</h3>
+                </div>
+                <div class="axisubs-plan-billinfo-fields">
+                    <div class="axisubs-billinfo-f-c-full">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                User Name
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {{ wp_userD['user_name'] }} <span class="description">Username cannot be changed.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_first_name">
+                                    First Name
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% if(user['meta'][user['ID']~'_axisubs_user_'~user_id~'_first_name']) %}
+                                    {% set firstname = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_first_name'] %}
+                                {% else %}
+                                    {% set firstname = wp_userD['first_name'] %}
+                                {% endif %}
+                                <input type="text" class="required" value="{{ firstname }}" name="axisubs[subscribe][first_name]" id="axisubs_subscribe_first_name"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_last_name">
+                                    Last Name
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% if(user['meta'][user['ID']~'_axisubs_user_'~user_id~'_last_name']) %}
+                                    {% set last_name = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_last_name'] %}
+                                {% else %}
+                                    {% set last_name = wp_userD['last_name'] %}
+                                {% endif %}
+                                <input type="text" class="required" value="{{ last_name }}" name="axisubs[subscribe][last_name]" id="axisubs_subscribe_last_name"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_email">
+                                    Email
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% if(user['meta'][user['ID']~'_axisubs_user_'~user_id~'_email']) %}
+                                    {% set email = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_email'] %}
+                                {% else %}
+                                    {% set email = wp_userD['email'] %}
+                                {% endif %}
+                                <input type="text" class="required" value="{{ email }}" name="axisubs[subscribe][email]" id="axisubs_subscribe_email"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_address_line1">
+                                    Address Line 1
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set address_line1 = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_address_line1'] %}
+                                <input type="text" class="required" value="{{ address_line1 }}" name="axisubs[subscribe][address_line1]" id="axisubs_subscribe_address_line1"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_address_line2">
+                                    Address Line 2
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set address_line2 = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_address_line2'] %}
+                                <input type="text" name="axisubs[subscribe][address_line2]" value="{{ address_line2 }}" id="axisubs_subscribe_address_line2"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_city">
+                                    City
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set city = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_city'] %}
+                                <input type="text" class="required" value="{{ city }}" name="axisubs[subscribe][city]" id="axisubs_subscribe_city"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_pincode">
+                                    Zip code
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set pincode = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_pincode'] %}
+                                <input type="text" value="{{ pincode }}" name="axisubs[subscribe][pincode]" id="axisubs_subscribe_pincode"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_country">
+                                    Country
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set country = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_country'] %}
+                                <input type="text" class="required" value="{{ country }}" name="axisubs[subscribe][country]" id="axisubs_subscribe_country"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_province">
+                                    State
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set province = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_province'] %}
+                                <input type="text" class="required" value="{{ province }}" name="axisubs[subscribe][province]" id="axisubs_subscribe_province"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_phone">
+                                    Phone
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set phone = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_phone'] %}
+                                <input type="text" class="required" value="{{ phone }}" name="axisubs[subscribe][phone]" id="axisubs_subscribe_phone"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="axisubs-profile-message-con">
+                    <div class="axisubs-profile-message-text hide message">
+                    </div>
+                </div>
+                <div class="axisubs-profile-payment-con">
+                    <input type="hidden" name="task" value="save"/>
+                    <input type="hidden" id="site_url" value="{{ site_url }}"/>
+                    <div class="axisubs-profile-payment-i-block">
+                        <div class="axisubs-profile-update-button hide">
+                            <button type="button" onclick="updateProfile();">Update</button>
+                            <button type="button" onclick="cancelProfileUpdate();">Cancel</button>
+                        </div>
+                        <div class="axisubs-profile-view-button">
+                            <button type="button" onclick="editProfile();">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <script>
+            disableTags('#my_profile', '1');
+        </script>
+    {% else %}
+        Please login to view your profile
+    {% endif %}
+</div>

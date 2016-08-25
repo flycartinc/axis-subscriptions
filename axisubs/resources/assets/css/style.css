@@ -117,3 +117,13 @@
     background: #000 none repeat scroll 0 0;
     color: #fff;
 }
+.axisubs-billinfo-f-i .description{
+    font-size: 14px;
+    font-style: italic;
+}
+.axisubs .clear{
+    clear: both;
+}
+.axisubs .message{
+    margin: 10px 0;
+}

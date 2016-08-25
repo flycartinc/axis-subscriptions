@@ -31,3 +31,9 @@ $router->post([
     'uri' => '/axisubs-site-registeruser',
     'uses' => __NAMESPACE__ . '\Controllers\AjaxController@registerUser'
 ]);
+
+$router->post([
+    'as' => "axisubsAjaxSiteUpdateProfile",
+    'uri' => '/axisubs-site-updateprofile',
+    'uses' => __NAMESPACE__ . '\Controllers\AjaxController@updateProfile'
+]);

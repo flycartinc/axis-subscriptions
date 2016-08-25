@@ -2,6 +2,7 @@
 
 /** @var \Herbert\Framework\Shortcode $shortcode */
 
+//For displaying plans
 $shortcode->add(
     'AxisubsAllPlans',
     __NAMESPACE__ . '\Controllers\PlanController@showAllPlans',
@@ -10,25 +11,19 @@ $shortcode->add(
     ]
 );
 
-$shortcode->add(
-    'StorePressSingleProductTitle',
-    __NAMESPACE__ . '\Controllers\PlanController@showAllPlan',
-    [
-        'post_id' => 'postId'
-    ]
-);
-
-$shortcode->add(
-    'StorePressSingleProduct',
-    __NAMESPACE__ . '\Controllers\PlanController@showSelectedPlan',
-    [
-        'post_id' => 'postId'
-    ]
-);
-
+//For displaying Subscriptions
 $shortcode->add(
     'AxisubsAllSubscriptions',
     __NAMESPACE__ . '\Controllers\SubscribeController@showAllSubscriptions',
+    [
+        'post_id' => 'postId'
+    ]
+);
+
+//For displaying Profile View
+$shortcode->add(
+    'AxisubsMyProfile',
+    __NAMESPACE__ . '\Controllers\ProfileController@showMyProfile',
     [
         'post_id' => 'postId'
     ]
