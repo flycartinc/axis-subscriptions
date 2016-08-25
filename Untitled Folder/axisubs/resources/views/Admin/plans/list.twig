@@ -1,0 +1,64 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+    <h1>{{ pagetitle }}
+        <a class="page-title-action" href="?page=plans-index&task=new">Add New</a>
+    </h1>
+
+    <form method="post" action="">
+        <div class="axisubs-plans">
+            <div class="axisubs-plans">
+                {% for item in items %}
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="col-data">
+                                <span class="col-data-title">Name: </span>
+                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</span>
+                            </div>
+                            <div class="col-data">
+                                <span class="col-data-title">Status: </span>
+                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_status'] }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="col-data">
+                                <span class="col-data-title">Slug: </span>
+                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}</span>
+                            </div>
+                            <div class="col-data">
+                                <span class="col-data-title">Period: </span>
+                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="col-data">
+                                <span class="col-data-title">Price: </span>
+                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_price'] }}</span>
+                            </div>
+                            <div class="col-data">
+                                <span class="col-data-title">Setup cost: </span>
+                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="col-data">
+                                <span class="col-data-content">
+                                    <a class="page-title-action" href="?page=plans-index&task=edit&id={{ item['ID'] }}">Edit</a>
+                                </span>
+                                 <span class="col-data-content">
+                                    <a class="page-title-action" href="?page=plans-index&task=delete&id={{ item['ID'] }}">Delete</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        No plans added.
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

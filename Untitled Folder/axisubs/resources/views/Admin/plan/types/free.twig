@@ -1,0 +1,25 @@
+<div class="axisubs-fields">
+    <div class="axisubs-fields-label">
+        <label for="axisub_plan_period">Duration</label>
+    </div>
+    <div class="axisubs-fields-content">
+        <input type="text" name="axisubs[plans][period]" id="axisub_plan_period" value="{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}"/>
+        <input type="checkbox" name="axisubs[plans][period_forever]" id="axisub_plan_period_forever" value="1" {% if item['meta'][item['ID']~'_axisubs_plans_period_forever'] == '1' %} checked {% endif %}/>
+        <label for="axisub_plan_period_forever">Forever</label>
+    </div>
+</div>
+
+<div class="axisubs-fields">
+    <div class="axisubs-fields-label">
+        <label for="axisub_plan_period">Units of Duration</label>
+    </div>
+    <div class="axisubs-fields-content">
+        <select name="axisubs[plans][period_units]" id="axisub_plan_period_units">
+            <option value="D" {% if item['meta'][item['ID']~'_axisubs_plans_period_units'] == 'D' %} selected {% endif %}>Days</option>
+            <option value="W" {% if item['meta'][item['ID']~'_axisubs_plans_period_units'] == 'W' %} selected {% endif %}>Weeks</option>
+            <option value="M" {% if item['meta'][item['ID']~'_axisubs_plans_period_units'] == 'M' %} selected {% endif %}>Months</option>
+            <option value="Y" {% if item['meta'][item['ID']~'_axisubs_plans_period_units'] == 'Y' %} selected {% endif %}>Years</option>
+        </select>
+        <span class="help-text">Regular subscription units of duration.</span>
+    </div>
+</div>
