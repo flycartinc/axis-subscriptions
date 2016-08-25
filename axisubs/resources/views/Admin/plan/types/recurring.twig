@@ -3,7 +3,7 @@
         <label for="axisub_plan_period">Duration</label>
     </div>
     <div class="axisubs-fields-content">
-        <input type="text" name="axisubs[plans][period]" id="axisub_plan_period" value="{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}"/>
+        <input type="text" class="required" name="axisubs[plans][period]" id="axisub_plan_period" value="{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}"/>
     </div>
 </div>
 
@@ -27,7 +27,7 @@
         <label for="axisub_plan_price">Price</label>
     </div>
     <div class="axisubs-fields-content">
-        <input type="text" name="axisubs[plans][price]" id="axisub_plan_price" value="{{ item['meta'][item['ID']~'_axisubs_plans_price'] }}"/>
+        <input type="text" class="required" name="axisubs[plans][price]" id="axisub_plan_price" value="{{ item['meta'][item['ID']~'_axisubs_plans_price'] }}"/>
         <span class="help-text">Plan price</span>
     </div>
 </div>

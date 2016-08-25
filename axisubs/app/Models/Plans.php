@@ -91,6 +91,17 @@ class Plans extends Post{
     }
 
     // save Plans
+    public static function deletePlan($id){
+        if($id){
+            $postDB = Post::where('post_type', 'axisubs_plans')->get();
+            $postTable = $postDB->find($id);
+            return $postTable->delete();
+        } else {
+            return false;
+        }
+    }
+
+    // save Plans
     public static function savePlans($post){
         if($post['id']){
             $postDB = Post::where('post_type', 'axisubs_plans')->get();
@@ -110,6 +121,11 @@ class Plans extends Post{
             } else {
                 $postTable->meta->$key = $val;
             }
+        }
+
+        $forever = $postTable->ID . '_axisubs_plans_period_forever';
+        if(!isset($post['axisubs']['plans']['period_forever'])){
+            $postTable->meta->$forever = '0';
         }
         $result = $postTable->save();
         if($result){

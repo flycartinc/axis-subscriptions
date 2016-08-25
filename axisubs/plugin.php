@@ -64,3 +64,6 @@ add_filter('single_template', 'axisubs_single_subscribe_template', '');
 add_action('axisubs_single_plan', 'filter_single_plan_display', '');
 
 add_action('axisubs_single_subscribe', 'filter_single_subscribe_display', '');
+
+
+http://localhost/wordpress/axisubs/dev/wp-admin/admin.php?page=plans-index&task=edit&id=5

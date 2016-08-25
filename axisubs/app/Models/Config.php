@@ -41,7 +41,9 @@ class Config extends Post
     public static function all($columns = ['*'])
     {
         $item = parent::all()->where('post_type', 'axisubs_config')->first();
-        $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+        if($item->meta() != null){
+            $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+        }
         return $item;
     }
 

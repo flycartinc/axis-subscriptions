@@ -16,8 +16,18 @@ $enqueue->admin([
     'src'    => Helper::assetUrl('/js/jquery-3.1.0.min.js'),
     'filter' => [ 'panel' => '*' ]
 ]);
+
 $enqueue->admin([
     'as'     => 'adminJS',
     'src'    => Helper::assetUrl('/js/admin.js'),
     'filter' => [ 'panel' => '*' ]
+]);
+
+$enqueue->front([
+    'as'     => 'siteJquery',
+    'src'    => Helper::assetUrl('/js/jquery-3.1.0.min.js')
+]);
+$enqueue->front([
+    'as'     => 'siteJS',
+    'src'    => Helper::assetUrl('/js/site.js')
 ]);

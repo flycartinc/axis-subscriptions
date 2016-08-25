@@ -17,11 +17,12 @@ class AdminController
     {
         $role_names = wp_roles()->role_names;
         $pagetitle = 'Plans';
+        $site_url = get_site_url();
         if ($http->has('task')) {
             if ($http->get('task') == 'new') {
                 $item = array();
                 $pagetitle = 'Add new plan';
-                return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names'));
+                return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url'));
             } else if ($http->get('task') == 'save') {
                 $axisubPost = $http->get('axisubs');
                 if (isset($axisubPost['plans'])) {
@@ -30,18 +31,27 @@ class AdminController
                     if ($result) {
                         Notifier::success('Saved successfully');
                         $item = Plans::loadPlan($result);
-                        return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names'));
+                        return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url'));
                     } else {
                         $item = $axisubPost['plans'];
                         Notifier::error('Failed to save');
-                        return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names'));
+                        return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url'));
                     }
                 }
             } else if ($http->get('task') == 'edit') {
                 if ($http->get('id')) {
                     $item = Plans::loadPlan($http->get('id'));
                     $pagetitle = 'Edit Plan';
-                    return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names'));
+                    return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url'));
+                }
+            } else if ($http->get('task') == 'delete') {
+                if ($http->get('id')) {
+                    $result = Plans::deletePlan($http->get('id'));
+                    if ($result) {
+                        Notifier::success('Deleted successfully');
+                    } else {
+                        Notifier::error('Failed to delete');
+                    }
                 }
             }
         }

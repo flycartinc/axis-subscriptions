@@ -4,6 +4,8 @@
     </div>
     <div class="axisubs-fields-content">
         <input type="text" name="axisubs[plans][period]" id="axisub_plan_period" value="{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}"/>
+        <input type="checkbox" name="axisubs[plans][period_forever]" id="axisub_plan_period_forever" value="1" {% if item['meta'][item['ID']~'_axisubs_plans_period_forever'] == '1' %} checked {% endif %}/>
+        <label for="axisub_plan_period_forever">Forever</label>
     </div>
 </div>
 

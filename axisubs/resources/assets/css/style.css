@@ -84,3 +84,36 @@
 .axisubs-subscribed-block-data {
     font-size: 13px;
 }
+.axisubs .invalid-field{
+    border: 1px solid red !important;
+}
+.axisubs .message-success {
+    background-color: #fff;
+    border-left: 4px solid #5cb85c;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+    padding: 12px;
+}
+.axisubs .message-danger {
+    background-color: #fff;
+    border-left: 4px solid #d9534f;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+    padding: 12px;
+}
+.axisubs .hide{
+    display: none;
+}
+.login_registration_tab_ul{
+    margin: 10px 0 0 0;
+}
+.login_registration_tab_ul > li {
+    background: #ddd none repeat scroll 0 0;
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+}
+.login_registration_tab_ul > li.active{
+    background: #000 none repeat scroll 0 0;
+    color: #fff;
+}

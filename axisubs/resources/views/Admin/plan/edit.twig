@@ -4,14 +4,14 @@
 <div class="axisubs wrap">
   <h1>{{ pagetitle }}
   </h1>
-  <form method="post" action="?page=plans-index">
+  <form name="planForm" id="planForm" method="post" action="?page=plans-index" onsubmit="return validatePlan();">
      <div class="axisubs-fields-con">
          <div class="axisubs-fields">
              <div class="axisubs-fields-label">
                  <label for="axisub_plan_name">Plan Name</label>
              </div>
              <div class="axisubs-fields-content">
-                 <input type="text" name="axisubs[plans][name]" id="axisub_plan_name" value="{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}"/>
+                 <input type="text" class="required" name="axisubs[plans][name]" id="axisub_plan_name" value="{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}"/>
                  <span class="help-text">A descriptive name for this plan. Please note that this will be displayed to customers.</span>
              </div>
          </div>
@@ -33,7 +33,7 @@
                   <label for="axisub_plan_slug">Alias</label>
               </div>
               <div class="axisubs-fields-content">
-                  <input type="text" name="axisubs[plans][slug]" id="axisub_plan_slug" value="{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}"/>
+                  <input type="text" class="required" name="axisubs[plans][slug]" id="axisub_plan_slug" value="{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}"/>
                   <span class="help-text">Unique identifier used in hosted page URLs and API calls.</span>
               </div>
          </div>
@@ -43,7 +43,7 @@
                   <label for="axisub_plan_description">Description</label>
               </div>
               <div class="axisubs-fields-content">
-                  <textarea id="axisub_plan_description" name="axisubs[plans][description]">{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</textarea>
+                  <textarea id="axisub_plan_description" class="required" name="axisubs[plans][description]">{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</textarea>
                   <span class="help-text">Description about the plan to show in the customer portal when users change their subscription.</span>
               </div>
          </div>
@@ -110,6 +110,7 @@
              </div>
          </div>
       </div>
+      <input type="hidden" id="site_url" value="{{ site_url }}"/>
   </form>
     <script>
         loadFieldsOfPlanType('{{ item['meta'][item['ID']~'_axisubs_plans_type'] }}', '{{ item['ID'] }}')

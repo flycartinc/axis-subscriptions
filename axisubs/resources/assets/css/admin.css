@@ -72,3 +72,6 @@
     background-color: #fff;
     opacity: .5;
 }
+.axisubs .invalid-field{
+    border: 1px solid red !important;
+}

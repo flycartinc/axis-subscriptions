@@ -54,18 +54,6 @@ class PlanController{
                     Notifier::error('Failed to subscribe');
                     return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'subscribtions_url'));
                 }
-            } else if($http->get('task')=='loginUser'){
-                $subscriber = Plans::loadOldSubscriber($item);
-                $user = Plans::getUserDetails();
-                $wp_user = Helper::getUserDetails();
-                $user_id = $wp_user->ID;
-                $result = User::LoginUser($http->all());
-                if($result){
-                    Notifier::success('Login success');
-                } else {
-                    Notifier::error('Invalid credentials');
-                }
-                return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id'));
             }
             $subscriber = Plans::loadOldSubscriber($item);
             $user = Plans::getUserDetails();

@@ -16,6 +16,18 @@ $router->get([
 
 $router->post([
     'as' => "axisubsAjax",
-    'uri' => 'axisubs-admin-ajax',
+    'uri' => '/axisubs-admin-ajax',
     'uses' => __NAMESPACE__ . '\Controllers\AdminController@ajaxCall'
+]);
+
+$router->post([
+    'as' => "axisubsAjaxSite",
+    'uri' => '/axisubs-site-login',
+    'uses' => __NAMESPACE__ . '\Controllers\AjaxController@loginUser'
+]);
+
+$router->post([
+    'as' => "axisubsAjaxSiteRegisterUser",
+    'uri' => '/axisubs-site-registeruser',
+    'uses' => __NAMESPACE__ . '\Controllers\AjaxController@registerUser'
 ]);
