@@ -6,8 +6,6 @@
         <a class="page-title-action" href="?page=plans-index&task=new">Add New</a>
     </h1>
     <form method="post" action="?page=subscriptions-index" id="axisubs_list_form">
-        {{ paginationD['limitbox'] |raw }}
-        {{ paginationD['links'] |raw }}
         {% set subscribers = items %}
         <div class="axisubs-subscribed-con">
             {% for subscribe in subscribers %}
@@ -64,7 +62,8 @@
                 </div>
             {% endfor %}
         </div>
-
+        {{ paginationD['limitbox'] | raw }}
+        {{ paginationD['links'] | raw }}
     </form>
 </div>
 {% endblock %}

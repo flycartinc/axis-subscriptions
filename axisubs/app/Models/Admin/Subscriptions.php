@@ -11,7 +11,7 @@ use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 use Axisubs\Models\Plans;
-//use Herbert\Pagination\Paginator;
+
 class Subscriptions extends Post{
     /**
      * The table associated with the model.
@@ -46,19 +46,34 @@ class Subscriptions extends Post{
         if(isset($post['limit']) && $post['limit']){
             Subscriptions::$_limit = $post['limit'];
         } else {
-            Subscriptions::$_limit = 5;
+            Subscriptions::$_limit = 10;
         }
     }
-    
+
+    public static function getPaginationStartAndLimit($total = 0){
+        Subscriptions::$_total = $total;
+        $balance = Subscriptions::$_total-(Subscriptions::$_limit*Subscriptions::$_start);
+        if($balance < Subscriptions::$_limit){
+            $limit = $balance;
+        } else {
+            $limit = Subscriptions::$_limit;
+        }
+        $result['start'] = Subscriptions::$_start;
+        $result['limit'] = $limit;
+
+        return $result;
+    }
+
+
     // Load all Subscriptions
     public static function all($columns = ['*']){
-        $postO = new Post();//parent::all();
+        $postO = new Post();
         //$items = parent::all()->where('post_type', 'axisubs_subscribe')
         $totalItem = $postO->all()->where('post_type', 'axisubs_subscribe');
-        Subscriptions::$_total = count($totalItem);
-//        $items = $totalItem->forPage(2, 5);
-
-        $items = $totalItem->forPage(Subscriptions::$_start, Subscriptions::$_limit);
+        //get pagination start and limit
+        $pageLimit = Subscriptions::getPaginationStartAndLimit(count($totalItem));
+        //get limited data
+        $items = $totalItem->forPage($pageLimit['start'], $pageLimit['limit']);
         if(count($items)){
             foreach ($items as $key => $item){
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();

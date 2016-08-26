@@ -19,7 +19,7 @@ class Pagination
      * */
     public function getLimitBox(){
         $limitStart = 5;
-        $limitHtml = '<select name="limit" id="limit" onchange="document.getElementById(\'axisubs_list_form\').submit();">';
+        $limitHtml = '<select name="limit" id="limit" onchange="document.getElementById(\'limitstart\').value=0;document.getElementById(\'axisubs_list_form\').submit();">';
         for($i = 1; $i <= 20; $i++) {
             $val = $i*$limitStart;
             if($val == $this->_limit)
@@ -33,30 +33,63 @@ class Pagination
         return $limitHtml;
     }
 
-    public function getPaginationLinks(){
-        $limitStart = 5;
+    public function getPaginationLinks($limitPage = 2){
         $html = '';
         if($this->_total > $this->_limit){
             $rem = $this->_total % $this->_limit;
-            $totalPage = $this->_total / $this->_limit;
+            $totalPage = floor($this->_total / $this->_limit);
             if($rem>0){
                 $totalPage++;
             }
             $html .= '<ul class="pagination-ul">';
-            $html .= '<li><a href="#"><</a></li>';
-            for ($i = 1; $i <= $totalPage; $i++){
+            if($this->_start == 0) {
+                $html .= '<li class="pag-disabled"><</li>';
+            } else {
+                $html .= '<li><a href="#" ';
+                $html .= 'onclick="document.getElementById(\'limitstart\').value=0;document.getElementById(\'axisubs_list_form\').submit();"';
+                $html .= '><</a></li>';
+            }
+            $i = 1;
+//            if($limitPage){
+//                if($totalPage-$limitPage){
+//                    $i = $limitPage-1;
+//                    $html .= '<li class="pag-disabled">';
+//                    $html .= '...';
+//                    $html .='</li>';
+//                } else {
+//                    $i = 1;
+//                }
+//            } else {
+//                $i = 1;
+//            }
+            $limitPageCount = 0;
+            for ($i; $i <= $totalPage; $i++){
                 $start = ($i-1);
-                $html .= '<li>';
+//                if($limitPage && (($limitPageCount) == $limitPage+1)){
+//                    $html .= '<li class="pag-disabled">';
+//                    $html .= '...';
+//                    $html .='</li>';
+//                    break;
+//                }
                 if($start != $this->_start) {
+                    $html .= '<li>';
                     $html .= '<a href="#" ';
                     $html .= 'onclick="document.getElementById(\'limitstart\').value=' . $start . ';document.getElementById(\'axisubs_list_form\').submit();"';
                     $html .= '>' . $i . '</a>';
                 } else {
+                    $html .= '<li class="pag-disabled">';
                     $html .= $i;
                 }
                 $html .='</li>';
+                $limitPageCount++;
             }
-            $html .= '<li><a href="#">'.'>'.'</a></li>';
+            if($this->_start == ($totalPage-1)) {
+                $html .= '<li class="pag-disabled">'.'>'.'</li>';
+            } else {
+                $html .= '<li><a href="#" ';
+                $html .= 'onclick="document.getElementById(\'limitstart\').value='.($totalPage-1).';document.getElementById(\'axisubs_list_form\').submit();"';
+                $html .= '>></a></li>';
+            }
             $html .= '</ul>';
             $html .= '<input type="hidden" id="limitstart" name="limitstart" value="'.$this->_start.'">';
         }

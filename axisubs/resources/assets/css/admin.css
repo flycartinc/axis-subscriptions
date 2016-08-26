@@ -75,3 +75,15 @@
 .axisubs .invalid-field{
     border: 1px solid red !important;
 }
+/* pagination */
+ul.pagination-ul > li {
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+ul.pagination-ul > li.pag-disabled{
+    padding: 10px;
+}
+ul.pagination-ul > li > a{
+    display: inline-block;
+    padding: 10px;
+}

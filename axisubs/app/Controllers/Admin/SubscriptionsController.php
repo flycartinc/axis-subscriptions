@@ -40,7 +40,6 @@ class SubscriptionsController
         Subscriptions::populateStates($http->all());
         // Load Listing layout
         $items = Subscriptions::all();
-        Subscriptions::$_total;
         $pagination = new Pagination(Subscriptions::$_start, Subscriptions::$_limit, Subscriptions::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
