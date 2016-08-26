@@ -79,10 +79,11 @@ class Subscriptions extends Post{
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
                 if(isset($item->meta[$item->ID.'_axisubs_subscribe_plan_id'])) {
                     $plan = Plans::loadPlan($item->meta[$item->ID . '_axisubs_subscribe_plan_id']);
+                    $item->plan = $plan;
                 } else {
                     unset($items[$key]);
                 }
-                $item->plan = $plan;
+
             }
         }
 

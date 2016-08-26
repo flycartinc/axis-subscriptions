@@ -99,7 +99,7 @@ ul.pagination-ul > li > a{
     border: 1px solid #ddc4dd;
     left: 100%;
     min-width: 300px;
-    padding: 0 10px;
+    padding: 5px 10px;
     position: absolute;
     top: 0;
     width: 100%;
@@ -132,4 +132,10 @@ ul.pagination-ul > li > a{
 }
 .transaction-history-text {
     font-weight: bold;
+}
+.clear{
+    clear: both;
+}
+.axisubs_button_container{
+    margin: 10px 0;
 }

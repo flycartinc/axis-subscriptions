@@ -27,15 +27,8 @@ class CustomersController
         $pagetitle = 'Customers';
         $site_url = get_site_url();
         if ($http->get('task') == 'view' && $http->has('id')) {
-            $customer = Customers::loadCustomer($http->get('id'));
-            $planDetails = array();
-//            if(isset($subscriber->meta[$subscriber->ID.'_axisubs_subscribe_plan_id'])){
-//                $planDetails = Customers::loadPlan($subscriber->meta[$subscriber->ID.'_axisubs_subscribe_plan_id']);
-//                $status = new Status();
-//                $statusCode = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_status'];
-//                $statusText = $status->getStatusText($statusCode);
-//            }
-            return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText'));
+            $item = Customers::loadCustomer($http->get('id'));
+            return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'item', 'currencyData', 'site_url'));
         } else if($http->get('task') == 'edit' && $http->has('id')){
 
         } else if($http->get('task') == 'delete' && $http->has('id')){

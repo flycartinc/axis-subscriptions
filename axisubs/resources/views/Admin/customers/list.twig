@@ -63,13 +63,13 @@
                             <div class="col-3">
                                 <div class="col-data">
                                     <span class="col-data-content">
-                                        <a class="page-title-action" href="?page=customers-index&task=view&id={{ item['ID'] }}">View</a>
+                                        <a class="page-title-action" href="?page=customers-index&task=view&id={{ item['meta'][metaPrefix~'user_id'] }}">View</a>
                                     </span>
                                     <span class="col-data-content">
-                                        <a class="page-title-action" href="?page=customers-index&task=edit&id={{ item['ID'] }}">Edit</a>
+                                        <a class="page-title-action" href="?page=customers-index&task=edit&id={{ item['meta'][metaPrefix~'user_id'] }}">Edit</a>
                                     </span>
                                     <span class="col-data-content">
-                                        <a class="page-title-action" href="?page=customers-index&task=delete&id={{ item['ID'] }}">Delete</a>
+                                        <a class="page-title-action" href="?page=customers-index&task=delete&id={{ item['meta'][metaPrefix~'user_id'] }}">Delete</a>
                                     </span>
                                 </div>
                             </div>

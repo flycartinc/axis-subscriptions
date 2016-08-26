@@ -98,7 +98,7 @@ class Customers extends Post{
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $item->meta = $meta;
-            $item->subscription = Plans::loadAllSubscribes($id);
+            $item->subscription = Customers::loadSubscriptionsByUserId($id);
         }
         return $item;
     }
