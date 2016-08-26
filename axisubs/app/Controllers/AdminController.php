@@ -10,6 +10,7 @@ namespace Axisubs\Controllers;
 use Axisubs\Models\Plans;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
+use Axisubs\Helper\Pagination;
 
 class AdminController
 {
@@ -55,9 +56,13 @@ class AdminController
                 }
             }
         }
+        Plans::populateStates($http->all());
         // Load Listing layout
         $items = Plans::all();
-        return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items'));
+        $pagination = new Pagination(Plans::$_start, Plans::$_limit, Plans::$_total);
+        $paginationD['limitbox'] = $pagination->getLimitBox();
+        $paginationD['links'] = $pagination->getPaginationLinks();
+        return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items', 'paginationD'));
     }
 
     public function ajaxCall(Http $http)

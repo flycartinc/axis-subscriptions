@@ -31,9 +31,47 @@ class Plans extends Post{
      */
     public $timestamps = false;
 
+    public static $_total;
+    public static $_start;
+    public static $_limit;
+
+    public static function populateStates($post){
+        if(isset($post['limitstart']) && $post['limitstart']){
+            Plans::$_start = $post['limitstart'];
+        } else {
+            Plans::$_start = 0;
+        }
+        if(isset($post['limit']) && $post['limit']){
+            Plans::$_limit = $post['limit'];
+        } else {
+            Plans::$_limit = 10;
+        }
+    }
+
+    public static function getPaginationStartAndLimit($total = 0){
+        Plans::$_total = $total;
+        $balance = Plans::$_total-(Plans::$_limit*Plans::$_start);
+        if($balance < Plans::$_limit){
+            $limit = $balance;
+        } else {
+            $limit = Plans::$_limit;
+        }
+        $result['start'] = Plans::$_start;
+        $result['limit'] = $limit;
+
+        return $result;
+    }
+
     // Load all Plans
     public static function all($columns = ['*']){
-        $items = parent::all()->where('post_type', 'axisubs_plans');        
+//        $items = parent::all()->where('post_type', 'axisubs_plans');
+        $postO = new Post();
+        $totalItem = $postO->all()->where('post_type', 'axisubs_plans');
+        //get pagination start and limit
+        $pageLimit = Plans::getPaginationStartAndLimit(count($totalItem));
+        //get limited data
+        $items = $totalItem->forPage($pageLimit['start'], $pageLimit['limit']);
+
         if(count($items)){
             foreach ($items as $key => $item){
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();

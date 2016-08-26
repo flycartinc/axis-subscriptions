@@ -6,7 +6,7 @@
         <a class="page-title-action" href="?page=plans-index&task=new">Add New</a>
     </h1>
 
-    <form method="post" action="">
+    <form method="post" action="?page=plans-index" id="axisubs_list_form">
         <div class="axisubs-plans">
             <div class="axisubs-plans">
                 {% for item in items %}
@@ -58,6 +58,8 @@
                     </div>
                 {% endfor %}
             </div>
+            {{ paginationD['limitbox'] | raw }}
+            {{ paginationD['links'] | raw }}
         </div>
     </form>
 </div>

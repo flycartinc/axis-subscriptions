@@ -91,8 +91,8 @@ class Pagination
                 $html .= '>></a></li>';
             }
             $html .= '</ul>';
-            $html .= '<input type="hidden" id="limitstart" name="limitstart" value="'.$this->_start.'">';
         }
+        $html .= '<input type="hidden" id="limitstart" name="limitstart" value="'.$this->_start.'">';
         return $html;
     }
 }
