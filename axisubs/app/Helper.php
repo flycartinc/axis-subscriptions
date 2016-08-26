@@ -105,9 +105,13 @@ class Helper {
         );
     }
 
-    public static function getUserDetails()
+    public static function getUserDetails($id = 0)
     {
-        $user = wp_get_current_user();
+        if($id) {
+            $user = get_userdata($id);
+        } else {
+            $user = wp_get_current_user();
+        }
         return $user;
     }
 }

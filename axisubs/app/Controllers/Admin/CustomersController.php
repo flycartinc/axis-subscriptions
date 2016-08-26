@@ -7,6 +7,7 @@
  */
 namespace Axisubs\Controllers\Admin;
 
+use Axisubs\Helper;
 use Axisubs\Models\Admin\Customers;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
@@ -30,9 +31,34 @@ class CustomersController
             $item = Customers::loadCustomer($http->get('id'));
             return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'item', 'currencyData', 'site_url'));
         } else if($http->get('task') == 'edit' && $http->has('id')){
-
+            if($http->get('id')){
+                $pagetitle = 'Edit Customer';
+            } else {
+                $pagetitle = 'Add Customer';
+            }
+            if($http->get('edit_task') == 'save'){
+                $result = Customers::saveCustomer($http->all(), $http->get('id'));
+                if($result){
+                    Notifier::success('Customer details updated successfully');
+                } else {
+                    Notifier::error('Failed to update');
+                }
+            }
+            $item = Customers::loadCustomer($http->get('id'));
+            $wp_userDetails = Helper::getUserDetails($http->get('id'));
+            if($wp_userDetails->data->user_login){
+                $wp_userD['user_login'] = $wp_userDetails->data->user_login;
+            } else {
+                $wp_userD = array();
+            }
+            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD'));
         } else if($http->get('task') == 'delete' && $http->has('id')){
-
+            $result = Customers::deleteCustomer($http->get('id'));
+            if($result){
+                Notifier::success('Customer deleted successfully');
+            } else {
+                Notifier::error('Failed to delete');
+            }
         }
         
         Customers::populateStates($http->all());

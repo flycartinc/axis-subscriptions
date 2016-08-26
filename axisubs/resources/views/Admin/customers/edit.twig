@@ -1,0 +1,137 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+   {% set customerMeta = item['meta'] %}
+   {% set customerPrefix = item['ID']~'_'~item['post_type']~'_' %}
+
+   <div class="axisubs wrap">
+      {% set user_id = customerMeta[customerPrefix~'user_id'] %}
+      <h1>{{ pagetitle }}
+      </h1>
+      <form id="my_profile" method="post" action="?page=customers-index&task=edit&id={{ user_id }}">
+         <div class="axisubs-fields-con">
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisub_plan_name">User Name</label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <div>
+                     {{ wp_userD['user_login'] }}
+                  </div>
+                  <span class="help-text">Username cannot be changed.</span>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_first_name">
+                     First Name
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'first_name'] }}" name="axisubs[subscribe][first_name]" id="axisubs_subscribe_first_name"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_last_name">
+                     Last Name
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'last_name'] }}" name="axisubs[subscribe][last_name]" id="axisubs_subscribe_last_name"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_last_name">
+                     Email
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'email'] }}" name="axisubs[subscribe][email]" id="axisubs_subscribe_email"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_address_line1">
+                     Address Line 1
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'address_line1'] }}" name="axisubs[subscribe][address_line1]" id="axisubs_subscribe_address_line1"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_address_line2">
+                     Address Line 2
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" name="axisubs[subscribe][address_line2]" value="{{ customerMeta[customerPrefix~'address_line2'] }}" id="axisubs_subscribe_address_line2"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_city">
+                     City
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'city'] }}" name="axisubs[subscribe][city]" id="axisubs_subscribe_city"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_pincode">
+                     Zip code
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" value="{{ customerMeta[customerPrefix~'pincode'] }}" name="axisubs[subscribe][pincode]" id="axisubs_subscribe_pincode"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_country">
+                     Country
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'country'] }}" name="axisubs[subscribe][country]" id="axisubs_subscribe_country"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_province">
+                     State
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'province'] }}" name="axisubs[subscribe][province]" id="axisubs_subscribe_province"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <label for="axisubs_subscribe_phone">
+                     Phone
+                  </label>
+               </div>
+               <div class="axisubs-fields-content">
+                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'phone'] }}" name="axisubs[subscribe][phone]" id="axisubs_subscribe_phone"/>
+               </div>
+            </div>
+            <div class="axisubs-fields">
+               <div class="axisubs-fields-label">
+                  <input type="hidden" name="edit_task" value="save"/>
+                  <input type="hidden" name="id" value="{{ user_id }}"/>
+                  <input type="hidden" id="site_url" value="{{ site_url }}"/>
+               </div>
+               <div class="axisubs-fields-content">
+                  <button class="btn page-title-action" type="submit">Update</button>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+{% endblock %}

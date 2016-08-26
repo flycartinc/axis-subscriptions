@@ -103,8 +103,28 @@ class Customers extends Post{
         return $item;
     }
 
+    //load subscription with plan based on wp userid
     public static function loadSubscriptionsByUserId($id){
         $item = Plans::loadAllSubscribes($id);
         return $item;
+    }
+
+    //For saving a customer details
+    public static function saveCustomer($post, $user_id){
+        if(!empty($post['axisubs']['subscribe'])){
+            $result = Plans::updateUserDetails($post['axisubs']['subscribe'], $user_id);
+            if($result){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static function deleteCustomer($id){
+        $postDB = Post::where('post_type', 'axisubs_user_'.$id)->first();
+        return $postDB->delete();
     }
 }

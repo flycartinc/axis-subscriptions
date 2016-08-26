@@ -230,8 +230,8 @@ class Plans extends Post{
     }
 
     //Update User Details
-    public static function updateUserDetails($data){
-        $user = Helper::getUserDetails();
+    public static function updateUserDetails($data, $user_id = 0){
+        $user = Helper::getUserDetails($user_id);
         $postDB = Post::where('post_type', 'axisubs_user_'.$user->ID)->get();
         $postTable = $postDB->first();
         if(empty($postTable)){
