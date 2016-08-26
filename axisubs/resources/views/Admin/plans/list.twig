@@ -18,7 +18,12 @@
                             </div>
                             <div class="col-data">
                                 <span class="col-data-title">Status: </span>
-                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_status'] }}</span>
+                                {% if(item['meta'][item['ID']~'_axisubs_plans_status'] == 1) %}
+                                    {% set statusTest = 'Enabled' %}
+                                {% else %}
+                                    {% set statusTest = 'Disabled' %}
+                                {% endif %}
+                                <span class="col-data-content">{{ statusTest }}</span>
                             </div>
                         </div>
                         <div class="col-3">

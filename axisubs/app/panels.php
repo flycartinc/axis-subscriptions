@@ -21,6 +21,16 @@ $panel->add([
     'uses'   => __NAMESPACE__ . '\Controllers\Admin\SubscriptionsController@index'
 ]);
 
+// For Subscriptions menu
+$panel->add([
+    'type'   => 'sub-panel',
+    'parent' => 'plans',
+    'as'     => 'customers',
+    'title'  => 'Customers',
+    'slug'   => 'customers-index',
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\CustomersController@index'
+]);
+
 // For configuration menu
 $panel->add([
     'type'   => 'sub-panel',

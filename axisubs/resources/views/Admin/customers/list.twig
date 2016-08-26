@@ -1,0 +1,89 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+    <div class="axisubs wrap">
+        <h1>{{ pagetitle }}
+            <a class="page-title-action" href="?page=customers-index&task=new">Add New</a>
+        </h1>
+        <form method="post" action="?page=customers-index" id="axisubs_list_form">
+            <div class="axisubs-plans">
+                <div class="axisubs-plans">
+                    {% for item in items %}
+                        {% set metaPrefix = item['ID']~'_'~item['post_type']~'_'  %}
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="col-data">
+                                    <span class="col-data-title">Customer Id: </span>
+                                    <span class="col-data-content">{{ item['ID'] }}</span>
+                                </div>
+                                <div class="col-data">
+                                    <span class="col-data-title">Subscriptions: </span>
+                                    {% if item['subscription'] is empty %}
+                                        {% set customerSubs = 'No subscriptions' %}
+                                        <span class="col-data-content">{{ customerSubs }}</span>
+                                    {% else %}
+                                        {% set plan = item['subscription']['0']['plan'] %}
+                                        {% set planMeta = item['subscription']['0']['plan']['meta'] %}
+                                        {% set subcriptionMeta = item['subscription']['0']['meta'] %}
+                                        {% set customerSubs = planMeta[plan['ID']~'_axisubs_plans_name'] %}
+                                        <div class="load_more_subscriptions" data-attr="{{ item['meta'][metaPrefix~'user_id'] }}">
+                                            <a>{{ customerSubs }}</a><span class="more_subscriptions">...</span>
+                                            <span class="more_subscriptions-data-left-arrow"></span>
+                                            <div class="more_subscriptions-data">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="col-data">
+                                    <span class="col-data-title">Name: </span>
+                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'first_name']~' '~item['meta'][metaPrefix~'last_name'] }}</span>
+                                </div>
+                                <div class="col-data">
+                                    <span class="col-data-title">Email: </span>
+                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'email'] }}</span>
+                                </div>
+                                <div class="col-data">
+                                    <span class="col-data-title">Country: </span>
+                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'country'] }}</span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="col-data">
+                                    <span class="col-data-title">Phone: </span>
+                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'phone'] }}</span>
+                                </div>
+                                <div class="col-data">
+                                    <span class="col-data-title">Created On: </span>
+                                    <span class="col-data-content">{{ item['post_date'] }}</span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="col-data">
+                                    <span class="col-data-content">
+                                        <a class="page-title-action" href="?page=customers-index&task=view&id={{ item['ID'] }}">View</a>
+                                    </span>
+                                    <span class="col-data-content">
+                                        <a class="page-title-action" href="?page=customers-index&task=edit&id={{ item['ID'] }}">Edit</a>
+                                    </span>
+                                    <span class="col-data-content">
+                                        <a class="page-title-action" href="?page=customers-index&task=delete&id={{ item['ID'] }}">Delete</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            No customer available.
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ paginationD['limitbox'] | raw }}
+                {{ paginationD['links'] | raw }}
+            </div>
+            <input type="hidden" id="site_url" name="site_url" value="{{ site_url }}" />
+        </form>
+    </div>
+{% endblock %}

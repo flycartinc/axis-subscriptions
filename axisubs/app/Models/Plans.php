@@ -193,8 +193,12 @@ class Plans extends Post{
     }
 
     // get All subscriptions
-    public static function loadAllSubscribes(){
-        $userId =get_current_user_id();
+    public static function loadAllSubscribes($id = 0){
+        if($id){
+            $userId = $id;
+        } else {
+            $userId =get_current_user_id();   
+        }        
         $subscribers = PostMeta::where('meta_key','like','%_axisubs_subscribe_user_id')
             ->where('meta_value', $userId)->orderBy('post_id','desc')
             ->pluck('post_id');
@@ -245,6 +249,9 @@ class Plans extends Post{
                 $postTable->meta->$key = $val;
             }
         }
+        //for adding wordpress user_id
+        $user_id_key = $postTable->ID . '_axisubs_user_' .$user->ID.'_user_id';
+        $postTable->meta->$user_id_key = $user->ID;
         $result = $postTable->save();
 
         return $result;

@@ -11,6 +11,7 @@ use Axisubs\Models\Plans;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Helper\Pagination;
+use Axisubs\Models\Admin\Customers;
 
 class AdminController
 {
@@ -67,16 +68,20 @@ class AdminController
 
     public function ajaxCall(Http $http)
     {
-        $task = $http->get('task');
-        $planType = $http->get('type');
-        $id = $http->get('id');
-        $item = Plans::loadPlan($id);
+        $task = $http->get('task');        
         if($task == 'loadPlanFields'){
+            $planType = $http->get('type');
+            $id = $http->get('id');
+            $item = Plans::loadPlan($id);
             if($planType != ''){
                 return view('@Axisubs/Admin/plan/types/'.$planType.'.twig', compact('item'));
             } else {
                 return view('@Axisubs/Admin/plan/types/free.twig', compact('item'));
             }
+        } else if($task == 'loadCustomerSubscriptions'){
+            $id = $http->get('id');
+            $items = Customers::loadSubscriptionsByUserId($id);
+            return view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
         }
     }
 }

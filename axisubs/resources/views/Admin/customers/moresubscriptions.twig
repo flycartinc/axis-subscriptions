@@ -1,0 +1,12 @@
+{% for item in items %}
+   {% set plan = item['plan'] %}
+   {% set planMeta = item['plan']['meta'] %}
+   {% set meta = item['meta'] %}
+   <div class="item">
+      <span class="transaction-history-text">Plan Name: </span>{{ planMeta[plan['ID']~'_axisubs_plans_name'] }}
+      <span class="transaction-history-text">Price: </span>{{ meta[item['ID']~'_axisubs_subscribe_total_price'] }}
+      <span class="transaction-history-text">Status: </span>{{ meta[item['ID']~'_axisubs_subscribe_status'] }}
+   </div>
+{% else %}
+   No data
+{% endfor %}

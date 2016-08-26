@@ -77,11 +77,39 @@ function checkForeverIsChoosen(){
             $('#axisub_plan_slug').val(name);
         });
 
-        // $( "#planForm" ).submit(function( event ) {
-        //     var result = validatePlan();
-        //     if(result){
-        //         $(this).submit();
-        //     }
-        // });
+        //for loading subscriptions
+        $('.load_more_subscriptions').mouseout(function() {
+            var contentDiv = $(this).children('.more_subscriptions-data');
+            contentDiv.hide();
+            contentDiv.prev('.more_subscriptions-data-left-arrow').hide();
+        }).mouseover(function() {
+            var selected = $(this);
+            var postData = {
+                id: jQuery(this).attr('data-attr'),
+                task: "loadCustomerSubscriptions"
+            };
+            var contentDiv = selected.children('.more_subscriptions-data');
+            //selected.find('.more_subscriptions-data').show();
+            contentDiv.show();
+            contentDiv.prev('.more_subscriptions-data-left-arrow').show();
+            if($(this).attr('send-attr') == '1'){
+                return;
+            } else {
+                selected.parent().find('.more_subscriptions-data').html("Loading..");
+                selected.attr('send-attr', '1');
+            }
+            $.ajax({
+                url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+                type: 'POST',
+                data: postData,
+                async	: false,
+                success: function(json) {
+                    selected.parent().find('.more_subscriptions-data').html(json);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        });
     });
 })(axisubs.jQuery);

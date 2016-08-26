@@ -15,7 +15,7 @@ use Axisubs\Helper\Status;
 use Axisubs\Models\Plans;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
-//use Flycart\Pagination\Pagination;
+
 class SubscriptionsController
 {
     public function index(Http $http)
