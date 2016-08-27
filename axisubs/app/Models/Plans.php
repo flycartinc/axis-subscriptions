@@ -133,6 +133,7 @@ class Plans extends Post{
         if($id){
             $postDB = Post::where('post_type', 'axisubs_plans')->get();
             $postTable = $postDB->find($id);
+            $postTable->meta()->delete();
             return $postTable->delete();
         } else {
             return false;

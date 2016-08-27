@@ -68,7 +68,7 @@ class AdminController
 
     public function ajaxCall(Http $http)
     {
-        $task = $http->get('task');        
+        $task = $http->get('task');
         if($task == 'loadPlanFields'){
             $planType = $http->get('type');
             $id = $http->get('id');
@@ -82,6 +82,14 @@ class AdminController
             $id = $http->get('id');
             $items = Customers::loadSubscriptionsByUserId($id);
             return view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
+        } else if($task == 'loadCustomerDetails'){
+            $id = $http->get('id');
+            $result = Customers::loadCustomerDetailsByUserId($id);
+            echo json_encode($result);
+        } else if($task == 'addCustomer'){
+            $result = Customers::addNewCustomer($http->all());
+            echo json_encode($result);
         }
+
     }
 }

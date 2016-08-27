@@ -31,21 +31,118 @@ function loadFieldsOfPlanType(val, id) {
     })(axisubs.jQuery);
 }
 
+// For validationg plan
 function validatePlan(){
     var valid = true;
-    axisubs.jQuery( "#planForm .required" ).removeClass('invalid-field');
-    var firstField = 0;
-    axisubs.jQuery( "#planForm .required" ).each(function( index ) {
-        if(axisubs.jQuery( this ).val() == ''){
-            firstField++;
-            axisubs.jQuery( this ).addClass('invalid-field');
-            if(firstField == 1){
-                axisubs.jQuery( this ).focus();
-            }
+    valid = validateRequiredFields('#planForm');
+    return valid;
+}
+
+// for adding new customer
+function addCustomer(){
+    (function ($) {
+        var messageText = $('.axisubs-user-message-text');
+        messageText.hide();
+        var valid = true;
+        valid = validateRequiredFields('#my_profile');
+        if(($('#axisubs_add_type').val() == '0') && ($('#axisubs_user_password1').val() != $('#axisubs_user_password2').val())){
+            $('#axisubs_user_password1').addClass('invalid-field').focus();
+            $('#axisubs_user_password2').addClass('invalid-field');
             valid = false;
         }
-    });
-    return valid;
+        if(valid){
+            var fields = $("#my_profile").serializeArray();
+            fields.push({'task':'addCustomer', 'tes':'sdf'});
+            $.ajax({
+                type: 'post',
+                url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+                dataType: 'json',
+                data: fields,
+                cache: false,
+                success: function (json) {
+                    removeMessageClass('.axisubs-user-message-text');
+                    messageText.html(json['message']).show();
+                    if (json['status'] == 'success') {
+                        messageText.addClass('message-success');
+                        //$("#register_user").submit();
+                        var redirectURL = $('#site_url').val()+'/wp-admin/admin.php?page=customers-index&task=edit&id='+json['ID'];
+                        window.location = redirectURL;
+                    } else {
+                        messageText.addClass('message-danger');
+                        if(json['field'] != undefined){
+                            $('#axisubs_subscribe_'+json['field']).addClass('invalid-field').focus();
+                        }
+                    }
+                    console.log(json)
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+    })(axisubs.jQuery);
+}
+
+// Customer new layout: On change customer type new/existing
+function addCustomertype(val){
+    (function ($) {
+        if(val == '1'){
+            $('.axisubs_customer_add_existing').show('slow');
+            $('.axisubs_customer_add_new').hide('slow');
+            $('input[type="password"]').removeClass('required');
+        } else {
+            $('.axisubs_customer_add_existing').hide('slow');
+            $('.axisubs_customer_add_new').show('slow');
+            $('input[type="password"]').addClass('required');
+            $('#axisubs_wp_user_id').val('').trigger('change');
+        }
+    })(axisubs.jQuery);
+}
+
+// For auto populate fields
+function autoPopulateCustomerDetails(val){
+    (function ($) {
+        var postData = {
+            id: val,
+            task: "loadCustomerDetails"
+        };
+        $.ajax({
+            url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function () {
+               // $('.axisubs-fields-plantypes-con-o .loader-ajax').show();
+            },
+            complete: function () {
+               // $('.axisubs-fields-plantypes-con-o .loader-ajax').hide();
+            },
+            success: function (data) {
+                if(data['status'] == 'success'){
+                    poupulateCustomerData(data['fields']);
+                } else {
+                    poupulateCustomerData();
+                }
+
+            }
+        });
+
+        function poupulateCustomerData(data){
+            if(data != undefined){
+                $('#axisubs-wordpress_username_text').html(data['user_login']);
+                $('#axisubs_subscribe_first_name').val(data['first_name']);
+                $('#axisubs_subscribe_last_name').val(data['last_name']);
+                $('#axisubs_subscribe_email').val(data['email']);
+                $('input[name="id"]').val(data['id']);
+            } else {
+                $('#axisubs-wordpress_username_text').html('');
+                $('#axisubs_subscribe_first_name').val('');
+                $('#axisubs_subscribe_last_name').val('');
+                $('#axisubs_subscribe_email').val('');
+                $('input[name="id"]').val('');
+            }
+        }
+    })(axisubs.jQuery);
 }
 
 //for forever choosen

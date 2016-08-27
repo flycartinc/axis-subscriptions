@@ -139,3 +139,20 @@ ul.pagination-ul > li > a{
 .axisubs_button_container{
     margin: 10px 0;
 }
+.axisubs .hide{
+    display: none;
+}
+.axisubs .message-success {
+    background-color: #fff;
+    border-left: 4px solid #5cb85c;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+    padding: 12px;
+}
+.axisubs .message-danger {
+    background-color: #fff;
+    border-left: 4px solid #d9534f;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+    padding: 12px;
+}

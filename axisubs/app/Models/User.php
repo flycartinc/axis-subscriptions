@@ -58,7 +58,7 @@ class User extends Post{
     }
 
     //Register user
-    public static function registerUser($post){
+    public static function registerUser($post, $admin = 0){
         if(isset($post['axisubs']['subscribe']) && isset($post['axisubs']['user'])){
             $userRegister = $post['axisubs']['subscribe'];
             $userPassword = $post['axisubs']['user'];
@@ -72,9 +72,12 @@ class User extends Post{
                         $userdata['user_login'] = $userRegister['email'];
                         $userdata['user_email'] = $userRegister['email'];
                         wp_insert_user($userdata);
-                        wp_signon( array('user_login' => $userRegister['email'], 'user_password' => $userPassword['password1']), '');
+                        if(!$admin){
+                            wp_signon( array('user_login' => $userRegister['email'], 'user_password' => $userPassword['password1']), '');    
+                        }                        
                         $result['status'] = 'success';
                         $result['message'] = 'Registration successfull. Please wait..';
+                        $result['ID'] = $userID;
                     } else {
                         $result['status'] = 'failed';
                         $result['message'] = 'Unable to register user. Please try again.';

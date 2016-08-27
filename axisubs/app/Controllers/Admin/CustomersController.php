@@ -27,15 +27,11 @@ class CustomersController
         $role_names = wp_roles()->role_names;
         $pagetitle = 'Customers';
         $site_url = get_site_url();
-        if ($http->get('task') == 'view' && $http->has('id')) {
+        if ($http->get('task') == 'view' && $http->get('id')) {
             $item = Customers::loadCustomer($http->get('id'));
             return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'item', 'currencyData', 'site_url'));
-        } else if($http->get('task') == 'edit' && $http->has('id')){
-            if($http->get('id')){
-                $pagetitle = 'Edit Customer';
-            } else {
-                $pagetitle = 'Add Customer';
-            }
+        } else if($http->get('task') == 'edit' && $http->get('id')){
+            $pagetitle = 'Edit Customer';
             if($http->get('edit_task') == 'save'){
                 $result = Customers::saveCustomer($http->all(), $http->get('id'));
                 if($result){
@@ -52,13 +48,18 @@ class CustomersController
                 $wp_userD = array();
             }
             return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD'));
-        } else if($http->get('task') == 'delete' && $http->has('id')){
+        } else if($http->get('task') == 'delete' && $http->get('id')){
             $result = Customers::deleteCustomer($http->get('id'));
             if($result){
                 Notifier::success('Customer deleted successfully');
             } else {
                 Notifier::error('Failed to delete');
             }
+        } else if($http->get('task') == 'new'){
+            $newuser = 1;
+            $newCustomersSelectBox = Customers::loadNewUsersNotInCustomersSelectbox();
+            $pagetitle = 'Add Customer';
+            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD', 'newCustomersSelectBox', 'newuser'));
         }
         
         Customers::populateStates($http->all());
