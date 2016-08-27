@@ -42,35 +42,45 @@ class Pagination
                 $totalPage++;
             }
             $html .= '<ul class="pagination-ul">';
+            //For first
             if($this->_start == 0) {
                 $html .= '<li class="pag-disabled"><</li>';
             } else {
                 $html .= '<li><a href="#" ';
                 $html .= 'onclick="document.getElementById(\'limitstart\').value=0;document.getElementById(\'axisubs_list_form\').submit();"';
+                $html .= '><<</a></li>';
+            }
+            //For prev
+            if($this->_start-1 < 0) {
+                $html .= '<li class="pag-disabled"><</li>';
+            } else {
+                $html .= '<li><a href="#" ';
+                $html .= 'onclick="document.getElementById(\'limitstart\').value='.($this->_start-1).';document.getElementById(\'axisubs_list_form\').submit();"';
                 $html .= '><</a></li>';
             }
             $i = 1;
+//            $hasMore = 0;
 //            if($limitPage){
-//                if($totalPage-$limitPage){
-//                    $i = $limitPage-1;
-//                    $html .= '<li class="pag-disabled">';
-//                    $html .= '...';
-//                    $html .='</li>';
+//                if($totalPage>$limitPage){
+//                    if(($this->_start-1)<=0){
+//                        $i = 1;
+//                    } else {
+//                        $i = $this->_start-1;
+//                        $html .= '<li class="pag-disabled">';
+//                        $html .= '...';
+//                        $html .='</li>';
+//                        $hasMore = 1;
+//                    }
 //                } else {
 //                    $i = 1;
 //                }
 //            } else {
 //                $i = 1;
 //            }
+
             $limitPageCount = 0;
             for ($i; $i <= $totalPage; $i++){
                 $start = ($i-1);
-//                if($limitPage && (($limitPageCount) == $limitPage+1)){
-//                    $html .= '<li class="pag-disabled">';
-//                    $html .= '...';
-//                    $html .='</li>';
-//                    break;
-//                }
                 if($start != $this->_start) {
                     $html .= '<li>';
                     $html .= '<a href="#" ';
@@ -81,14 +91,29 @@ class Pagination
                     $html .= $i;
                 }
                 $html .='</li>';
-                $limitPageCount++;
+//                if($hasMore && ($i<$totalPage) && (($limitPageCount) == $limitPage)){
+//                    $html .= '<li class="pag-disabled">';
+//                    $html .= '...';
+//                    $html .='</li>';
+//                    break;
+//                }
+//                $limitPageCount++;
             }
-            if($this->_start == ($totalPage-1)) {
+            //For next page
+            if($totalPage <= ($this->_start+1)) {
                 $html .= '<li class="pag-disabled">'.'>'.'</li>';
             } else {
                 $html .= '<li><a href="#" ';
-                $html .= 'onclick="document.getElementById(\'limitstart\').value='.($totalPage-1).';document.getElementById(\'axisubs_list_form\').submit();"';
+                $html .= 'onclick="document.getElementById(\'limitstart\').value='.($this->_start+1).';document.getElementById(\'axisubs_list_form\').submit();"';
                 $html .= '>></a></li>';
+            }
+            //For end
+            if($this->_start == ($totalPage-1)) {
+                $html .= '<li class="pag-disabled">'.'>>'.'</li>';
+            } else {
+                $html .= '<li><a href="#" ';
+                $html .= 'onclick="document.getElementById(\'limitstart\').value='.($totalPage-1).';document.getElementById(\'axisubs_list_form\').submit();"';
+                $html .= '>>></a></li>';
             }
             $html .= '</ul>';
         }
