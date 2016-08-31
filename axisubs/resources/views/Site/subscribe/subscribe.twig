@@ -1,4 +1,5 @@
 <div class="axisubs wrap">
+    {{ message | raw }}
     {% if item['ID'] > 0 %}
         {% set id = item['ID'] %}
     <form action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">

@@ -421,6 +421,7 @@ class Plans extends Post{
         return $item;
     }
 
+    //Get oldSubscriber
     public static function loadOldSubscriber($plans)
     {
         $sessionData = Session()->get('axisubs_subscribers');
@@ -430,5 +431,20 @@ class Plans extends Post{
         else
             $item = array();
         return $item;
+    }
+
+    public static function isEligible($plan){
+        $planSufix = $plan->ID.'_axisubs_plans_';
+        $plantype = $plan->meta[$planSufix.'type'];
+        if($plantype == 'free' || $plantype == 'non_renewal' || $plantype == 'recurring' || $plantype == 'recurring_with_trial'){
+            $available = Plans::getSubscribedDetails($plan->ID);
+            if(count($available)){
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
     }
 }

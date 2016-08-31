@@ -2,6 +2,7 @@
     <div class="axisubs-subscribed-title">
         <h3>{{ pagetitle }}</h3>
     </div>
+    {{ message | raw }}
     <div class="axisubs-subscribed-con">
         {% for subscribe in subscribers %}
             {% set plan = subscribe['plan'] %}

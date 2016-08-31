@@ -15,6 +15,7 @@ use Herbert\Framework\Notifier;
 use Herbert\Framework\Response;
 use Axisubs\Helper;
 use Axisubs\Helper\Duration;
+use Axisubs\Helper\FrontEndMessages;
 
 class PlanController{
     //Show all Plans
@@ -26,44 +27,51 @@ class PlanController{
         $site_url = get_site_url();
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
         if($http->get('slug')=='') {
-            $duration = new Duration();
-            $unitInWords = $duration->getDurationInFormatInArray();
-            $pagetitle = "Plans";
-            $items = Plans::allFrontEndPlans();
-            return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData', 'site_url', 'subscribtions_url', 'unitInWords'));
         } else {
             $pagetitle = "Order Summary";
             $item = Plans::loadPlan($http->get('id'));
             $meta = $item->meta;
-            //for adding subscriber
-            if($http->get('task')=='save'){
-                $result = Plans::addSubscribe($http->all(), $item);
-                if($result) {
-                    $subscriber = Plans::loadSubscriber($result);
-                    return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url'));
-                } else {
-                    Notifier::error('Failed to subscribe');
-                    return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle','item', 'meta', 'currencyData', 'site_url'));
+
+            //Check eligibility
+            $eligible = Plans::isEligible($item);
+            if($eligible) {
+                //for adding subscriber
+                if ($http->get('task') == 'save') {
+                    $result = Plans::addSubscribe($http->all(), $item);
+                    if ($result) {
+                        $subscriber = Plans::loadSubscriber($result);
+                        return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url'));
+                    } else {
+                        FrontEndMessages::failure('Failed to subscribe');
+                        return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'currencyData', 'site_url', 'message'));
+                    }
+                } else if ($http->get('task') == 'update') {
+                    $result = Plans::updateSubscribe($http->all(), $item);
+                    if ($result) {
+                        FrontEndMessages::success('Subscribed successfully');
+                        //wp_redirect($site_url.'index.php?axisubs_subscribes=subscribe');
+                        //$subscriber = Plans::loadAllSubscribes();
+                        $subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
+                        return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle', 'subscribtions_url', 'message'));
+                    } else {
+                        FrontEndMessages::failure('Failed to subscribe');
+                        return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'subscribtions_url', 'message'));
+                    }
                 }
-            } else if($http->get('task')=='update'){
-                $result = Plans::updateSubscribe($http->all(), $item);
-                if($result) {
-                    Notifier::success('Subscribed successfully');
-                    //wp_redirect($site_url.'index.php?axisubs_subscribes=subscribe');
-                    //$subscriber = Plans::loadAllSubscribes();
-                    $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
-                    return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle','subscribtions_url'));
-                } else {
-                    Notifier::error('Failed to subscribe');
-                    return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'subscribtions_url'));
-                }
+                $subscriber = Plans::loadOldSubscriber($item);
+                $user = Plans::getUserDetails();
+                $wp_user = Helper::getUserDetails();
+                $user_id = $wp_user->ID;
+                return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id'));
+            } else {
+                $message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
             }
-            $subscriber = Plans::loadOldSubscriber($item);
-            $user = Plans::getUserDetails();
-            $wp_user = Helper::getUserDetails();
-            $user_id = $wp_user->ID;
-            return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle','item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id'));
         }
+        $duration = new Duration();
+        $unitInWords = $duration->getDurationInFormatInArray();
+        $pagetitle = "Plans";
+        $items = Plans::allFrontEndPlans();
+        return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData', 'site_url', 'subscribtions_url', 'unitInWords', 'message'));
     }
 
     public function showSelectedPlan(){

@@ -127,3 +127,23 @@
 .axisubs .message{
     margin: 10px 0;
 }
+.axisubs .notice-error,
+.axisubs .notice-success{
+    margin: 5px 0 15px;
+    background: #fff none repeat scroll 0 0;
+    border-left: 4px solid #fff;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin: 5px 0 15px;
+    padding: 1px 12px;
+}
+.axisubs .notice-error > p,
+.axisubs .notice-success > p{
+    margin: 0.5em 0;
+    padding: 2px;
+}
+.axisubs .notice-error {
+    border-left-color: #dc3232;
+}
+.axisubs .notice-success {
+    border-left-color: #46b450;
+}
