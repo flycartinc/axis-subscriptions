@@ -14,6 +14,7 @@ use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Herbert\Framework\Response;
 use Axisubs\Helper;
+use Axisubs\Helper\Duration;
 
 class PlanController{
     //Show all Plans
@@ -25,9 +26,11 @@ class PlanController{
         $site_url = get_site_url();
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
         if($http->get('slug')=='') {
+            $duration = new Duration();
+            $unitInWords = $duration->getDurationInFormatInArray();
             $pagetitle = "Plans";
             $items = Plans::allFrontEndPlans();
-            return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData', 'site_url', 'subscribtions_url'));
+            return view('@Axisubs/Site/plans/list.twig', compact('pagetitle','items', 'currencyData', 'site_url', 'subscribtions_url', 'unitInWords'));
         } else {
             $pagetitle = "Order Summary";
             $item = Plans::loadPlan($http->get('id'));

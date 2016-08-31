@@ -37,7 +37,8 @@
                                 <div><span class="axisubs-plans-label-block">Duration: </span>
                                     <span class="axisubs-plans-text">
                                     {% if item['meta'][item['ID']~'_axisubs_plans_period'] > 0 %}
-                                        {{ item['meta'][item['ID']~'_axisubs_plans_period'] }} Days
+                                        {% set periodUnit = item['meta'][item['ID']~'_axisubs_plans_period_units'] %}
+                                        {{ item['meta'][item['ID']~'_axisubs_plans_period'] }} {{ unitInWords[periodUnit] }}
                                     {% else %}
                                         Forever
                                     {% endif %}

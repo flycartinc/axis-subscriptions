@@ -10,6 +10,8 @@ namespace Axisubs\Models;
 use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
+use Axisubs\Helper\Duration;
+
 class Plans extends Post{
     /**
      * The table associated with the model.
@@ -292,7 +294,7 @@ class Plans extends Post{
 
         $now = date("Y-m-d g:i:s");
         if(count($existAlready)){
-            $startDate = Plans::getEndDate($existAlready);
+            $startDate = Plans::getEndDateOfSubscriber($existAlready);
             $setup_cost = 0;
         } else {
             $startDate = $now;
@@ -303,13 +305,15 @@ class Plans extends Post{
             }
 
         }
+        //Calculate End Date
+        $endDate = Plans::calculateEndDate($startDate, $plans);
         $totalCost = $price+$setup_cost;
 
         $extraFields = array('_axisubs_subscribe_plan_id' => $post['id'],
             '_axisubs_subscribe_status' => 'ORDER_PAGE',
             '_axisubs_subscribe_created_on' => $now,
             '_axisubs_subscribe_start_on' => $startDate,
-            '_axisubs_subscribe_end_on' => date("Y-m-d g:i:s", strtotime($startDate." +30 days")),
+            '_axisubs_subscribe_end_on' => $endDate,
             '_axisubs_subscribe_user_id' => get_current_user_id(),
             '_axisubs_subscribe_price' => $price,
             '_axisubs_subscribe_setup_cost' => $setup_cost,
@@ -337,7 +341,34 @@ class Plans extends Post{
         }
     }
 
-    public static function getEndDate($subscribers){
+    //get End Date
+    public static function calculateEndDate($startDate, $plan){
+        $planSufix = $plan->ID.'_axisubs_plans_';
+        $plantype = $plan->meta[$planSufix.'type'];
+        $planPeriod = 0;
+        $planPeriodUnit = 'D';
+        if(isset($plan->meta[$planSufix.'period']) && $plan->meta[$planSufix.'period']){
+            $planPeriod = $plan->meta[$planSufix.'period'];
+        }
+        if(isset($plan->meta[$planSufix.'period_units']) && $plan->meta[$planSufix.'period_units']){
+            $planPeriodUnit = $plan->meta[$planSufix.'period_units'];
+        }
+        $duration = new Duration();
+        if($plantype == 'free'){
+            if($plan->meta[$planSufix.'period_forever'] == '1'){
+                return '-';
+            } else {
+                $days = $duration->getDurationInDays($planPeriod, $planPeriodUnit);
+            }
+        } else{
+            $days = $duration->getDurationInDays($planPeriod, $planPeriodUnit);
+        }
+
+        return date("Y-m-d g:i:s", strtotime($startDate." +".$days." days"));
+    }
+
+    //get end date from previous subscriber
+    public static function getEndDateOfSubscriber($subscribers){
         $newEndDate = date("Y-m-d g:i:s");
         foreach($subscribers as $key => $value){
             $endDateKey = $value->ID.'_axisubs_subscribe_end_on';
