@@ -156,3 +156,57 @@ ul.pagination-ul > li > a{
     margin-left: 0;
     padding: 12px;
 }
+
+
+
+.axisubs.axis-head h1{
+    background: #e84c3d none repeat scroll 0 0;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    line-height: 2;
+}
+
+.axisubs h1 a{
+    color: #E84C3D !important;
+    font-weight: 400 !important;
+}
+.axisubs h1 a:hover{
+    background-color: #E6DDB2 !important;
+    border-color: #E6DDB2 !important;
+}
+.axisubs-subscribed-i-con {
+    line-height: 2.6;
+    background: #E6DDB2 none repeat scroll 0 0;
+    border-bottom: 1px solid #eeeeee;
+}
+.axisubs-subscribed-i-con:nth-of-type(2n+2){
+    background: #efefef none repeat scroll 0 0;
+}
+.axisubs-subscribed-con {
+    max-with: 100%;
+}
+.axisubs-subscribed-i-block {
+    display: inline-block;
+    min-width: 225px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #E84C3D;
+}
+.axisubs-subscribed-block-data{
+    padding: 0 15px;
+}
+.axisubs-subscribed-block-data a{
+    text-decoration: none;
+    color: #E84C3D;
+}
+@media screen and (max-width: 250px){
+    .axisubs h1{
+        line-height: 3;
+    }
+    .axisubs-subscribed-i-block {
+        min-width: 175px;
+    }
+}
