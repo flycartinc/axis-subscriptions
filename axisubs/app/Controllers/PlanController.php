@@ -42,19 +42,19 @@ class PlanController{
                         $subscriber = Plans::loadSubscriber($result);
                         return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url'));
                     } else {
-                        FrontEndMessages::failure('Failed to subscribe');
+                        $message = FrontEndMessages::failure('Failed to subscribe');
                         return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'currencyData', 'site_url', 'message'));
                     }
                 } else if ($http->get('task') == 'update') {
                     $result = Plans::updateSubscribe($http->all(), $item);
                     if ($result) {
-                        FrontEndMessages::success('Subscribed successfully');
+                        $message = FrontEndMessages::success('Subscribed successfully');
                         //wp_redirect($site_url.'index.php?axisubs_subscribes=subscribe');
                         //$subscriber = Plans::loadAllSubscribes();
                         $subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
                         return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle', 'subscribtions_url', 'message'));
                     } else {
-                        FrontEndMessages::failure('Failed to subscribe');
+                        $message = FrontEndMessages::failure('Failed to subscribe');
                         return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'subscribtions_url', 'message'));
                     }
                 }
