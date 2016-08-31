@@ -34,7 +34,7 @@ class AppController{
                 break;
                 case 'view':
                     $result = App::loadAppView($http->get('p'));
-                    return;
+                    return ;
                 break;
             }
         }
