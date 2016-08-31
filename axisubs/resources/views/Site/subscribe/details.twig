@@ -321,7 +321,7 @@
                 <div class="axisubs-plan-payment-i-block">
                     <div class="axisubs-plan-payment-button">
                         {% if(user_id) %}
-                            <button type="submit">Subscribe</button>
+                            <button type="button" onclick="submitSubscriptions();">Subscribe</button>
                         {% else %}
                             <button type="button" onclick="registerUser();">Subscribe</button>
                         {% endif %}

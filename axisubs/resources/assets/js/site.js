@@ -84,6 +84,14 @@ function updateProfile(){
     })(axisubs.jQuery);
 }
 
+//Validate subscription
+function submitSubscriptions(){
+    var valid = validateRequiredFields("#register_user");
+    if(valid){
+        axisubs.jQuery("#register_user").submit();
+    }
+}
+
 //for registering User
 function registerUser(){
     (function ($) {
