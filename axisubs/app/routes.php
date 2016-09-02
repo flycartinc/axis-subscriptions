@@ -8,6 +8,7 @@ $router->get([
     'uses' => __NAMESPACE__ . '\Controllers\PostController@showPost'
 ]);
 
+
 $router->get([
     'as' => 'subscribe',
     'uri' => '/subscribe/{plan_slug}',
