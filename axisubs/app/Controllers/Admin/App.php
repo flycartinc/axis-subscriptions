@@ -10,45 +10,62 @@ namespace Axisubs\Controllers\Admin;
 use Axisubs\Models\Admin\App as ModelApp;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
+use Axisubs\Controllers\Controller;
 
-class App{
-    public function index(Http $http){
-        if ($http->has('task')) {
-            $task = $http->get('task');
-            switch ($task){
-                case 'disable':
-                    $result = ModelApp::disableApp($http->get('p'));
-                    if ( is_wp_error( $result ) ) {
-                        Notifier::error('Failed to disable');
-                    } else {
-                        Notifier::success('Disabled successfully');
-                    }
-                break;
-                case 'enable':
-                    $result = ModelApp::enableApp($http->get('p'));
-                    if ( is_wp_error( $result ) ) {
-                        Notifier::error('Failed to enable');
-                    } else {
-                        Notifier::success('Enabled successfully');
-                    }
-                break;
-                case 'view':
-                    $result = ModelApp::loadAppView($http->get('p'));
-                    return ;
-                break;
-            }
-        }
-        /*$all = Config::all();*/
+class App extends Controller{
+    public $_controller = 'App';
+
+    /**
+     * Default page
+     * */
+    public function index()
+    {
         $pagetitle = "Apps";
-        //$content = do_action('loadPluginNameFunction');
         $apps = ModelApp::getAllApps();
-//        $output = '';
-//        $content[]   = apply_filters( 'loadPluginNameFunction', $output);
-//       print_r($content);exit;
-        // echo $output;
-       // echo $content;
         return view('@Axisubs/Admin/app/list.twig', compact('pagetitle','apps'));
     }
+
+    /**
+     * Disable an app
+     * */
+    public function disable()
+    {
+        $http = Http::capture();
+        $result = ModelApp::disableApp($http->get('p'));
+        if ( is_wp_error( $result ) ) {
+            Notifier::error('Failed to disable');
+        } else {
+            Notifier::success('Disabled successfully');
+        }
+
+        return $this->index();
+    }
+
+    /**
+     * Enable an app
+     * */
+    public function enable()
+    {
+        $http = Http::capture();
+        $result = ModelApp::enableApp($http->get('p'));
+        if ( is_wp_error( $result ) ) {
+            Notifier::error('Failed to enable');
+        } else {
+            Notifier::success('Enabled successfully');
+        }
+
+        return $this->index();
+    }
+
+    /**
+     * View an app
+     * */
+    public function view()
+    {
+        $http = Http::capture();
+        $result = ModelApp::loadAppView($http->get('p'));
+        return ;
+    }    
 
     public function app(Http $http){
 

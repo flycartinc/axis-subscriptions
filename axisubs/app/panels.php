@@ -48,5 +48,5 @@ $panel->add([
     'as'     => 'app',
     'title'  => 'Apps',
     'slug'   => 'app-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\App@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\App@execute'
 ]);
