@@ -28,7 +28,7 @@ $panel->add([
     'as'     => 'customers',
     'title'  => 'Customers',
     'slug'   => 'customers-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Customer@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Customer@execute'
 ]);
 
 // For configuration menu

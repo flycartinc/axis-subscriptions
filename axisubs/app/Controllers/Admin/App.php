@@ -13,6 +13,7 @@ use Herbert\Framework\Notifier;
 use Axisubs\Controllers\Controller;
 
 class App extends Controller{
+    
     public $_controller = 'App';
 
     /**
@@ -65,7 +66,7 @@ class App extends Controller{
         $http = Http::capture();
         $result = ModelApp::loadAppView($http->get('p'));
         return ;
-    }    
+    }
 
     public function app(Http $http){
 

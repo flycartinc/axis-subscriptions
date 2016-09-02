@@ -15,21 +15,64 @@ use Herbert\Framework\Notifier;
 use Axisubs\Helper\Status;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
+use Axisubs\Controllers\Controller;
 
-class Customer
+class Customer extends Controller
 {
-    public function index(Http $http)
+    public $_controller = 'Customer';
+
+    /**
+     * Default page
+     * */
+    public function index()
     {
+        $http = Http::capture();
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
-        $role_names = wp_roles()->role_names;
         $pagetitle = 'Customers';
         $site_url = get_site_url();
-        if ($http->get('task') == 'view' && $http->get('id')) {
+        Customers::populateStates($http->all());
+        // Load Listing layout
+        $items = Customers::all();
+        $pagination = new Pagination(Customers::$_start, Customers::$_limit, Customers::$_total);
+        $paginationD['limitbox'] = $pagination->getLimitBox();
+        $paginationD['links'] = $pagination->getPaginationLinks();
+        return view('@Axisubs/Admin/customers/list.twig', compact('pagetitle', 'items', 'paginationD', 'site_url'));
+    }
+
+    /**
+     * View Page
+     * */
+    public function view()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
+            $currency = new Currency();
+            $currencyData['code'] = $currency->getCurrencyCode();
+            $currencyData['currency'] = $currency->getCurrency();
+            $pagetitle = 'Customers';
+            $site_url = get_site_url();
+
             $item = Customers::loadCustomer($http->get('id'));
             return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'item', 'currencyData', 'site_url'));
-        } else if($http->get('task') == 'edit' && $http->get('id')){
+        }
+
+        return $this->index();
+    }
+
+    /**
+     * Edit
+     * */
+    public function edit()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
+            $currency = new Currency();
+            $currencyData['code'] = $currency->getCurrencyCode();
+            $currencyData['currency'] = $currency->getCurrency();
+            $site_url = get_site_url();
+
             $pagetitle = 'Edit Customer';
             if($http->get('edit_task') == 'save'){
                 $result = Customers::saveCustomer($http->all(), $http->get('id'));
@@ -47,29 +90,38 @@ class Customer
                 $wp_userD = array();
             }
             return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD'));
-        } else if($http->get('task') == 'delete' && $http->get('id')){
+        } else {
+            $item = array();
+            $newuser = 1;
+            $newCustomersSelectBox = Customers::loadNewUsersNotInCustomersSelectbox();
+            $pagetitle = 'Add Customer';
+            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD', 'newCustomersSelectBox', 'newuser'));
+        }
+
+        return $this->index();
+    }
+
+    /**
+     * delete
+     * */
+    public function delete()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
             $result = Customers::deleteCustomer($http->get('id'));
             if($result){
                 Notifier::success('Customer deleted successfully');
             } else {
                 Notifier::error('Failed to delete');
             }
-        } else if($http->get('task') == 'new'){
-            $newuser = 1;
-            $newCustomersSelectBox = Customers::loadNewUsersNotInCustomersSelectbox();
-            $pagetitle = 'Add Customer';
-            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD', 'newCustomersSelectBox', 'newuser'));
         }
-        
-        Customers::populateStates($http->all());
-        // Load Listing layout
-        $items = Customers::all();
-        $pagination = new Pagination(Customers::$_start, Customers::$_limit, Customers::$_total);
-        $paginationD['limitbox'] = $pagination->getLimitBox();
-        $paginationD['links'] = $pagination->getPaginationLinks();
-        return view('@Axisubs/Admin/customers/list.twig', compact('pagetitle', 'items', 'paginationD', 'site_url'));
+
+        return $this->index();
     }
 
+    /**
+     * Load customer subscription - for ajax request
+     * */
     public function loadCustomerSubscriptions(){
         $http = Http::capture();
         $id = $http->get('id');
@@ -77,6 +129,9 @@ class Customer
         return view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
     }
 
+    /**
+     * Load Customer Details for auto populate
+     * */
     public function loadCustomerDetails(){
         $http = Http::capture();
         $id = $http->get('id');
@@ -84,6 +139,9 @@ class Customer
         echo json_encode($result);
     }
 
+    /**
+     * Add customer through ajax
+     * */
     public function addCustomer(){
         $http = Http::capture();
         $result = Customers::addNewCustomer($http->all());
