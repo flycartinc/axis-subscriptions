@@ -6,7 +6,7 @@
  * Time: 1:25 PM
  */
 
-namespace Axisubs\Models;
+namespace Axisubs\Models\Admin;
 use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;

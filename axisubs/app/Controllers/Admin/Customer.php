@@ -13,11 +13,10 @@ use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 
 use Axisubs\Helper\Status;
-use Axisubs\Models\Plans;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
 
-class CustomersController
+class Customer
 {
     public function index(Http $http)
     {
@@ -69,5 +68,25 @@ class CustomersController
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
         return view('@Axisubs/Admin/customers/list.twig', compact('pagetitle', 'items', 'paginationD', 'site_url'));
+    }
+
+    public function loadCustomerSubscriptions(){
+        $http = Http::capture();
+        $id = $http->get('id');
+        $items = Customers::loadSubscriptionsByUserId($id);
+        return view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
+    }
+
+    public function loadCustomerDetails(){
+        $http = Http::capture();
+        $id = $http->get('id');
+        $result = Customers::loadCustomerDetailsByUserId($id);
+        echo json_encode($result);
+    }
+
+    public function addCustomer(){
+        $http = Http::capture();
+        $result = Customers::addNewCustomer($http->all());
+        echo json_encode($result);
     }
 }

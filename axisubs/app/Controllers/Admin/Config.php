@@ -5,19 +5,19 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Admin;
 
-use Axisubs\Models\Config;
+use Axisubs\Models\Admin\Config as ModelConfig;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 
-class ConfigController{
+class Config{
     public function index(Http $http){
         if ($http->has('task')) {
             if($http->get('task') == 'save'){
                 $axisubPost = $http->get('axisubs');
                 if(isset($axisubPost['config'])) {
-                    $result = Config::saveConfig($http->all());
+                    $result = ModelConfig::saveConfig($http->all());
                     if($result){
                         Notifier::success('Saved successfully');
                     } else {
@@ -26,7 +26,7 @@ class ConfigController{
                 }
             }
         }
-        $all = Config::all();
+        $all = ModelConfig::all();
         $pagetitle = "Configuration";
         return view('@Axisubs/Admin/config/edit.twig', compact('all','pagetitle'));
     }

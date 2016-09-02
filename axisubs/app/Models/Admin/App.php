@@ -6,7 +6,7 @@
  * Time: 1:25 PM
  */
 
-namespace Axisubs\Models;
+namespace Axisubs\Models\Admin;
 
 use Events\Event;
 use Corcel\Post;

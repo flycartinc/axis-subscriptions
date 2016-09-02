@@ -6,7 +6,7 @@
  * Time: 1:25 PM
  */
 
-namespace Axisubs\Models;
+namespace Axisubs\Models\Admin;
 
 use Herbert\Framework\Models\Post;
 use Herbert\Framework\Models\PostMeta;
@@ -41,8 +41,10 @@ class Config extends Post
     public static function all($columns = ['*'])
     {
         $item = parent::all()->where('post_type', 'axisubs_config')->first();
-        if($item->meta() != null){
-            $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+        if(!empty($item)) {
+            if ($item->meta() != null) {
+                $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+            }
         }
         return $item;
     }

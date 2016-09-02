@@ -10,7 +10,7 @@ namespace Axisubs\Models\Admin;
 use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
-use Axisubs\Models\Plans;
+use Axisubs\Models\Site\Plans;
 
 class Subscriptions extends Post{
     /**

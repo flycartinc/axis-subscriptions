@@ -8,7 +8,7 @@
 
 namespace Axisubs\Helper;
 
-use Axisubs\Models\Config;
+use Axisubs\Models\Admin\Config;
 
 class Currency
 {

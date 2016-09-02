@@ -12,10 +12,10 @@ function loginUser(){
         var valid = validateRequiredFields("#login_user");
         if(valid) {
             var fields = $("#login_user").serializeArray();
-            //fields.push({'name':'ajax','value':'ajax'});
+            fields.push({'name':'view','value':'User'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-site-login',
+                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
                 dataType: 'json',
                 data: fields,
                 cache: false,
@@ -57,10 +57,11 @@ function updateProfile(){
         var valid = validateRequiredFields("#my_profile");
         if(valid) {
             var fields = $("#my_profile").serializeArray();
-            //fields.push({'name':'ajax','value':'ajax'});
+            fields.push({'name':'view','value':'User'});
+            fields.push({'name':'task','value':'updateProfile'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-site-updateprofile',
+                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
                 dataType: 'json',
                 data: fields,
                 cache: false,
@@ -74,7 +75,6 @@ function updateProfile(){
                     } else {
                         meesageText.addClass('message-danger');
                     }
-                    console.log(json)
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -105,10 +105,11 @@ function registerUser(){
         }
         if(valid) {
             var fields = $("#register_user").serializeArray();
-            //fields.push({'name':'ajax','value':'ajax'});
+            fields.push({'name':'view','value':'User'});
+            fields.push({'name':'task','value':'registerUser'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-site-registeruser',
+                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
                 dataType: 'json',
                 data: fields,
                 cache: false,

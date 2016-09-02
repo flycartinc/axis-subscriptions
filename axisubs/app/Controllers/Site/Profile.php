@@ -5,15 +5,15 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Site;
 
-use Axisubs\Models\Plans;
+use Axisubs\Models\Site\Plans;
 use Axisubs\Helper\Currency;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Helper;
 
-class ProfileController{
+class Profile{
     //Show My profile
     public function showMyProfile(Http $http){
         $site_url = get_site_url();

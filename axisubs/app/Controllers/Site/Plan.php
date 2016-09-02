@@ -5,10 +5,9 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Site;
 
-use Axisubs\Models\Plans;
-use Axisubs\Models\User;
+use Axisubs\Models\Site\Plans;
 use Axisubs\Helper\Currency;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
@@ -17,7 +16,7 @@ use Axisubs\Helper;
 use Axisubs\Helper\Duration;
 use Axisubs\Helper\FrontEndMessages;
 
-class PlanController{
+class Plan{
     //Show all Plans
     public function showAllPlans(Http $http){
 

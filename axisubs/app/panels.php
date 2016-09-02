@@ -8,7 +8,7 @@ $panel->add([
     'title'  => 'Axisubs',
     'rename' => 'Plans',
     'slug'   => 'plans-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\AdminController@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Plan@index'
 ]);
 
 // For Subscriptions menu
@@ -18,7 +18,7 @@ $panel->add([
     'as'     => 'subscriptions',
     'title'  => 'Subscriptions',
     'slug'   => 'subscriptions-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\SubscriptionsController@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Subscription@index'
 ]);
 
 // For Subscriptions menu
@@ -28,7 +28,7 @@ $panel->add([
     'as'     => 'customers',
     'title'  => 'Customers',
     'slug'   => 'customers-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\CustomersController@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Customer@index'
 ]);
 
 // For configuration menu
@@ -38,7 +38,7 @@ $panel->add([
     'as'     => 'configuration',
     'title'  => 'Configuration',
     'slug'   => 'config-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\ConfigController@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Config@index'
 ]);
 
 // For App menu
@@ -48,5 +48,5 @@ $panel->add([
     'as'     => 'app',
     'title'  => 'Apps',
     'slug'   => 'app-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\AppController@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\App@index'
 ]);

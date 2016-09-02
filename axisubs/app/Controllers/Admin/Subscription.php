@@ -12,11 +12,10 @@ use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 
 use Axisubs\Helper\Status;
-use Axisubs\Models\Plans;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
 
-class SubscriptionsController
+class Subscription
 {
     public function index(Http $http)
     {

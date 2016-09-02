@@ -10,7 +10,7 @@ namespace Axisubs\Models\Admin;
 use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
-use Axisubs\Models\Plans;
+use Axisubs\Models\Site\Plans;
 use Corcel\User;
 
 class Customers extends Post{
@@ -206,7 +206,7 @@ class Customers extends Post{
         if($post['add_type'] && $post['id']){
             $user_id = $post['id'];
         } else {
-            $addUser = \Axisubs\Models\User::registerUser($post, 1);
+            $addUser = \Axisubs\Models\Site\User::registerUser($post, 1);
             if($addUser['status'] == 'success'){
                 $user_id = $addUser['ID'];
             } else {

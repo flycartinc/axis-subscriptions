@@ -5,15 +5,16 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Admin;
 
-use Axisubs\Models\Plans;
+use Axisubs\Models\Site\Plans;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Helper\Pagination;
 use Axisubs\Models\Admin\Customers;
+use Axisubs\Controllers\Controller;
 
-class AdminController
+class Plan extends Controller
 {
     public function index(Http $http)
     {
@@ -66,30 +67,15 @@ class AdminController
         return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items', 'paginationD'));
     }
 
-    public function ajaxCall(Http $http)
-    {
-        $task = $http->get('task');
-        if($task == 'loadPlanFields'){
-            $planType = $http->get('type');
-            $id = $http->get('id');
-            $item = Plans::loadPlan($id);
-            if($planType != ''){
-                return view('@Axisubs/Admin/plan/types/'.$planType.'.twig', compact('item'));
-            } else {
-                return view('@Axisubs/Admin/plan/types/free.twig', compact('item'));
-            }
-        } else if($task == 'loadCustomerSubscriptions'){
-            $id = $http->get('id');
-            $items = Customers::loadSubscriptionsByUserId($id);
-            return view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
-        } else if($task == 'loadCustomerDetails'){
-            $id = $http->get('id');
-            $result = Customers::loadCustomerDetailsByUserId($id);
-            echo json_encode($result);
-        } else if($task == 'addCustomer'){
-            $result = Customers::addNewCustomer($http->all());
-            echo json_encode($result);
+    public function loadPlanFields(){
+        $http = Http::capture();
+        $planType = $http->get('type', '');
+        $id = $http->get('id');
+        $item = Plans::loadPlan($id);
+        if($planType != ''){
+            return view('@Axisubs/Admin/plan/types/'.$planType.'.twig', compact('item'));
+        } else {
+            return view('@Axisubs/Admin/plan/types/free.twig', compact('item'));
         }
-
     }
 }

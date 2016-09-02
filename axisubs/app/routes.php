@@ -11,29 +11,17 @@ $router->get([
 $router->get([
     'as' => 'subscribe',
     'uri' => '/subscribe/{plan_slug}',
-    'uses' => __NAMESPACE__ . '\Controllers\PlanController@showSelectedPlan'
+    'uses' => __NAMESPACE__ . '\Controllers\Site\Plan@showSelectedPlan'
 ]);
 
 $router->post([
     'as' => "axisubsAjax",
     'uri' => '/axisubs-admin-ajax',
-    'uses' => __NAMESPACE__ . '\Controllers\AdminController@ajaxCall'
+    'uses' => __NAMESPACE__ . '\Controllers\Controller@ajaxCall'
 ]);
 
 $router->post([
-    'as' => "axisubsAjaxSite",
-    'uri' => '/axisubs-site-login',
-    'uses' => __NAMESPACE__ . '\Controllers\AjaxController@loginUser'
-]);
-
-$router->post([
-    'as' => "axisubsAjaxSiteRegisterUser",
-    'uri' => '/axisubs-site-registeruser',
-    'uses' => __NAMESPACE__ . '\Controllers\AjaxController@registerUser'
-]);
-
-$router->post([
-    'as' => "axisubsAjaxSiteUpdateProfile",
-    'uri' => '/axisubs-site-updateprofile',
-    'uses' => __NAMESPACE__ . '\Controllers\AjaxController@updateProfile'
+    'as' => "axisubsAjaxSiteAll",
+    'uri' => '/axisubs-site-ajax',
+    'uses' => __NAMESPACE__ . '\Controllers\Controller@ajaxCallSite'
 ]);

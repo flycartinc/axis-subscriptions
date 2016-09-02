@@ -5,19 +5,19 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Admin;
 
-use Axisubs\Models\App;
+use Axisubs\Models\Admin\App as ModelApp;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 
-class AppController{
+class App{
     public function index(Http $http){
         if ($http->has('task')) {
             $task = $http->get('task');
             switch ($task){
                 case 'disable':
-                    $result = App::disableApp($http->get('p'));
+                    $result = ModelApp::disableApp($http->get('p'));
                     if ( is_wp_error( $result ) ) {
                         Notifier::error('Failed to disable');
                     } else {
@@ -25,7 +25,7 @@ class AppController{
                     }
                 break;
                 case 'enable':
-                    $result = App::enableApp($http->get('p'));
+                    $result = ModelApp::enableApp($http->get('p'));
                     if ( is_wp_error( $result ) ) {
                         Notifier::error('Failed to enable');
                     } else {
@@ -33,7 +33,7 @@ class AppController{
                     }
                 break;
                 case 'view':
-                    $result = App::loadAppView($http->get('p'));
+                    $result = ModelApp::loadAppView($http->get('p'));
                     return ;
                 break;
             }
@@ -41,7 +41,7 @@ class AppController{
         /*$all = Config::all();*/
         $pagetitle = "Apps";
         //$content = do_action('loadPluginNameFunction');
-        $apps = App::getAllApps();
+        $apps = ModelApp::getAllApps();
 //        $output = '';
 //        $content[]   = apply_filters( 'loadPluginNameFunction', $output);
 //       print_r($content);exit;

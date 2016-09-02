@@ -5,21 +5,23 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Site;
 
-use Axisubs\Models\Plans;
+use Axisubs\Controllers\Controller;
+use Axisubs\Models\Site\Plans;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Helper;
-use Axisubs\Models\User;
+use Axisubs\Models\Site\User as ModelUser;
 
-class AjaxController
+class User extends Controller
 {
-    public function loginUser(Http $http)
+    public function loginUser()
     {
+        $http = Http::capture();
         $task = $http->get('task');
         if ($task == 'loginUser') {
-            $result = User::loginUser($http->all());
+            $result = ModelUser::loginUser($http->all());
         } else {
             $result['status'] = 'failed';
             $result['message'] = 'Something goes wrong.';
@@ -28,12 +30,14 @@ class AjaxController
 
     }
 
-    public function registerUser(Http $http){
-        $result = User::registerUser($http->all());
+    public function registerUser(){
+        $http = Http::capture();
+        $result = ModelUser::registerUser($http->all());
         echo json_encode($result);
     }
 
-    public function updateProfile(Http $http){
+    public function updateProfile(){
+        $http = Http::capture();
         $post = $http->all();
         $result = Plans::updateUserDetails($post['axisubs']['subscribe']);
         if($result){

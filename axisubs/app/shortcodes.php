@@ -5,7 +5,7 @@
 //For displaying plans
 $shortcode->add(
     'AxisubsAllPlans',
-    __NAMESPACE__ . '\Controllers\PlanController@showAllPlans',
+    __NAMESPACE__ . '\Controllers\Site\Plan@showAllPlans',
     [
         'post_id' => 'postId'
     ]
@@ -14,7 +14,7 @@ $shortcode->add(
 //For displaying Subscriptions
 $shortcode->add(
     'AxisubsAllSubscriptions',
-    __NAMESPACE__ . '\Controllers\SubscribeController@showAllSubscriptions',
+    __NAMESPACE__ . '\Controllers\Site\Subscribe@showAllSubscriptions',
     [
         'post_id' => 'postId'
     ]
@@ -23,7 +23,7 @@ $shortcode->add(
 //For displaying Profile View
 $shortcode->add(
     'AxisubsMyProfile',
-    __NAMESPACE__ . '\Controllers\ProfileController@showMyProfile',
+    __NAMESPACE__ . '\Controllers\Site\Profile@showMyProfile',
     [
         'post_id' => 'postId'
     ]

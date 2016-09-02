@@ -5,9 +5,9 @@
  * Date: 12/7/16
  * Time: 12:52 PM
  */
-namespace Axisubs\Controllers;
+namespace Axisubs\Controllers\Site;
 
-use Axisubs\Models\Plans;
+use Axisubs\Models\Site\Plans;
 use Axisubs\Helper\Currency;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
@@ -15,7 +15,7 @@ use Axisubs\Helper\Status;
 use Axisubs\Helper\FrontEndMessages;
 use Axisubs\Helper;
 
-class SubscribeController{
+class Subscribe{
     //Show all Plans
     public function showAllSubscriptions(Http $http){
         $currency = new Currency();

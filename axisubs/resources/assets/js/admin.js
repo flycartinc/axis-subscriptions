@@ -11,6 +11,7 @@ function loadFieldsOfPlanType(val, id) {
         var postData = {
             id: id,
             type: val,
+            view: "Plan",
             task: "loadPlanFields"
         };
         $.ajax({
@@ -52,7 +53,8 @@ function addCustomer(){
         }
         if(valid){
             var fields = $("#my_profile").serializeArray();
-            fields.push({'task':'addCustomer', 'tes':'sdf'});
+            fields.push({'name':'task','value': 'addCustomer'});
+            fields.push({'name':'view','value': 'Customer'});
             $.ajax({
                 type: 'post',
                 url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
@@ -73,7 +75,6 @@ function addCustomer(){
                             $('#axisubs_subscribe_'+json['field']).addClass('invalid-field').focus();
                         }
                     }
-                    console.log(json)
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -104,7 +105,8 @@ function autoPopulateCustomerDetails(val){
     (function ($) {
         var postData = {
             id: val,
-            task: "loadCustomerDetails"
+            task: "loadCustomerDetails",
+            view: "Customer"
         };
         $.ajax({
             url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
@@ -183,7 +185,8 @@ function checkForeverIsChoosen(){
             var selected = $(this);
             var postData = {
                 id: jQuery(this).attr('data-attr'),
-                task: "loadCustomerSubscriptions"
+                task: "loadCustomerSubscriptions",
+                view: "Customer"
             };
             var contentDiv = selected.children('.more_subscriptions-data');
             //selected.find('.more_subscriptions-data').show();
