@@ -38,7 +38,7 @@ $panel->add([
     'as'     => 'configuration',
     'title'  => 'Configuration',
     'slug'   => 'config-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Config@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Config@execute'
 ]);
 
 // For App menu
