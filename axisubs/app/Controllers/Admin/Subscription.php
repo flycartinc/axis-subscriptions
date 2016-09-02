@@ -14,15 +14,21 @@ use Herbert\Framework\Notifier;
 use Axisubs\Helper\Status;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
+use Axisubs\Controllers\Controller;
 
-class Subscription
+class Subscription extends Controller
 {
-    public function index(Http $http)
+    public $_controller = 'Subscription';
+
+    /**
+     * Default page
+     * */
+    public function index()
     {
+        $http = Http::capture();
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
-        $role_names = wp_roles()->role_names;
         $pagetitle = 'Subscriptions';
         $site_url = get_site_url();
         if ($http->has('sid')) {

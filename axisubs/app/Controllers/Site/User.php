@@ -16,6 +16,9 @@ use Axisubs\Models\Site\User as ModelUser;
 
 class User extends Controller
 {
+    /**
+     * For user Login through ajax
+     * */
     public function loginUser()
     {
         $http = Http::capture();
@@ -30,12 +33,18 @@ class User extends Controller
 
     }
 
+    /**
+     * For register an user through ajax
+     * */
     public function registerUser(){
         $http = Http::capture();
         $result = ModelUser::registerUser($http->all());
         echo json_encode($result);
     }
 
+    /**
+     * For update user profile through ajax
+     * */
     public function updateProfile(){
         $http = Http::capture();
         $post = $http->all();

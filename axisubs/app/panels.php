@@ -18,7 +18,7 @@ $panel->add([
     'as'     => 'subscriptions',
     'title'  => 'Subscriptions',
     'slug'   => 'subscriptions-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Subscription@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Subscription@execute'
 ]);
 
 // For Subscriptions menu
