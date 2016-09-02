@@ -8,7 +8,7 @@ $panel->add([
     'title'  => 'Axisubs',
     'rename' => 'Plans',
     'slug'   => 'plans-index',
-    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Plan@index'
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Plan@execute'
 ]);
 
 // For Subscriptions menu
