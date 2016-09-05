@@ -70,7 +70,10 @@ class App extends Post{
     // For load app View
     public static function loadAppView($folder){
         Event::trigger( $folder.'_loadView', '');
-//        Event::listen('axisubs-app-paypal_loadView', 'loadFormView', 1);
-//        echo "hai ashlin";
+    }
+
+    // For load app View
+    public static function loadAppTask($folder){
+        Event::trigger( $folder.'_appTask', '');
     }
 }

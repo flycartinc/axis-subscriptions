@@ -60,6 +60,8 @@ class Config extends Post
             $postTable->post_title = 'Config';
             $postTable->post_type = 'axisubs_config';
             $postTable->save();
+            $postDB = \Corcel\Post::where('post_type', 'axisubs_config')->get();
+            $postTable = $postDB->first();
         }
         foreach ($post['axisubs']['config'] as $key => $val) {
             $key = $postTable->ID . '_axisubs_config_' . $key;

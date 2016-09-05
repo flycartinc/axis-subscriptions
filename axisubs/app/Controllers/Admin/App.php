@@ -68,7 +68,13 @@ class App extends Controller{
         return ;
     }
 
-    public function app(Http $http){
-
+    /**
+     * App task
+     * */
+    public function appTask()
+    {
+        $http = Http::capture();
+        $result = ModelApp::loadAppTask($http->get('p'));
+        return ;
     }
 }
