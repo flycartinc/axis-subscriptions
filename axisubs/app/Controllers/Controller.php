@@ -13,6 +13,7 @@ use Herbert\Framework\Notifier;
 class Controller
 {
     public $_controller = '';
+    public $_path = 'Admin';
 
     /**
      * For ajax Call
@@ -28,10 +29,10 @@ class Controller
             if(method_exists($object, $task)){
                 return $object->$task();
             } else {
-                echo 'function not available';
+                echo 'function not available'; // TODO: handle error
             }
         } else {
-            echo 'Class not available';
+            echo 'Class not available'; // TODO: handle error
         }
     }
 
@@ -49,7 +50,7 @@ class Controller
     public function execute(Http $http){
         $task = $http->get('task');
         $controller = $http->get('controller', $this->_controller);
-        $path = $http->get('path', 'Admin');
+        $path = $http->get('path', $this->_path);
         $className = '\\Axisubs\\Controllers\\'.$path.'\\'.$controller;
         if(class_exists($className)){
             $object = new $className();

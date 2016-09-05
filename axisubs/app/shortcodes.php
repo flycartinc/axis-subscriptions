@@ -5,7 +5,7 @@
 //For displaying plans
 $shortcode->add(
     'AxisubsAllPlans',
-    __NAMESPACE__ . '\Controllers\Site\Plan@showAllPlans',
+    __NAMESPACE__ . '\Controllers\Site\Plan@execute',
     [
         'post_id' => 'postId'
     ]

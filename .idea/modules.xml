@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/axisubs_wordpress.iml" filepath="$PROJECT_DIR$/.idea/axisubs_wordpress.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/axisubs_plugin.iml" filepath="$PROJECT_DIR$/.idea/axisubs_plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/axisubs_wordpress.iml" filepath="$PROJECT_DIR$/.idea/axisubs_wordpress.iml" />
     </modules>
   </component>
 </project>
