@@ -87,6 +87,10 @@
 .axisubs .invalid-field{
     border: 1px solid red !important;
 }
+.axisubs label.invalid-field{
+    border: 0px solid red !important;
+    color: red;
+}
 .axisubs .message-success {
     background-color: #fff;
     border-left: 4px solid #5cb85c;
@@ -146,4 +150,11 @@
 }
 .axisubs .notice-success {
     border-left-color: #46b450;
+}
+.axisubs-plan-payment-block-con {
+    padding: 10px 0;
+}
+.axisubs_payment_each_block {
+    display: inline-block;
+    margin: 5px 0;
 }

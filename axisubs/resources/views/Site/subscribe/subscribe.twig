@@ -100,11 +100,16 @@
             <input type="hidden" name="s_id" value="{{ subscriber['ID'] }}"/>
             <div class="axisubs-plan-payment-i-block">
                 <div class="axisubs-plan-payment-button">
-                    <button type="submit">Pay now</button>
+                    {% if meta[id~'_axisubs_plans_type'] == 'free' %}
+                    <button type="submit">Confirm Subscribe</button>
+                    {% else %}
+                        <button type="button" onclick="submitAxisubsPayment()">Pay now</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </form>
+        {{ data['paymentForm'] | raw }}
     {% else %}
         <div class="axisubs-plan-notfound">
             Invalid Data

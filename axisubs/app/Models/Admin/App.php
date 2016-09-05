@@ -55,6 +55,21 @@ class App extends Post{
         return $axisubsApps;
     }
 
+    /**
+     * Get active payment Apps
+     * */
+    public static function getActivePaymentApps(){
+        $allApps = App::getAllApps();
+        $axisubsApps = array();
+        foreach($allApps as $key => $value){
+            $folderArray = explode('-', $value['pluginFolder']);
+            if($folderArray[2] == 'payment' && $value['active'] == '1'){
+                $axisubsApps[] = $value;
+            }
+        }
+        return $axisubsApps;
+    }
+
     //For enable a plugin
     public static function enableApp($path){
         $result = activate_plugin( $path );

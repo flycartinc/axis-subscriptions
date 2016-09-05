@@ -84,9 +84,27 @@ function updateProfile(){
     })(axisubs.jQuery);
 }
 
+//validate payment radio button
+function validateForPaymentOption(){
+    axisubs.jQuery( "input[name=payment]" ).next().removeClass('invalid-field');
+    if ( axisubs.jQuery( "input[name=payment]" ).length ) {
+        if(axisubs.jQuery( "input[name=payment]" ).is(':checked')){
+            return true;
+        } else {
+            axisubs.jQuery( "input[name=payment]" ).next().addClass('invalid-field');
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
 //Validate subscription
 function submitSubscriptions(){
     var valid = validateRequiredFields("#register_user");
+    if(valid){
+        valid = validateForPaymentOption();
+    }
     if(valid){
         axisubs.jQuery("#register_user").submit();
     }
@@ -132,7 +150,7 @@ function registerUser(){
     })(axisubs.jQuery);
 }
 
-// For
+// Document ready functions
 (function ($) {
     $(document).ready(function () {
         // For on click event forever checkbox

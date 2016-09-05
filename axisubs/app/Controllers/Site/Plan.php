@@ -16,6 +16,7 @@ use Axisubs\Helper;
 use Axisubs\Helper\Duration;
 use Axisubs\Helper\FrontEndMessages;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\PaymentPlugins;
 
 class Plan extends Controller{
 
@@ -45,6 +46,7 @@ class Plan extends Controller{
      * View a plan
      * */
     public function view(){
+        $data = array();
         $http = Http::capture();
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
@@ -64,7 +66,13 @@ class Plan extends Controller{
                 $user = Plans::getUserDetails();
                 $wp_user = Helper::getUserDetails();
                 $user_id = $wp_user->ID;
-                return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id'));
+                if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
+                    //For loading payment options
+                    $payment = new PaymentPlugins();
+                    $data['paymentMethods'] = $payment->loadPaymentOptions();
+                }
+
+                return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id', 'data'));
             } else {
                 $this->message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
                 return $this->index();
@@ -76,6 +84,7 @@ class Plan extends Controller{
      * save a plan
      * */
     public function save(){
+        $data = array();
         $http = Http::capture();
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
@@ -94,7 +103,17 @@ class Plan extends Controller{
                 $result = Plans::addSubscribe($http->all(), $item);
                 if ($result) {
                     $subscriber = Plans::loadSubscriber($result);
-                    return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url'));
+                    if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
+                        if($http->get('payment', '') != ''){
+                            //For loading payment options
+                            $payment = new PaymentPlugins();
+                            $data['paymentForm'] = $payment->loadPaymentForm($http->get('payment'), $subscriber, $item);
+                        } else {
+                            $this->message = FrontEndMessages::failure('Invalid payment option');
+                            return $this->index();
+                        }
+                    }                    
+                    return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'data'));
                 } else {
                     $message = FrontEndMessages::failure('Failed to subscribe');
                     return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'currencyData', 'site_url', 'message'));

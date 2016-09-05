@@ -317,8 +317,18 @@
                 </div>
             </div>
             <div class="axisubs-plan-payment-con">
+                {% if meta[id~'_axisubs_plans_type'] != 'free' %}
+                <div class="axisubs-plan_details-title">
+                    <h3>Payment methods</h3>
+                </div>
+                {% endif %}
                 <input type="hidden" name="task" value="save"/>
                 <div class="axisubs-plan-payment-i-block">
+                    {% if meta[id~'_axisubs_plans_type'] != 'free' %}
+                        <div class="axisubs-plan-payment-block-con">
+                            {{ data['paymentMethods'] | raw }}
+                        </div>
+                    {% endif %}
                     <div class="axisubs-plan-payment-button">
                         {% if(user_id) %}
                             <button type="button" onclick="submitSubscriptions();">Subscribe</button>
