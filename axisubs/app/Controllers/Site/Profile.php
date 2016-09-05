@@ -12,17 +12,23 @@ use Axisubs\Helper\Currency;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Helper;
+use Axisubs\Controllers\Controller;
 
-class Profile{
-    //Show My profile
-    public function showMyProfile(Http $http){
+class Profile extends Controller{
+
+    public $_controller = 'Profile';
+    public $_path = 'Site';
+
+    /**
+     * Show My Profile Default layout
+     * */
+    public function index(){
         $site_url = get_site_url();
         $pagetitle = "Subscriptions";
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
         $user = Plans::getUserDetails();
         $wp_user = Helper::getUserDetails();
         $wp_userD = array();
-//        echo "<pre>";print_r($wp_user);exit;
         $wp_userD['ID'] = $wp_user->ID;
         $wp_userD['user_name'] = $wp_user->user_login;
         $wp_userD['first_name'] = $wp_user->first_name;
@@ -31,9 +37,5 @@ class Profile{
             $wp_userD['email'] = $wp_user->data->user_email;
         }
         return view('@Axisubs/Site/myprofile/myprofile.twig', compact('pagetitle', 'subscribtions_url', 'site_url', 'user', 'wp_userD'));
-    }
-
-    public function showSelectedPlan(){
-        return view('@Axisubs/Site/subscribe/details.twig');
     }
 }

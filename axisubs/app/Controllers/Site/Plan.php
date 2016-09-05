@@ -24,7 +24,7 @@ class Plan extends Controller{
     public $message = null;
 
     /**
-     * Show All Plans
+     * Show All Plans Default layout
      * */
     public function index(){
         $http = Http::capture();
