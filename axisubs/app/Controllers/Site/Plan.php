@@ -126,9 +126,9 @@ class Plan extends Controller{
     }
 
     /**
-     * update a plan
+     * update free plan
      * */
-    public function update(){
+    public function updateFreePlan(){
         $http = Http::capture();
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
@@ -144,7 +144,7 @@ class Plan extends Controller{
             //Check eligibility
             $eligible = Plans::isEligible($item);
             if($eligible) {
-                $result = Plans::updateSubscribe($http->all(), $item);
+                $result = Plans::updateFreeSubscribe($http->all(), $item);
                 if ($result) {
                     $message = FrontEndMessages::success('Subscribed successfully');
                     //wp_redirect($site_url.'index.php?axisubs_subscribes=subscribe');
@@ -160,5 +160,31 @@ class Plan extends Controller{
                 return $this->index();
             }
         }
+    }
+
+    /**
+     * Complete payment
+     * */
+    public function paymentComplete(){
+        $http = Http::capture();
+        if($http->get('payment_type') != ''){
+            $sessionData = Session()->get('axisubs_subscribers');
+            if(isset($sessionData['current_subscription_id']) && $sessionData['current_subscription_id']){
+                $payment = new PaymentPlugins();
+                $result = $payment->executePaymentTasks();
+                Session()->set('axisubs_subscribers', null);
+                if($result['status'] == 200){
+                    $message = FrontEndMessages::success($result['message']);
+                } else {
+                    $message = FrontEndMessages::failure($result['message']);
+                }
+            } else {
+                $message = FrontEndMessages::failure('Session expired');
+            }
+        } else {
+            $message = FrontEndMessages::failure('Invalid Request');
+        }
+        $subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
+        return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle', 'subscribtions_url', 'message'));
     }
 }

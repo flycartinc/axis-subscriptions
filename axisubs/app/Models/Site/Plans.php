@@ -36,6 +36,7 @@ class Plans extends Post{
     public static $_total;
     public static $_start;
     public static $_limit;
+    public static $instance = null;
 
     public static function populateStates($post){
         if(isset($post['limitstart']) && $post['limitstart']){
@@ -64,7 +65,18 @@ class Plans extends Post{
         return $result;
     }
 
-    // Load all Plans
+    public static function getInstance(array $config = array())
+    {
+        if (!self::$instance)
+        {
+            self::$instance = new self($config);
+        }
+
+        return self::$instance;
+    }
+    /**
+     * Load all plans with pagination
+     * */
     public static function all($columns = ['*']){
 //        $items = parent::all()->where('post_type', 'axisubs_plans');
         $postO = new Post();
@@ -83,7 +95,9 @@ class Plans extends Post{
         return $items;
     }
 
-    //Load plans for front end
+    /**
+     * Load plans for front end
+     * */
     public static function allFrontEndPlans(){
         $items = parent::all()->where('post_type', 'axisubs_plans');
         /*$postO = new Post();
@@ -112,13 +126,15 @@ class Plans extends Post{
         return $items;
     }
 
-    //Load Single Plan
+    /**
+     * Load Single Plan
+     * */
     public static function loadPlan($id){
         $item = Post::all()->where('post_type', 'axisubs_plans')->find($id);
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $meta['allow_setupcost'] = 1;
-            if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_price'])) {
+            if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost'])) {
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
             } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'];
@@ -130,7 +146,9 @@ class Plans extends Post{
         return $item;
     }
 
-    // save Plans
+    /**
+     * Delete Plans
+     * */
     public static function deletePlan($id){
         if($id){
             $postDB = Post::where('post_type', 'axisubs_plans')->get();
@@ -142,7 +160,9 @@ class Plans extends Post{
         }
     }
 
-    // save Plans
+    /**
+     * save Plans
+     * */
     public static function savePlans($post){
         if($post['id']){
             $postDB = Post::where('post_type', 'axisubs_plans')->get();
@@ -175,10 +195,14 @@ class Plans extends Post{
             return false;
         }
     }
-    // update Subscribe
-    public static function updateSubscribe($post, $plans){
+
+    /**
+     * update Subscribe
+     * */
+    public static function updateFreeSubscribe($post, $plans){
+        $plantype = $plans->meta[$plans->ID.'_axisubs_plans_type'];
         $sessionData = Session()->get('axisubs_subscribers');
-        if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId){
+        if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId && $plantype == 'free'){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->get();
             $postTable = $postDB->find($sessionData[$plans->ID]->subscriberId);
             $key = $sessionData[$plans->ID]->subscriberId.'_axisubs_subscribe_status';
@@ -195,7 +219,9 @@ class Plans extends Post{
         }
     }
 
-    // get All subscriptions
+    /**
+     * get All subscriptions
+     * */
     public static function loadAllSubscribes($id = 0){
         if($id){
             $userId = $id;
@@ -217,7 +243,9 @@ class Plans extends Post{
         return $subscribers;
     }
 
-    //Get user Details
+    /**
+     * Get user Details
+     * */
     public static function getUserDetails(){
         $user = Helper::getUserDetails();
         if($user->ID){
@@ -232,7 +260,9 @@ class Plans extends Post{
         }
     }
 
-    //Update User Details
+    /**
+     * Update User Details
+     * */
     public static function updateUserDetails($data, $user_id = 0){
         $user = Helper::getUserDetails($user_id);
         $postDB = Post::where('post_type', 'axisubs_user_'.$user->ID)->get();
@@ -260,7 +290,9 @@ class Plans extends Post{
         return $result;
     }
 
-    // save Subscribe
+    /**
+     * Add Subscription
+     * */
     public static function addSubscribe($post, $plans){
         $sessionData = Session()->get('axisubs_subscribers');
         if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId){
@@ -309,6 +341,11 @@ class Plans extends Post{
         $endDate = Plans::calculateEndDate($startDate, $plans);
         $totalCost = $price+$setup_cost;
 
+        $payment_type = '';
+        if(isset($post['payment'])){
+            $payment_type = $post['payment'];
+        }
+
         $extraFields = array('_axisubs_subscribe_plan_id' => $post['id'],
             '_axisubs_subscribe_status' => 'ORDER_PAGE',
             '_axisubs_subscribe_created_on' => $now,
@@ -318,7 +355,7 @@ class Plans extends Post{
             '_axisubs_subscribe_price' => $price,
             '_axisubs_subscribe_setup_cost' => $setup_cost,
             '_axisubs_subscribe_total_price' => $totalCost,
-            '_axisubs_subscribe_payment_type' => "",
+            '_axisubs_subscribe_payment_type' => $payment_type,
             '_axisubs_subscribe_payment_status' => "");
 
         foreach ($extraFields as $key1 => $val1) {
@@ -334,6 +371,7 @@ class Plans extends Post{
             $sessionObj->planId = $plans->ID;
             $sessionObj->subscriberId = $postTable->ID;
             $sessionData[$plans->ID] = $sessionObj;
+            $sessionData['current_subscription_id'] = $postTable->ID;
             Session()->set('axisubs_subscribers', $sessionData);
             return $postTable->ID;
         } else {
@@ -341,7 +379,9 @@ class Plans extends Post{
         }
     }
 
-    //get End Date
+    /**
+     * get End Date
+     * */
     public static function calculateEndDate($startDate, $plan){
         $planSufix = $plan->ID.'_axisubs_plans_';
         $plantype = $plan->meta[$planSufix.'type'];
@@ -367,7 +407,9 @@ class Plans extends Post{
         return date("Y-m-d g:i:s", strtotime($startDate." +".$days." days"));
     }
 
-    //get end date from previous subscriber
+    /**
+     * get end date from previous subscriber
+     * */
     public static function getEndDateOfSubscriber($subscribers){
         $newEndDate = date("Y-m-d g:i:s");
         foreach($subscribers as $key => $value){
@@ -382,7 +424,9 @@ class Plans extends Post{
         return $newEndDate;
     }
 
-    //load current(users) valid subscriber
+    /**
+     * load current(users) valid subscriber
+     * */
     public static function getSubscribedDetails($planId){
         $userId =get_current_user_id();
         $valid = PostMeta::where('meta_key','like','%_axisubs_subscribe_user_id')
@@ -411,7 +455,9 @@ class Plans extends Post{
 
     }
 
-    //Load Single Subscriber
+    /**
+     * Load Single Subscriber
+     * */
     public static function loadSubscriber($id){
         $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($id);
         if($item) {
@@ -421,7 +467,9 @@ class Plans extends Post{
         return $item;
     }
 
-    //Get oldSubscriber
+    /**
+     * Get oldSubscriber
+     * */
     public static function loadOldSubscriber($plans)
     {
         $sessionData = Session()->get('axisubs_subscribers');
@@ -433,6 +481,9 @@ class Plans extends Post{
         return $item;
     }
 
+    /**
+     * check eligible for subscription
+     * */
     public static function isEligible($plan){
         $planSufix = $plan->ID.'_axisubs_plans_';
         $plantype = $plan->meta[$planSufix.'type'];
@@ -445,6 +496,98 @@ class Plans extends Post{
             }
         } else {
             return true;
+        }
+    }
+
+    public function paymentPending($subscription_id, $transaction){
+        if($subscription_id){
+            $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
+            $subsPrefix = $subscription_id.'_axisubs_subscribe_';
+            if(!empty($postDB)){
+                foreach ($transaction as $keyT => $val) {
+                    $key = $subsPrefix.$keyT;
+                    $postDB->meta->$key = $val;
+                }
+
+                $key = $subsPrefix.'payment_status';
+                $postDB->meta->$key = 'PENDING';
+                $key = $subsPrefix.'status';
+                $postDB->meta->$key = 'PENDING';
+                return $postDB->meta()->save();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function paymentFailed($subscription_id, $transaction){
+        if($subscription_id){
+            $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
+            $subsPrefix = $subscription_id.'_axisubs_subscribe_';
+            if(!empty($postDB)){
+                foreach ($transaction as $keyT => $val) {
+                    $key = $subsPrefix.$keyT;
+                    $postDB->meta->$key = $val;
+                }
+
+                $key = $subsPrefix.'payment_status';
+                $postDB->meta->$key = 'FAILED';
+                $key = $subsPrefix.'status';
+                $postDB->meta->$key = 'FAILED';
+                return $postDB->save();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function paymentCompleted($subscription_id, $transaction){
+        if($subscription_id){
+            $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
+            $subsPrefix = $subscription_id.'_axisubs_subscribe_';
+            if(!empty($postDB)){
+                foreach ($transaction as $keyT => $val) {
+                    $key = $subsPrefix.$keyT;
+                    $postDB->meta->$key = $val;
+                }
+
+                $key = $subsPrefix.'payment_status';
+                $postDB->meta->$key = 'SUCCESS';
+//                $key = $subsPrefix.'status'; // TODO : Need to update
+//                $postDB->meta->$key = 'SUCCESS';
+                return $postDB->save();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function paymentCanceled($subscription_id, $transaction){
+        if($subscription_id){
+            $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
+            $subsPrefix = $subscription_id.'_axisubs_subscribe_';
+            if(!empty($postDB)){
+                foreach ($transaction as $keyT => $val) {
+                    $key = $subsPrefix.$keyT;
+                    $postDB->meta->$key = $val;
+                }
+
+                $key = $subsPrefix.'payment_status';
+                $postDB->meta->$key = 'CANCELED';
+                $key = $subsPrefix.'status';
+                $postDB->meta->$key = 'CANCELED';
+                return $postDB->save();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 }

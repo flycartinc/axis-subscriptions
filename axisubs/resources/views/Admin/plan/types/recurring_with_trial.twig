@@ -55,3 +55,13 @@
         <span class="help-text">Regular subscription units of duration.</span>
     </div>
 </div>
+
+<div class="axisubs-fields">
+    <div class="axisubs-fields-label">
+        <label for="axisub_plan_billing_cycles">Billing Cycle</label>
+    </div>
+    <div class="axisubs-fields-content">
+        <input type="text" name="axisubs[plans][billing_cycles]" id="axisub_plan_billing_cycles" value="{{ item['meta'][item['ID']~'_axisubs_plans_billing_cycles'] }}"/>
+        <span class="help-text">No of times Subscription should Reoccur.</span>
+    </div>
+</div>

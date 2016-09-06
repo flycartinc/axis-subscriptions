@@ -10,6 +10,7 @@ namespace Axisubs\Helper;
 
 use Axisubs\Models\Admin\App;
 use Events\Event;
+use Herbert\Framework\Http;
 
 class PaymentPlugins
 {
@@ -36,8 +37,18 @@ class PaymentPlugins
         return $html;
     }
 
+    /**
+     * Load payment form
+     * */
     public function loadPaymentForm($paymentType, $subscription, $plan){
         $html = Event::trigger( $paymentType.'_paymentForm', array($subscription, $plan), 'filter');
+        return $html;
+    }
+
+    public function executePaymentTasks(){
+        $http = Http::capture();
+        $html = Event::trigger( $http->get('payment_type').'_paymentTask', '', 'filter');
+
         return $html;
     }
 }
