@@ -504,9 +504,10 @@ class Plans extends Post{
                 $lastSubscription = $value;
             }
         }
-        if($subscription->ID == $lastSubscription->ID){
-            $lastSubscription = array();
-        }
+        if(!empty($lastSubscription))
+            if($subscription->ID == $lastSubscription->ID){
+                $lastSubscription = array();
+            }
         return $lastSubscription;
     }
 
