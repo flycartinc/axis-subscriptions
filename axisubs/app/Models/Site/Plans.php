@@ -427,8 +427,12 @@ class Plans extends Post{
     /**
      * load current(users) valid subscriber
      * */
-    public static function getSubscribedDetails($planId){
-        $userId =get_current_user_id();
+    public static function getSubscribedDetails($planId, $user_id = 0){
+        if($user_id){
+            $userId = $user_id;
+        } else {
+            $userId = get_current_user_id();
+        }
         $valid = PostMeta::where('meta_key','like','%_axisubs_subscribe_user_id')
             ->where('meta_value', $userId)
             ->pluck('post_id');
@@ -482,6 +486,31 @@ class Plans extends Post{
     }
 
     /**
+     * check for active subscriptions
+     * */
+    public function checkForActiveSubscription($subscription)
+    {
+        $subsPrefix = $subscription->ID.'_axisubs_subscribe_';
+        $subscriptions = Plans::getSubscribedDetails($subscription->meta[$subsPrefix.'plan_id'], $subscription->meta[$subsPrefix.'user_id']);
+        $newEndDate = date("Y-m-d g:i:s");
+        $lastSubscription = array();
+        foreach($subscriptions as $key => $value){
+            $endDateKey = $value->ID.'_axisubs_subscribe_end_on';
+            $endDate = $value->meta[$endDateKey];
+            $oldDate = new \DateTime($newEndDate);
+            $newDate = new \DateTime($endDate);
+            if($newDate>$oldDate){
+                $newEndDate = $endDate;
+                $lastSubscription = $value;
+            }
+        }
+        if($subscription->ID == $lastSubscription->ID){
+            $lastSubscription = array();
+        }
+        return $lastSubscription;
+    }
+
+    /**
      * check eligible for subscription
      * */
     public static function isEligible($plan){
@@ -499,6 +528,9 @@ class Plans extends Post{
         }
     }
 
+    /**
+     * Handle pending payment
+     * */
     public function paymentPending($subscription_id, $transaction){
         if($subscription_id){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
@@ -513,7 +545,7 @@ class Plans extends Post{
                 $postDB->meta->$key = 'PENDING';
                 $key = $subsPrefix.'status';
                 $postDB->meta->$key = 'PENDING';
-                return $postDB->meta()->save();
+                return $postDB->save();
             } else {
                 return false;
             }
@@ -522,6 +554,9 @@ class Plans extends Post{
         }
     }
 
+    /**
+     * Handle failed payment
+     * */
     public function paymentFailed($subscription_id, $transaction){
         if($subscription_id){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
@@ -545,6 +580,9 @@ class Plans extends Post{
         }
     }
 
+    /**
+     * Handle completed payment
+     * */
     public function paymentCompleted($subscription_id, $transaction){
         if($subscription_id){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
@@ -557,8 +595,15 @@ class Plans extends Post{
 
                 $key = $subsPrefix.'payment_status';
                 $postDB->meta->$key = 'SUCCESS';
-//                $key = $subsPrefix.'status'; // TODO : Need to update
-//                $postDB->meta->$key = 'SUCCESS';
+
+                //For check to set Active or Future
+                $activeSubs = $this->checkForActiveSubscription($postDB);
+                $key = $subsPrefix.'status';
+                if(empty($activeSubs)){
+                    $postDB->meta->$key = 'ACTIVE';
+                } else {
+                    $postDB->meta->$key = 'FUTURE';
+                }
                 return $postDB->save();
             } else {
                 return false;
@@ -568,6 +613,9 @@ class Plans extends Post{
         }
     }
 
+    /**
+     * Handle canceled payment
+     * */
     public function paymentCanceled($subscription_id, $transaction){
         if($subscription_id){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->find($subscription_id);
