@@ -512,6 +512,104 @@ class Plans extends Post{
     }
 
     /**
+     * get Next Renewal
+     * */
+    public function getNextRenewal($subscription_id, $trans_id = ''){
+        if($trans_id != ''){
+            $subs = $this->checkForTransactionId($trans_id);
+        } else {
+            $subs = 0;
+        }
+        if($subs){
+            return $subs;
+        } else {
+            return $this->createACopyOfSubscription($subscription_id);
+        }
+    }
+
+    /**
+     * create a copy of subscription
+     * */
+    public function createACopyOfSubscription($subscription_id){
+        $oldSubscription = Plans::loadSubscriber($subscription_id);
+        $oldSubscriptionPrefix = $oldSubscription->ID.'_axisubs_subscribe_';
+        $planId = $oldSubscription->meta[$oldSubscriptionPrefix.'plan_id'];
+
+        $plans = Plans::loadPlan($planId);
+
+        $existAlready = Plans::getSubscribedDetails($plans->ID);
+        if(isset($plans->meta[$plans->ID.'_axisubs_plans_price']) && $plans->meta[$plans->ID.'_axisubs_plans_price'] > 0){
+            $price = $plans->meta[$plans->ID.'_axisubs_plans_price'];
+        } else {
+            $price = 0;
+        }
+
+        $now = date("Y-m-d g:i:s");
+        $setup_cost = 0;
+        if(count($existAlready)){
+            $startDate = Plans::getEndDateOfSubscriber($existAlready);
+        } else {
+            $startDate = $now;
+        }
+        //Calculate End Date
+        $endDate = Plans::calculateEndDate($startDate, $plans);
+        $totalCost = $price+$setup_cost;
+
+        $postTable = new Post();
+        $postTable->post_name = 'Subscribers';
+        $postTable->post_title = 'Subscribers';
+        $postTable->post_type = 'axisubs_subscribe';
+        $postTable->save();
+
+        $newSubscriptionPrefix = $postTable->ID.'_axisubs_subscribe_';
+        $fieldsToBeFilled = array('first_name', 'city', 'province', 'phone', 'plan_id',
+            'last_name', 'pincode', 'user_id',
+            'email', 'country', 'payment_type',
+            'address_line1', 'address_line2');
+        foreach ($oldSubscription->meta as $key => $val) {
+            $split = explode($oldSubscriptionPrefix, $key);
+            $fieldName = $split['1'];
+            if(in_array($fieldName, $fieldsToBeFilled)){
+                $newKey = $newSubscriptionPrefix.$fieldName;
+                $postTable->meta->$newKey = $val;
+            }
+        }
+
+        $extraFields = array('_axisubs_subscribe_plan_id' => $planId,
+            '_axisubs_subscribe_status' => 'PENDING',
+            '_axisubs_subscribe_created_on' => $now,
+            '_axisubs_subscribe_start_on' => $startDate,
+            '_axisubs_subscribe_end_on' => $endDate,
+            '_axisubs_subscribe_price' => $price,
+            '_axisubs_subscribe_setup_cost' => $setup_cost,
+            '_axisubs_subscribe_total_price' => $totalCost,
+            '_axisubs_subscribe_payment_status' => "");
+
+        foreach ($extraFields as $key1 => $val1) {
+            $key1 = $postTable->ID . $key1;
+            $postTable->meta->$key1 = $val1;
+        }
+        
+        $result = $postTable->save();
+        if($result){
+            return $postTable->ID;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkForTransactionId($trans_id){
+        $subscription = PostMeta::where('meta_key','like','%_axisubs_subscribe_transaction_ref_id')
+            ->where('meta_value', $trans_id)
+            ->pluck('post_id')->first();
+        if (empty($subscription)){
+            return false;
+        } else {
+            return $subscription;
+        }
+    }
+
+    /**
      * check eligible for subscription
      * */
     public static function isEligible($plan){
