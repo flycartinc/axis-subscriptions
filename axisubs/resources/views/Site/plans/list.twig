@@ -34,6 +34,19 @@
                                     <div><span class="axisubs-plans-label-block">Setup cost: </span><span class="axisubs-plans-text">{{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}</span></div>
                                 </div>
                             {% endif %}
+                            {% set type = item['meta'][item['ID']~'_axisubs_plans_type'] %}
+                            {% if (type == 'renewal_with_trial' or type == 'recurring_with_trial') %}
+                                {% if item['meta'][item['ID']~'_axisubs_plans_trial_period'] > 0 %}
+                                <div class="axisubs-plans-duration">
+                                    <div><span class="axisubs-plans-label-block">Trial Duration: </span>
+                                        <span class="axisubs-plans-text">
+                                            {% set trial_periodUnit = item['meta'][item['ID']~'_axisubs_plans_trial_period_units'] %}
+                                            {{ item['meta'][item['ID']~'_axisubs_plans_trial_period'] }} {{ unitInWords[trial_periodUnit] }}
+                                        </span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endif %}
                             <div class="axisubs-plans-duration">
                                 <div><span class="axisubs-plans-label-block">Duration: </span>
                                     <span class="axisubs-plans-text">

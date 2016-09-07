@@ -28,8 +28,6 @@ class Plan extends Controller{
      * Show All Plans Default layout
      * */
     public function index(){
-        $model = $this->getModel('Plans');
-        $model->createACopyOfSubscription(107);
         $http = Http::capture();
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
