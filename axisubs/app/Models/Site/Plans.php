@@ -325,11 +325,19 @@ class Plans extends Post{
         }
 
         $now = date("Y-m-d g:i:s");
+        $extraFieldsTrial = array();
         if(count($existAlready)){
             $startDate = Plans::getEndDateOfSubscriber($existAlready);
             $setup_cost = 0;
         } else {
             $startDate = $now;
+            $planType = $plans->meta[$plans->ID.'_axisubs_plans_type'];
+            if($planType == 'renewal_with_trial' || $planType == 'recurring_with_trial'){
+                $endDate = Plans::calculateEndDate($startDate, $plans, 1);
+                $extraFieldsTrial = array('_axisubs_subscribe_trial_start_on' => $startDate,
+                    '_axisubs_subscribe_trial_end_on' => $endDate);
+                $startDate = $endDate;
+            }
             if(isset($plans->meta[$plans->ID.'_axisubs_plans_setup_cost']) && $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'] > 0){
                 $setup_cost = $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'];
             } else {
@@ -358,6 +366,8 @@ class Plans extends Post{
             '_axisubs_subscribe_payment_type' => $payment_type,
             '_axisubs_subscribe_payment_status' => "");
 
+        $extraFields = array_merge($extraFields, $extraFieldsTrial);
+
         foreach ($extraFields as $key1 => $val1) {
             $key1 = $postTable->ID . $key1;
             $postTable->meta->$key1 = $val1;
@@ -382,16 +392,23 @@ class Plans extends Post{
     /**
      * get End Date
      * */
-    public static function calculateEndDate($startDate, $plan){
+    public static function calculateEndDate($startDate, $plan, $trial = 0){
+        if($trial){
+            $periodField = 'trial_period';
+            $periodUnitField = 'trial_period_units';
+        } else {
+            $periodField = 'period';
+            $periodUnitField = 'period_units';
+        }
         $planSufix = $plan->ID.'_axisubs_plans_';
         $plantype = $plan->meta[$planSufix.'type'];
         $planPeriod = 0;
         $planPeriodUnit = 'D';
-        if(isset($plan->meta[$planSufix.'period']) && $plan->meta[$planSufix.'period']){
-            $planPeriod = $plan->meta[$planSufix.'period'];
+        if(isset($plan->meta[$planSufix.$periodField]) && $plan->meta[$planSufix.$periodField]){
+            $planPeriod = $plan->meta[$planSufix.$periodField];
         }
-        if(isset($plan->meta[$planSufix.'period_units']) && $plan->meta[$planSufix.'period_units']){
-            $planPeriodUnit = $plan->meta[$planSufix.'period_units'];
+        if(isset($plan->meta[$planSufix.$periodUnitField]) && $plan->meta[$planSufix.$periodUnitField]){
+            $planPeriodUnit = $plan->meta[$planSufix.$periodUnitField];
         }
         $duration = new Duration();
         if($plantype == 'free'){
@@ -589,7 +606,7 @@ class Plans extends Post{
             $key1 = $postTable->ID . $key1;
             $postTable->meta->$key1 = $val1;
         }
-        
+
         $result = $postTable->save();
         if($result){
             return $postTable->ID;
