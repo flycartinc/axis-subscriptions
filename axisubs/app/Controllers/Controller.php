@@ -14,6 +14,7 @@ class Controller
 {
     public $_controller = '';
     public $_path = 'Admin';
+    public $_package = 'Axisubs';
 
     /**
      * For ajax Call
@@ -23,7 +24,7 @@ class Controller
         $task = $http->get('task');
         $controller = $http->get('view');
         $path = $http->get('path', 'Admin');
-        $className = '\\Axisubs\\Controllers\\'.$path.'\\'.$controller;
+        $className = '\\'.$this->_package.'\\Controllers\\'.$path.'\\'.$controller;
         if(class_exists($className)){
             $object = new $className();
             if(method_exists($object, $task)){
@@ -51,7 +52,7 @@ class Controller
         $task = $http->get('task');
         $controller = $http->get('controller', $this->_controller);
         $path = $http->get('path', $this->_path);
-        $className = '\\Axisubs\\Controllers\\'.$path.'\\'.$controller;
+        $className = '\\'.$this->_package.'\\Controllers\\'.$path.'\\'.$controller;
         if(class_exists($className)){
             $object = new $className();
             if(method_exists($object, $task)){
@@ -59,6 +60,25 @@ class Controller
             } else {
                 return $object->index(); // Load default page
             }
+        } else {
+            echo 'Class not available'; // TODO: handle error
+        }
+    }
+
+    /**
+     * Get instance of model
+     * */
+    public function getModel($model = '', $path = ''){
+        if($model == ''){
+            $model = $this->_controller;
+        }
+        if($path == ''){
+            $path = $this->_path;
+        }
+        $className = '\\'.$this->_package.'\\Models\\'.$path.'\\'.$model;
+        if(class_exists($className)){
+            $object = new $className();
+            return $object;
         } else {
             echo 'Class not available'; // TODO: handle error
         }
