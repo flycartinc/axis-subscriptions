@@ -776,4 +776,70 @@ class Plans extends Post{
             return false;
         }
     }
+
+    /**
+     * Mark as Expired
+     * */
+    public function markExpired($subscription){
+        //TODO: Change this condition as required
+        if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
+        } else {
+            if((int)$subscription){
+                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                if(empty($subscription)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $subscriptionPrefix = '_axisubs_subscribe_';
+        $statusKey = $subscription->ID.$subscriptionPrefix.'status';
+        $subscription->meta->$statusKey = 'EXPIRED';
+        return $subscription->save();
+    }
+
+    /**
+     * Mark as Active
+     * */
+    public function markActive($subscription){
+        //TODO: Change this condition as required
+        if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
+        } else {
+            if((int)$subscription){
+                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                if(empty($subscription)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $subscriptionPrefix = '_axisubs_subscribe_';
+        $statusKey = $subscription->ID.$subscriptionPrefix.'status';
+        $subscription->meta->$statusKey = 'ACTIVE';
+        return $subscription->save();
+    }
+
+    /**
+     * Mark as TRIAL
+     * */
+    public function markTrial($subscription){
+        //TODO: Change this condition as required
+        if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
+        } else {
+            if((int)$subscription){
+                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                if(empty($subscription)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $subscriptionPrefix = '_axisubs_subscribe_';
+        $statusKey = $subscription->ID.$subscriptionPrefix.'status';
+        $subscription->meta->$statusKey = 'TRIAL';
+        return $subscription->save();
+    }
 }

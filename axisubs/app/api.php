@@ -1,5 +1,6 @@
 <?php namespace Axisubs;
 
+use Axisubs\Helper\ExpiryControl;
 /** @var \Herbert\Framework\API $api */
 
 /**
@@ -13,3 +14,5 @@ $api->add('helper', function ()
 
     return forward_static_call_array(__NAMESPACE__ . '\\Helper::' . $method, $args);
 });
+
+(new ExpiryControl)->processSubscriptionExpiry();
