@@ -64,6 +64,7 @@ class Plan extends Controller{
             if($eligible) {
                 $subscriber = Plans::loadOldSubscriber($item);
                 $user = Plans::getUserDetails();
+                //From WP
                 $wp_user = Helper::getUserDetails();
                 $user_id = $wp_user->ID;
                 if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
@@ -81,9 +82,10 @@ class Plan extends Controller{
     }
 
     /**
-     * save a plan
+     * save / create a subscription
      * */
     public function save(){
+        $model = $this->getModel('Plans');
         $data = array();
         $http = Http::capture();
         $currency = new Currency();
@@ -100,8 +102,9 @@ class Plan extends Controller{
             //Check eligibility
             $eligible = Plans::isEligible($item);
             if($eligible) {
-                $result = Plans::addSubscribe($http->all(), $item);
+                $result = $model->addSubscribe($http->all(), $item);                
                 if ($result) {
+                    $data['hasActiveSubs'] = count($model->existAlready);                    
                     $subscriber = Plans::loadSubscriber($result);
                     if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
                         if($http->get('payment', '') != ''){

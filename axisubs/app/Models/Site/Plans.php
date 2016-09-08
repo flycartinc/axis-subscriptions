@@ -77,8 +77,7 @@ class Plans extends Post{
     /**
      * Load all plans with pagination
      * */
-    public static function all($columns = ['*']){
-//        $items = parent::all()->where('post_type', 'axisubs_plans');
+    public static function getItems(){
         $postO = new Post();
         $totalItem = $postO->all()->where('post_type', 'axisubs_plans');
         //get pagination start and limit
@@ -133,8 +132,8 @@ class Plans extends Post{
         $item = Post::all()->where('post_type', 'axisubs_plans')->find($id);
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
-            $meta['allow_setupcost'] = 1;
-            if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost'])) {
+            $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+            if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost']) && $meta['allow_setupcost']) {
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
             } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'];
@@ -291,9 +290,17 @@ class Plans extends Post{
     }
 
     /**
+     * For calculating total
+     * */
+    public function getTotalPrice(){
+        $this->total = $this->price + $this->setup_cost;
+        return $this->total;
+    }
+
+    /**
      * Add Subscription
      * */
-    public static function addSubscribe($post, $plans){
+    public function addSubscribe($post, $plans){
         $sessionData = Session()->get('axisubs_subscribers');
         if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->get();
@@ -317,7 +324,9 @@ class Plans extends Post{
         //For storing User details
         Plans::updateUserDetails($post['axisubs']['subscribe']);
 
+        //check already has active or future subscriptions
         $existAlready = Plans::getSubscribedDetails($plans->ID);
+
         if(isset($plans->meta[$plans->ID.'_axisubs_plans_price']) && $plans->meta[$plans->ID.'_axisubs_plans_price'] > 0){
             $price = $plans->meta[$plans->ID.'_axisubs_plans_price'];
         } else {
@@ -347,7 +356,13 @@ class Plans extends Post{
         }
         //Calculate End Date
         $endDate = Plans::calculateEndDate($startDate, $plans);
-        $totalCost = $price+$setup_cost;
+
+        $this->price = $price;
+        $this->setup_cost = $setup_cost;
+        $this->existAlready = $existAlready;
+
+        //calculate Total price
+        $totalCost = $this->getTotalPrice();//$price+$setup_cost;
 
         $payment_type = '';
         if(isset($post['payment'])){
@@ -442,7 +457,7 @@ class Plans extends Post{
     }
 
     /**
-     * load current(users) valid subscriber
+     * load current(users) has valid subscriber
      * */
     public static function getSubscribedDetails($planId, $user_id = 0){
         if($user_id){

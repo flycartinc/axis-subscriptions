@@ -27,7 +27,7 @@ class Plan extends Controller
         $pagetitle = 'Plans';
         Plans::populateStates($http->all());
         // Load Listing layout
-        $items = Plans::all();
+        $items = Plans::getItems();
         $pagination = new Pagination(Plans::$_start, Plans::$_limit, Plans::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();

@@ -46,7 +46,7 @@
                     </div>
                     <div class="axisubs-block-50">
                         <div class="axisubs-plan-total-fee-amt">
-                            {{ currencyData['code']~meta['total_price'] }}
+                            {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_total_price'] }}
                         </div>
                     </div>
                 </div>
