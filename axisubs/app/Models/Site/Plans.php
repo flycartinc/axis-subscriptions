@@ -209,9 +209,11 @@ class Plans extends Post{
         if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId && $plantype == 'free'){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->get();
             $postTable = $postDB->find($sessionData[$plans->ID]->subscriberId);
-            $key = $sessionData[$plans->ID]->subscriberId.'_axisubs_subscribe_status';
-            $postTable->meta->$key = 'ACTIVE';
-            $result = $postTable->save();
+//            $key = $sessionData[$plans->ID]->subscriberId.'_axisubs_subscribe_status';
+//            $postTable->meta->$key = 'ACTIVE';
+//            $result = $postTable->save();
+            // Mark as Active
+            $result = Plans::getInstance()->markActive($postTable);
             if($result){
                 Session()->set('axisubs_subscribers', null);
                 return $postTable->ID;
@@ -738,11 +740,12 @@ class Plans extends Post{
                 $activeSubs = $this->checkForActiveSubscription($postDB);
                 $key = $subsPrefix.'status';
                 if(empty($activeSubs)){
-                    $postDB->meta->$key = 'ACTIVE';
+                    // Mark as Active
+                    return Plans::getInstance()->markActive($postDB);
                 } else {
-                    $postDB->meta->$key = 'FUTURE';
+                    // Mark as Future
+                    return Plans::getInstance()->markFuture($postDB);
                 }
-                return $postDB->save();
             } else {
                 return false;
             }
@@ -840,6 +843,28 @@ class Plans extends Post{
         $subscriptionPrefix = '_axisubs_subscribe_';
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'TRIAL';
+        return $subscription->save();
+    }
+
+    /**
+     * Mark as Future
+     * */
+    public function markFuture($subscription){
+        //TODO: Change this condition as required
+        if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
+        } else {
+            if((int)$subscription){
+                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                if(empty($subscription)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $subscriptionPrefix = '_axisubs_subscribe_';
+        $statusKey = $subscription->ID.$subscriptionPrefix.'status';
+        $subscription->meta->$statusKey = 'FUTURE';
         return $subscription->save();
     }
 }

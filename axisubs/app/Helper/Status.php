@@ -26,6 +26,12 @@ class Status
             case 'PENDING':
                 $text = 'Pending';
                 break;
+            case 'TRIAL':
+                $text = 'In Trial';
+                break;
+            case 'EXPIRED':
+                $text = 'Expired';
+                break;
             default:
                 $text = $code;
         }
