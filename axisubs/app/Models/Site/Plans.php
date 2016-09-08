@@ -128,11 +128,16 @@ class Plans extends Post{
     /**
      * Load Single Plan
      * */
-    public static function loadPlan($id){
+    public static function loadPlan($id, $backend = 0){
         $item = Post::all()->where('post_type', 'axisubs_plans')->find($id);
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
-            $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+            if($backend){
+                $meta['allow_setupcost'] = 1;//count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+            } else {
+                $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+            }
+            $meta['allow_setupcost'] = 1;//count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
             if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost']) && $meta['allow_setupcost']) {
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
             } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
@@ -302,10 +307,12 @@ class Plans extends Post{
      * */
     public function addSubscribe($post, $plans){
         $sessionData = Session()->get('axisubs_subscribers');
+        $postTable = array();
         if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->get();
             $postTable = $postDB->find($sessionData[$plans->ID]->subscriberId);
-        } else {
+        }
+        if(empty($postTable)){
             $postTable = new Post();
             $postTable->post_name = 'Subscribers';
             $postTable->post_title = 'Subscribers';

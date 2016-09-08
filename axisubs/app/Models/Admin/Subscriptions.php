@@ -70,6 +70,7 @@ class Subscriptions extends Post{
         $postO = new Post();
         //$items = parent::all()->where('post_type', 'axisubs_subscribe')
         $totalItem = $postO->all()->where('post_type', 'axisubs_subscribe');
+
         //get pagination start and limit
         $pageLimit = Subscriptions::getPaginationStartAndLimit(count($totalItem));
         //get limited data
@@ -78,7 +79,7 @@ class Subscriptions extends Post{
             foreach ($items as $key => $item){
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
                 if(isset($item->meta[$item->ID.'_axisubs_subscribe_plan_id'])) {
-                    $plan = Plans::loadPlan($item->meta[$item->ID . '_axisubs_subscribe_plan_id']);
+                    $plan = Subscriptions::loadPlan($item->meta[$item->ID . '_axisubs_subscribe_plan_id']);
                     $item->plan = $plan;
                 } else {
                     unset($items[$key]);
@@ -102,7 +103,16 @@ class Subscriptions extends Post{
 
     //load plan
     public static function loadPlan($id){
-        $plan = Plans::loadPlan($id);
+        $plan = Plans::loadPlan($id, 1);
         return $plan;
+    }
+
+    /**
+     * For deleting a Subscription
+     * */
+    public static function deleteSubscriptions($id){
+        $postDB = Post::where('post_type', 'axisubs_subscribe')->first()->find($id);
+        $postDB->meta()->delete();
+        return $postDB->delete();
     }
 }

@@ -50,4 +50,22 @@ class Subscription extends Controller
         $paginationD['links'] = $pagination->getPaginationLinks();
         return view('@Axisubs/Admin/subscriptions/list.twig', compact('pagetitle', 'items', 'paginationD'));
     }
+
+    /**
+     * delete
+     * */
+    public function delete()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
+            $result = Subscriptions::deleteSubscriptions($http->get('id'));
+            if($result){
+                Notifier::success('Subscription deleted successfully');
+            } else {
+                Notifier::error('Failed to delete');
+            }
+        }
+
+        return $this->index();
+    }
 }
