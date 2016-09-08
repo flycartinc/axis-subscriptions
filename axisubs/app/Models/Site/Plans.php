@@ -507,11 +507,15 @@ class Plans extends Post{
      * */
     public function checkForActiveSubscription($subscription)
     {
+        $subscription = Plans::loadSubscriber($subscription->ID);
         $subsPrefix = $subscription->ID.'_axisubs_subscribe_';
         $subscriptions = Plans::getSubscribedDetails($subscription->meta[$subsPrefix.'plan_id'], $subscription->meta[$subsPrefix.'user_id']);
         $newEndDate = date("Y-m-d g:i:s");
         $lastSubscription = array();
         foreach($subscriptions as $key => $value){
+            if($subscription->ID == $value->ID){
+                continue;
+            }
             $endDateKey = $value->ID.'_axisubs_subscribe_end_on';
             $endDate = $value->meta[$endDateKey];
             $oldDate = new \DateTime($newEndDate);
@@ -521,10 +525,6 @@ class Plans extends Post{
                 $lastSubscription = $value;
             }
         }
-        if(!empty($lastSubscription))
-            if($subscription->ID == $lastSubscription->ID){
-                $lastSubscription = array();
-            }
         return $lastSubscription;
     }
 
