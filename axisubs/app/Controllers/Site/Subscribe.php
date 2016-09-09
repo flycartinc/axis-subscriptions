@@ -16,6 +16,7 @@ use Axisubs\Helper\FrontEndMessages;
 use Axisubs\Helper;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\ManageUser;
+use Axisubs\Helper\Pagination;
 
 class Subscribe extends Controller{
 
@@ -27,6 +28,7 @@ class Subscribe extends Controller{
      * Show My Subscriptions Default layout
      * */
     public function index(){
+        $http = Http::capture();        
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
@@ -36,12 +38,16 @@ class Subscribe extends Controller{
         $wp_user = ManageUser::getInstance()->getUserDetails();
         $user_id = $wp_user->ID;
         if($user_id){
+            Plans::populateStates($http->all());
             $subscribers = Plans::loadAllSubscribes();
+            $pagination = new Pagination(Plans::$_start, Plans::$_limit, Plans::$_total);
+            $paginationD['limitbox'] = $pagination->getLimitBox();
+            $paginationD['links'] = $pagination->getPaginationLinks();
         } else {
             $subscribers = array();
         }
         $message = $this->message;
-        return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url', 'message'));
+        return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url', 'message', 'paginationD'));
     }
 
     /**

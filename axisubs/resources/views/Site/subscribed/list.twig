@@ -3,59 +3,63 @@
         <h3>{{ pagetitle }}</h3>
     </div>
     {{ message | raw }}
-    <div class="axisubs-subscribed-con">
-        {% for subscribe in subscribers %}
-            {% set plan = subscribe['plan'] %}
-            {% set planMeta = subscribe['plan']['meta'] %}
-            {% set meta = subscribe['meta'] %}
-            <div class="axisubs-subscribed-i-con">
-                <div class="axisubs-subscribed-i">
-                    <div class="axisubs-subscribed-i-block">
-                        <div class="axisubs-subscribed-block-data">
-                            <span class="axisubs-data-title">Subscription Id: </span>
-                            <span class="axisubs-data-content">{{ subscribe['ID'] }}</span>
+    <form method="post" action="?axisubs_subscribes=subscribe" id="axisubs_list_form">
+        <div class="axisubs-subscribed-con">
+            {% for subscribe in subscribers %}
+                {% set plan = subscribe['plan'] %}
+                {% set planMeta = subscribe['plan']['meta'] %}
+                {% set meta = subscribe['meta'] %}
+                <div class="axisubs-subscribed-i-con">
+                    <div class="axisubs-subscribed-i">
+                        <div class="axisubs-subscribed-i-block">
+                            <div class="axisubs-subscribed-block-data">
+                                <span class="axisubs-data-title">Subscription Id: </span>
+                                <span class="axisubs-data-content">{{ subscribe['ID'] }}</span>
+                            </div>
+                            <div class="axisubs-subscribed-block-data">
+                                <span class="axisubs-data-title">Plan Name: </span>
+                                <span class="axisubs-data-content">{{ planMeta[plan['ID']~'_axisubs_plans_name'] }}</span>
+                            </div>
                         </div>
-                        <div class="axisubs-subscribed-block-data">
-                            <span class="axisubs-data-title">Plan Name: </span>
-                            <span class="axisubs-data-content">{{ planMeta[plan['ID']~'_axisubs_plans_name'] }}</span>
-                        </div>
-                    </div>
 
-                    <div class="axisubs-subscribed-i-block">
-                        <div class="axisubs-subscribed-block-data">
-                            <span class="axisubs-data-title">Start Date: </span>
-                            <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_start_on'] }}</span>
+                        <div class="axisubs-subscribed-i-block">
+                            <div class="axisubs-subscribed-block-data">
+                                <span class="axisubs-data-title">Start Date: </span>
+                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_start_on'] }}</span>
+                            </div>
+                            <div class="axisubs-subscribed-block-data">
+                                <span class="axisubs-data-title">End Date: </span>
+                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_end_on'] }}</span>
+                            </div>
                         </div>
-                        <div class="axisubs-subscribed-block-data">
-                            <span class="axisubs-data-title">End Date: </span>
-                            <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_end_on'] }}</span>
-                        </div>
-                    </div>
 
-                    <div class="axisubs-subscribed-i-block">
-                        <div class="axisubs-subscribed-block-data">
-                            <span class="axisubs-data-title">Total Cost: </span>
-                            <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}</span>
+                        <div class="axisubs-subscribed-i-block">
+                            <div class="axisubs-subscribed-block-data">
+                                <span class="axisubs-data-title">Total Cost: </span>
+                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}</span>
+                            </div>
+                            <div class="axisubs-subscribed-block-data">
+                                <span class="axisubs-data-title">Status: </span>
+                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_status'] }}</span>
+                            </div>
                         </div>
-                        <div class="axisubs-subscribed-block-data">
-                            <span class="axisubs-data-title">Status: </span>
-                            <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_status'] }}</span>
-                        </div>
-                    </div>
 
-                    <div class="axisubs-subscribed-i-block">
-                        <div class="axisubs-subscribed-block-data">
-                            <a href="{{ subscribtions_url~'&task=view&sid='~subscribe['ID'] }}">View Details</a>
-                        </div>
-                        <div class="axisubs-subscribed-block-data">
+                        <div class="axisubs-subscribed-i-block">
+                            <div class="axisubs-subscribed-block-data">
+                                <a href="{{ subscribtions_url~'&task=view&sid='~subscribe['ID'] }}">View Details</a>
+                            </div>
+                            <div class="axisubs-subscribed-block-data">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="row">
-                No subscription found.
-            </div>
-        {% endfor %}
-    </div>
+            {% else %}
+                <div class="row">
+                    No subscription found.
+                </div>
+            {% endfor %}
+            {{ paginationD['limitbox'] | raw }}
+            {{ paginationD['links'] | raw }}
+        </div>
+    </form>
 </div>

@@ -238,6 +238,10 @@ class Plans extends Post{
         $subscribers = PostMeta::where('meta_key','like','%_axisubs_subscribe_user_id')
             ->where('meta_value', $userId)->orderBy('post_id','desc')
             ->pluck('post_id');
+        //get pagination start and limit
+        $pageLimit = Plans::getPaginationStartAndLimit(count($subscribers));
+        //get limited data
+        $subscribers = $subscribers->forPage($pageLimit['start'], $pageLimit['limit']);
 
         foreach($subscribers as $key => $value){
             $today = date("Y-m-d g:i:s");

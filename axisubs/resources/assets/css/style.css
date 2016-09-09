@@ -159,3 +159,15 @@
     display: inline-block;
     margin: 5px 0;
 }
+/* pagination */
+.axisubs ul.pagination-ul > li {
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+.axisubs ul.pagination-ul > li.pag-disabled{
+    padding: 10px;
+}
+.axisubs ul.pagination-ul > li > a{
+    display: inline-block;
+    padding: 10px;
+}
