@@ -48,6 +48,23 @@ class PostMeta extends Model
     public function getValueAttribute()
     {
         try {
+            $value = @unserialize($this->meta_value);
+            // if we get false, but the original value is not false then something has gone wrong.
+            // return the meta_value as is instead of unserializing
+            // added this to handle cases where unserialize doesn't throw an error that is catchable
+
+            if ($value !== false) {
+                return (($value === false && $this->meta_value !== false) ? $this->meta_value : $value);
+            } else {
+                return $this->meta_value;
+            }
+        } catch (Exception $ex) {
+            return $this->meta_value;
+        }
+    }
+   /*public function getValueAttribute()
+    {
+        try {
             $value = unserialize($this->meta_value);
             // if we get false, but the original value is not false then something has gone wrong.
             // return the meta_value as is instead of unserializing
@@ -56,7 +73,7 @@ class PostMeta extends Model
         } catch (Exception $ex) {
             return $this->meta_value;
         }
-    }
+    }*/
 
     /**
      * Taxonomy relationship from the meta_value.

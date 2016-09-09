@@ -11,7 +11,7 @@ use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 use Axisubs\Helper\Duration;
-
+use Axisubs\Helper\ManageUser;
 class Plans extends Post{
     /**
      * The table associated with the model.
@@ -799,7 +799,23 @@ class Plans extends Post{
         $subscriptionPrefix = '_axisubs_subscribe_';
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'EXPIRED';
-        return $subscription->save();
+
+        $result = $subscription->save();
+        if($result){
+            //Remove user Role
+            $planKey = $subscription->ID.$subscriptionPrefix.'plan_id';
+            $userKey = $subscription->ID.$subscriptionPrefix.'user_id';
+            $plan = Plans::loadPlan($subscription->meta->$planKey, 1);
+            $planPrefix = '_axisubs_plans_';
+            $removeRoleskey = $plan->ID.$planPrefix.'remove_roles';
+            if($plan->meta[$removeRoleskey] != ''){
+                ManageUser::getInstance()->removeUserRole($subscription->meta->$userKey, explode(',', $plan->meta[$removeRoleskey]));
+            }
+
+            return $result;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -821,7 +837,22 @@ class Plans extends Post{
         $subscriptionPrefix = '_axisubs_subscribe_';
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'ACTIVE';
-        return $subscription->save();
+        $result = $subscription->save();
+        if($result){
+            //Add user Role
+            $planKey = $subscription->ID.$subscriptionPrefix.'plan_id';
+            $userKey = $subscription->ID.$subscriptionPrefix.'user_id';
+            $plan = Plans::loadPlan($subscription->meta->$planKey, 1);
+            $planPrefix = '_axisubs_plans_';
+            $addRoleskey = $plan->ID.$planPrefix.'add_roles';
+            if($plan->meta[$addRoleskey] != ''){
+                ManageUser::getInstance()->addUserRole($subscription->meta->$userKey, explode(',', $plan->meta[$addRoleskey]));
+            }
+
+            return $result;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -843,7 +874,22 @@ class Plans extends Post{
         $subscriptionPrefix = '_axisubs_subscribe_';
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'TRIAL';
-        return $subscription->save();
+        $result = $subscription->save();
+        if($result){
+            //Add user Role
+            $planKey = $subscription->ID.$subscriptionPrefix.'plan_id';
+            $userKey = $subscription->ID.$subscriptionPrefix.'user_id';
+            $plan = Plans::loadPlan($subscription->meta->$planKey, 1);
+            $planPrefix = '_axisubs_plans_';
+            $addRoleskey = $plan->ID.$planPrefix.'add_roles';
+            if($plan->meta[$addRoleskey] != ''){
+                ManageUser::getInstance()->addUserRole($subscription->meta->$userKey, explode(',', $plan->meta[$addRoleskey]));
+            }
+
+            return $result;
+        } else {
+            return false;
+        }
     }
 
     /**
