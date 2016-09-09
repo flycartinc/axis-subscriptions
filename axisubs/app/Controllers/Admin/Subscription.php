@@ -10,11 +10,12 @@ namespace Axisubs\Controllers\Admin;
 use Axisubs\Models\Admin\Subscriptions;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
-
+use Axisubs\Helper\AxisubsRedirect;
 use Axisubs\Helper\Status;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
 use Axisubs\Controllers\Controller;
+use Axisubs\Models\Admin\Customers;
 
 class Subscription extends Controller
 {
@@ -49,6 +50,20 @@ class Subscription extends Controller
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
         return view('@Axisubs/Admin/subscriptions/list.twig', compact('pagetitle', 'items', 'paginationD'));
+    }
+
+    /**
+     * New / Edit Subscription
+     * */
+    public function edit(){
+        $http = Http::capture();
+        if ($http->get('user_id')) {
+            $data['customer'] = Customers::loadCustomer($http->get('user_id'));
+            $data['planSelectbox'] = Subscriptions::loadPlanSelectbox();
+            return view('@Axisubs/Admin/subscription/edit.twig', compact('pagetitle', 'data', 'role_names', 'site_url'));
+        } else {
+            AxisubsRedirect::redirect('?page=subscriptions-index');
+        }
     }
 
     /**

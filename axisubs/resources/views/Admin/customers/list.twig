@@ -1,11 +1,20 @@
 {% extends '@Axisubs/Admin/tabs/tab.twig' %}
 
 {% block body %}
+    {% set choose_customer = 0 %}
+    {% if data['flag'] == 'choose_customer'  %}
+        {% set choose_customer = 1 %}
+    {% endif %}
     <div class="axisubs wrap">
         <h1>{{ pagetitle }}
             <a class="page-title-action" href="?page=customers-index&task=edit">Add New</a>
         </h1>
-        <form method="post" action="?page=customers-index" id="axisubs_list_form">
+        {% if choose_customer %}
+            <div class="info">
+                <p>Choose customer First</p>
+            </div>
+        {% endif %}
+        <form method="post" action="?page=customers-index{% if choose_customer %}&flag=choose_customer{% endif %}" id="axisubs_list_form">
             <div class="axisubs-plans">
                 <div class="axisubs-plans">
                     {% for item in items %}
@@ -62,6 +71,11 @@
                             </div>
                             <div class="col-3">
                                 <div class="col-data">
+                                    {% if choose_customer %}
+                                        <span class="col-data-content">
+                                            <a class="page-title-action" href="?page=subscriptions-index&task=edit&user_id={{ item['meta'][metaPrefix~'user_id'] }}">Choose customer</a>
+                                        </span>
+                                    {% else %}
                                     <span class="col-data-content">
                                         <a class="page-title-action" href="?page=customers-index&task=view&id={{ item['meta'][metaPrefix~'user_id'] }}">View</a>
                                     </span>
@@ -71,6 +85,7 @@
                                     <span class="col-data-content">
                                         <a class="page-title-action" href="?page=customers-index&task=delete&id={{ item['meta'][metaPrefix~'user_id'] }}">Delete</a>
                                     </span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

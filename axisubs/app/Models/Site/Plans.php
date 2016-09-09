@@ -78,13 +78,18 @@ class Plans extends Post{
     /**
      * Load all plans with pagination
      * */
-    public static function getItems(){
+    public static function getItems($pagination = 1){
         $postO = new Post();
         $totalItem = $postO->all()->where('post_type', 'axisubs_plans');
-        //get pagination start and limit
-        $pageLimit = Plans::getPaginationStartAndLimit(count($totalItem));
-        //get limited data
-        $items = $totalItem->forPage($pageLimit['start'], $pageLimit['limit']);
+        if($pagination){
+            //get pagination start and limit
+            $pageLimit = Plans::getPaginationStartAndLimit(count($totalItem));
+            //get limited data
+            $items = $totalItem->forPage($pageLimit['start'], $pageLimit['limit']);
+        } else {
+            $items = $totalItem;
+        }
+        
 
         if(count($items)){
             foreach ($items as $key => $item){

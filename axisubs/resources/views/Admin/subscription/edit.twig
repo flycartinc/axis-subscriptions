@@ -1,0 +1,116 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs wrap">
+  <h1>{{ pagetitle }}
+  </h1>
+    {% set customer = data['customer'] %}
+    {% set customerMeta = customer['meta'] %}
+    {% set customerPrefix = customer['ID']~'_'~customer['post_type']~'_' %}
+    {% set subscription = data['subscription'] %}
+    {% set subscriptionMeta = subscription['meta'] %}
+    {% set subscriptionPrefix = subscription['ID']~'_'~subscription['post_type']~'_' %}
+  <form name="subscriptionForm" id="subscriptionForm" method="post" action="?page=subscriptions-index" onsubmit="return validatePlan();">
+      <div class="axisubs-fields-title">
+          <h3>User Details</h3>
+      </div>
+      <div class="axisubs-fields-con">
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 User Name
+             </div>
+             <div class="axisubs-fields-content">
+                {{ customerMeta[customerPrefix~'first_name']~' '~customerMeta[customerPrefix~'last_name'] }}
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 Email
+             </div>
+             <div class="axisubs-fields-content">
+                 {{ customerMeta[customerPrefix~'email'] }}
+             </div>
+         </div>
+      </div>
+      <div class="axisubs-fields-title">
+          <h3>Subscription Details</h3>
+      </div>
+      <div class="axisubs-fields-con">
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="axisub_plan_name">Plan</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  {{ data['planSelectbox'] | raw }}
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_start_on">Start Date</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" class="" name="subscribe_start_on" id="subscribe_start_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+                  <span class="help-text">Specify this if you want to start this subscription at a future date. Further if the selected plan has 'Trial' period configured it will go into 'Trial' state when it starts on the above specified date.</span>
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_trial_start_on">Trial starts on</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_trial_start_on" id="subscribe_trial_start_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_trial_ends_on">Trial ends on</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_trial_ends_on" id="subscribe_trial_ends_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_start_on1">Subscription start on</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_start_on1" id="subscribe_start_on1" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_end_on">Subscription ends on</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_end_on" id="subscribe_end_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+              </div>
+          </div>
+
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_price">Price</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_price" id="subscribe_price" value="{{ subscriptionMeta[subscriptionPrefix~'price'] }}"/>
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_setup_cost">Setup cost</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_setup_cost" id="subscribe_setup_cost" value="{{ subscriptionMeta[subscriptionPrefix~'setup_cost'] }}"/>
+              </div>
+          </div>
+          <div class="axisubs-fields">
+              <div class="axisubs-fields-label">
+                  <label for="subscribe_total">Total</label>
+              </div>
+              <div class="axisubs-fields-content">
+                  <input type="text" disabled="disabled" name="subscribe_total" id="subscribe_total" value="{{ subscriptionMeta[subscriptionPrefix~'total_price'] }}"/>
+              </div>
+          </div>
+      </div>
+      <input type="hidden" id="site_url" value="{{ site_url }}"/>
+  </form>
+{% endblock %}

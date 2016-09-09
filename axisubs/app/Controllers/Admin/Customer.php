@@ -36,10 +36,15 @@ class Customer extends Controller
         Customers::populateStates($http->all());
         // Load Listing layout
         $items = Customers::all();
+            if($http->get('flag', '') == 'choose_customer'){
+            $data['flag'] = 'choose_customer';
+        } else {
+            $data['flag'] = '';
+        }
         $pagination = new Pagination(Customers::$_start, Customers::$_limit, Customers::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
-        return view('@Axisubs/Admin/customers/list.twig', compact('pagetitle', 'items', 'paginationD', 'site_url'));
+        return view('@Axisubs/Admin/customers/list.twig', compact('pagetitle', 'items', 'paginationD', 'site_url', 'data'));
     }
 
     /**
