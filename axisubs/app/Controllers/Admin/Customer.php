@@ -16,6 +16,7 @@ use Axisubs\Helper\Status;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\ManageUser;
 
 class Customer extends Controller
 {
@@ -83,7 +84,7 @@ class Customer extends Controller
                 }
             }
             $item = Customers::loadCustomer($http->get('id'));
-            $wp_userDetails = Helper::getUserDetails($http->get('id'));
+            $wp_userDetails = ManageUser::getInstance()->getUserDetails($http->get('id'));
             if($wp_userDetails->data->user_login){
                 $wp_userD['user_login'] = $wp_userDetails->data->user_login;
             } else {

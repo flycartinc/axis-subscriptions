@@ -104,14 +104,4 @@ class Helper {
             substr(self::asset($file), strlen(content_directory()))
         );
     }
-
-    public static function getUserDetails($id = 0)
-    {
-        if($id) {
-            $user = get_userdata($id);
-        } else {
-            $user = wp_get_current_user();
-        }
-        return $user;
-    }
 }

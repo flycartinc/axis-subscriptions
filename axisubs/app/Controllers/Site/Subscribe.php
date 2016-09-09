@@ -15,6 +15,7 @@ use Axisubs\Helper\Status;
 use Axisubs\Helper\FrontEndMessages;
 use Axisubs\Helper;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\ManageUser;
 
 class Subscribe extends Controller{
 
@@ -32,7 +33,7 @@ class Subscribe extends Controller{
         $site_url = get_site_url();
         $pagetitle = "Subscriptions";
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
-        $wp_user = Helper::getUserDetails();
+        $wp_user = ManageUser::getInstance()->getUserDetails();
         $user_id = $wp_user->ID;
         if($user_id){
             $subscribers = Plans::loadAllSubscribes();
@@ -54,7 +55,7 @@ class Subscribe extends Controller{
         $site_url = get_site_url();
         $pagetitle = "Subscriptions";
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
-        $wp_user = Helper::getUserDetails();
+        $wp_user = ManageUser::getInstance()->getUserDetails();
         $user_id = $wp_user->ID;
         if($http->get('sid')) {
             $subscriber = Plans::loadSubscriber($http->get('sid'));

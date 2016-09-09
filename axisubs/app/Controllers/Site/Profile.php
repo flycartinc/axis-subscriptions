@@ -13,6 +13,7 @@ use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Helper;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\ManageUser;
 
 class Profile extends Controller{
 
@@ -27,7 +28,7 @@ class Profile extends Controller{
         $pagetitle = "Subscriptions";
         $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
         $user = Plans::getUserDetails();
-        $wp_user = Helper::getUserDetails();
+        $wp_user = ManageUser::getInstance()->getUserDetails();
         $wp_userD = array();
         $wp_userD['ID'] = $wp_user->ID;
         $wp_userD['user_name'] = $wp_user->user_login;

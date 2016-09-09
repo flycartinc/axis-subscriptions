@@ -12,6 +12,7 @@ use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 use Axisubs\Helper\Duration;
 use Axisubs\Helper\ManageUser;
+
 class Plans extends Post{
     /**
      * The table associated with the model.
@@ -253,7 +254,7 @@ class Plans extends Post{
      * Get user Details
      * */
     public static function getUserDetails(){
-        $user = Helper::getUserDetails();
+        $user = ManageUser::getInstance()->getUserDetails();
         if($user->ID){
             $item = Post::all()->where('post_type', 'axisubs_user_'.$user->ID)->first();
             if($item) {
@@ -270,7 +271,7 @@ class Plans extends Post{
      * Update User Details
      * */
     public static function updateUserDetails($data, $user_id = 0){
-        $user = Helper::getUserDetails($user_id);
+        $user = ManageUser::getInstance()->getUserDetails($user_id);
         $postDB = Post::where('post_type', 'axisubs_user_'.$user->ID)->get();
         $postTable = $postDB->first();
         if(empty($postTable)){

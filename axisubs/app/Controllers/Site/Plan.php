@@ -17,6 +17,7 @@ use Axisubs\Helper\Duration;
 use Axisubs\Helper\FrontEndMessages;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\PaymentPlugins;
+use Axisubs\Helper\ManageUser;
 
 class Plan extends Controller{
 
@@ -65,7 +66,7 @@ class Plan extends Controller{
                 $subscriber = Plans::loadOldSubscriber($item);
                 $user = Plans::getUserDetails();
                 //From WP
-                $wp_user = Helper::getUserDetails();
+                $wp_user = ManageUser::getInstance()->getUserDetails();
                 $user_id = $wp_user->ID;
                 if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
                     //For loading payment options
