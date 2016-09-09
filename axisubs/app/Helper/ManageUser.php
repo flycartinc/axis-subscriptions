@@ -29,6 +29,9 @@ class ManageUser
      * */
     public function getUserDetails($id = 0)
     {
+        //For access get user function
+        if (is_admin()) require_once(ABSPATH . 'wp-includes/pluggable.php');
+
         if($id) {
             $user = get_userdata($id);
         } else {

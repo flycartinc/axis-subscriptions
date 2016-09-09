@@ -107,7 +107,7 @@ class Customers extends Post{
      * get Customer Details with subscriptions
      * */
     public static function loadCustomer($id){
-        $item = Post::all()->where('post_type', 'axisubs_user_'.$id)->first();
+        $item = Post::where('post_type', 'axisubs_user_'.$id)->first();
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $item->meta = $meta;

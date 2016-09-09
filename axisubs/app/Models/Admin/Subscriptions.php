@@ -93,7 +93,7 @@ class Subscriptions extends Post{
 
     //Load Single Subscriber
     public static function loadSubscriber($id){
-        $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($id);
+        $item = Post::where('post_type', 'axisubs_subscribe')->find($id);
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $item->meta = $meta;

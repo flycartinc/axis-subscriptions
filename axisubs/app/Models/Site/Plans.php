@@ -130,7 +130,7 @@ class Plans extends Post{
      * Load Single Plan
      * */
     public static function loadPlan($id, $backend = 0){
-        $item = Post::all()->where('post_type', 'axisubs_plans')->find($id);
+        $item = Post::where('post_type', 'axisubs_plans')->find($id);
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             if($backend){
@@ -245,7 +245,7 @@ class Plans extends Post{
 
         foreach($subscribers as $key => $value){
             $today = date("Y-m-d g:i:s");
-            $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($value);
+            $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $plan = Plans::loadPlan($item->meta[$item->ID.'_axisubs_subscribe_plan_id']);
             $item->plan = $plan;
@@ -260,7 +260,7 @@ class Plans extends Post{
     public static function getUserDetails(){
         $user = ManageUser::getInstance()->getUserDetails();
         if($user->ID){
-            $item = Post::all()->where('post_type', 'axisubs_user_'.$user->ID)->first();
+            $item = Post::where('post_type', 'axisubs_user_'.$user->ID)->first();
             if($item) {
                 $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
                 $item->meta = $meta;
@@ -485,7 +485,7 @@ class Plans extends Post{
 
         foreach($valid as $key => $value){
             $today = date("Y-m-d g:i:s");
-            $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($value);
+            $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $valid[$key] = $item;
             $planIdKey = $item->ID.'_axisubs_subscribe_plan_id';
@@ -509,7 +509,7 @@ class Plans extends Post{
      * Load Single Subscriber
      * */
     public static function loadSubscriber($id){
-        $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($id);
+        $item = Post::where('post_type', 'axisubs_subscribe')->find($id);
         if($item) {
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $item->meta = $meta;
@@ -793,7 +793,7 @@ class Plans extends Post{
         if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
         } else {
             if((int)$subscription){
-                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                $subscription = Post::where('post_type', 'axisubs_subscribe')->find((int)$subscription);
                 if(empty($subscription)){
                     return false;
                 }
@@ -831,7 +831,7 @@ class Plans extends Post{
         if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
         } else {
             if((int)$subscription){
-                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                $subscription = Post::where('post_type', 'axisubs_subscribe')->find((int)$subscription);
                 if(empty($subscription)){
                     return false;
                 }
@@ -868,7 +868,7 @@ class Plans extends Post{
         if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
         } else {
             if((int)$subscription){
-                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                $subscription = Post::where('post_type', 'axisubs_subscribe')->find((int)$subscription);
                 if(empty($subscription)){
                     return false;
                 }
@@ -905,7 +905,7 @@ class Plans extends Post{
         if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
         } else {
             if((int)$subscription){
-                $subscription = Post::all()->where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                $subscription = Post::where('post_type', 'axisubs_subscribe')->find((int)$subscription);
                 if(empty($subscription)){
                     return false;
                 }

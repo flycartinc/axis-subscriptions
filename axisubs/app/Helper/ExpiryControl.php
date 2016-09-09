@@ -37,7 +37,7 @@ class ExpiryControl
         $today = $date->getOnlyDate();
         $todayTime = new \DateTime($today);
         foreach($subscribers as $key => $value){
-            $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($value);
+            $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $endKey = $value.$subscriptionPrefix.'end_on';
 //            $statusKey = $value.$subscriptionPrefix.'status';
@@ -69,7 +69,7 @@ class ExpiryControl
         $today = $date->getOnlyDate();
         $todayTime = new \DateTime($today);
         foreach($subscribers as $key => $value){
-            $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($value);
+            $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $startKey = $value.$subscriptionPrefix.'start_on';
             $endDate = $date->getOnlyDate($meta[$startKey]);
@@ -94,7 +94,7 @@ class ExpiryControl
         $today = $date->getOnlyDate();
         $todayTime = new \DateTime($today);
         foreach($subscribers as $key => $value){
-            $item = Post::all()->where('post_type', 'axisubs_subscribe')->find($value);
+            $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $endKey = $value.$subscriptionPrefix.'trial_end_on';
             $endDate = $date->getOnlyDate($meta[$endKey]);
