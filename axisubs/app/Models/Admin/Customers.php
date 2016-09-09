@@ -145,8 +145,10 @@ class Customers extends Post{
      * */
     public static function deleteCustomer($id){
         $postDB = Post::where('post_type', 'axisubs_user_'.$id)->first();
-        $postDB->meta()->delete();
-        return $postDB->delete();
+        if(!empty($postDB)){
+            $postDB->meta()->delete();
+            return $postDB->delete();
+        }
     }
 
     /**

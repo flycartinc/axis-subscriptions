@@ -11,6 +11,8 @@ use Axisubs\Helper;
 use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 use Axisubs\Models\Site\Plans;
+use Events\Event;
+use Axisubs\Helper\ManageUser;
 
 class Subscriptions extends Post{
     /**
@@ -112,7 +114,29 @@ class Subscriptions extends Post{
      * */
     public static function deleteSubscriptions($id){
         $postDB = Post::where('post_type', 'axisubs_subscribe')->first()->find($id);
-        $postDB->meta()->delete();
-        return $postDB->delete();
+        if(!empty($postDB)) {
+            //On before delete trigger
+            Event::trigger('onBeforeSubscriptionDelete', array($id));
+
+            //Remove user Role
+            $subscriptionPrefix = '_axisubs_subscribe_';
+            $planKey = $postDB->ID . $subscriptionPrefix . 'plan_id';
+            $userKey = $postDB->ID . $subscriptionPrefix . 'user_id';
+            $plan = Subscriptions::loadPlan($postDB->meta->$planKey, 1);
+            $planPrefix = '_axisubs_plans_';
+            $removeRoleskey = $plan->ID . $planPrefix . 'remove_roles';
+            if ($plan->meta[$removeRoleskey] != '') {
+                ManageUser::getInstance()->removeUserRole($postDB->meta->$userKey, explode(',', $plan->meta[$removeRoleskey]));
+            }
+
+            $postDB->meta()->delete();
+            $result = $postDB->delete();
+            if ($result) {
+                Event::trigger('onAfterSubscriptionDelete', array($id));
+            }
+            return $result;
+        } else {
+            return false;
+        }
     }
 }

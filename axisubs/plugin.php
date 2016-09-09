@@ -11,9 +11,10 @@
  * License:           MIT
  */
 
+use Events\Event;
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';
-
 
 function filter_single_plan_display($content)
 {
@@ -65,5 +66,3 @@ add_action('axisubs_single_plan', 'filter_single_plan_display', '');
 
 add_action('axisubs_single_subscribe', 'filter_single_subscribe_display', '');
 
-
-http://localhost/wordpress/axisubs/dev/wp-admin/admin.php?page=plans-index&task=edit&id=5
