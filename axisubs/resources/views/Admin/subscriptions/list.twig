@@ -50,6 +50,7 @@
                         <div class="axisubs-subscribed-i-block">
                             <div class="axisubs-subscribed-block-data">
                                 <a class="page-title-action" href="{{ '?page=subscriptions-index&sid='~subscribe['ID'] }}">View Details</a>
+                                <a class="page-title-action" href="{{ '?page=subscriptions-index&task=edit&user_id='~meta[subscribe['ID']~'_axisubs_subscribe_user_id']~'&sid='~subscribe['ID'] }}">Edit</a>
                             </div>
                             <div class="axisubs-subscribed-block-data">
                                 <a class="page-title-action" href="?page=subscriptions-index&task=delete&id={{ subscribe['ID'] }}">Delete</a>

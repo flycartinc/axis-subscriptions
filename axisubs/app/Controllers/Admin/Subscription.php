@@ -60,7 +60,13 @@ class Subscription extends Controller
         $site_url = get_site_url();
         if ($http->get('user_id')) {
             $data['customer'] = Customers::loadCustomer($http->get('user_id'));
-            $data['planSelectbox'] = Subscriptions::loadPlanSelectbox();
+            $planid = '';
+            if ($http->get('sid')) {
+                $data['subscription'] = Subscriptions::loadSubscriber($http->get('sid'));
+                $subscriptionPrefix = $data['subscription']->ID.'_'.$data['subscription']->post_type.'_';
+                $planid = $data['subscription']->meta[$subscriptionPrefix.'plan_id'];
+            }
+            $data['planSelectbox'] = Subscriptions::loadPlanSelectbox($planid);
             return view('@Axisubs/Admin/subscription/edit.twig', compact('pagetitle', 'data', 'role_names', 'site_url'));
         } else {
             AxisubsRedirect::redirect('?page=subscriptions-index');
@@ -123,7 +129,7 @@ class Subscription extends Controller
         $plan_id = $http->get('axisubs_plan');
         $start_on = $http->get('subscribe_start_on', '');
         $model = $this->getModel('Subscriptions');
-        $sub_id = 0;
+        $sub_id = $http->get('sid', 0);
         $result = $model->addSubscription($user_id, $plan_id, $sub_id, $start_on);
         if($result){
             Notifier::success('Subscription created successfully');

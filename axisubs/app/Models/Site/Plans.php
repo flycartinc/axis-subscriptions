@@ -434,6 +434,7 @@ class Plans extends Post{
     public function addSubscriptionThroughBackend($user_id, $plan_id, $sub_id, $subs_startDate = ''){
         $dateFormat = DateFormat::getInstance();
         $postTable = array();
+        $planchanged = 0;
         if($sub_id){
             $postDB = Post::where('post_type', 'axisubs_subscribe')->get();
             $postTable = $postDB->find($sub_id);
@@ -445,14 +446,22 @@ class Plans extends Post{
             $postTable->post_type = 'axisubs_subscribe';
             $postTable->save();
         }
-        $customer = Customers::loadCustomer($user_id);
-        $customerMeta = $customer->meta;
-        $customerPrefix = $customer->ID.'_'.$customer->post_type.'_';
-        foreach ($customerMeta as $key => $val) {
-            $field = explode($customerPrefix, $key);
-            if(isset($field['1'])) {
-                $newkey = $postTable->ID . '_axisubs_subscribe_' . $field['1'];
-                $postTable->meta->$newkey = $val;
+        // save only for new subscription
+        if(!$sub_id) {
+            $customer = Customers::loadCustomer($user_id);
+            $customerMeta = $customer->meta;
+            $customerPrefix = $customer->ID . '_' . $customer->post_type . '_';
+            foreach ($customerMeta as $key => $val) {
+                $field = explode($customerPrefix, $key);
+                if (isset($field['1'])) {
+                    $newkey = $postTable->ID . '_axisubs_subscribe_' . $field['1'];
+                    $postTable->meta->$newkey = $val;
+                }
+            }
+        } else {
+            $subscripSufix = $postTable->ID.'_'.$postTable->post_type.'_';
+            if($plan_id != $postTable->meta->$subscripSufix.'plan_id'){
+                $planchanged = 1;
             }
         }
 
@@ -506,18 +515,33 @@ class Plans extends Post{
         //calculate Total price
         $totalCost = $this->getTotalPrice();//$price+$setup_cost;
 
+        if(!$sub_id) {
+            $extraFields = array('_axisubs_subscribe_plan_id' => $plan_id,
+                '_axisubs_subscribe_status' => 'PENDING',
+                '_axisubs_subscribe_created_on' => $now,
+                '_axisubs_subscribe_start_on' => $startDate,
+                '_axisubs_subscribe_end_on' => $endDate,
+                '_axisubs_subscribe_user_id' => $user_id,
+                '_axisubs_subscribe_price' => $price,
+                '_axisubs_subscribe_setup_cost' => $setup_cost,
+                '_axisubs_subscribe_total_price' => $totalCost,
+                '_axisubs_subscribe_payment_type' => '',
+                '_axisubs_subscribe_payment_status' => "");
+        } else {
+            if($planchanged){
+                $extraFields = array('_axisubs_subscribe_plan_id' => $plan_id,
+                    '_axisubs_subscribe_start_on' => $startDate,
+                    '_axisubs_subscribe_end_on' => $endDate,
+                    '_axisubs_subscribe_price' => $price,
+                    '_axisubs_subscribe_setup_cost' => $setup_cost,
+                    '_axisubs_subscribe_total_price' => $totalCost);
+            } else {
+                $extraFields = array('_axisubs_subscribe_plan_id' => $plan_id,
+                    '_axisubs_subscribe_start_on' => $startDate,
+                    '_axisubs_subscribe_end_on' => $endDate);
+            }
 
-        $extraFields = array('_axisubs_subscribe_plan_id' => $plan_id,
-            '_axisubs_subscribe_status' => 'PENDING',
-            '_axisubs_subscribe_created_on' => $now,
-            '_axisubs_subscribe_start_on' => $startDate,
-            '_axisubs_subscribe_end_on' => $endDate,
-            '_axisubs_subscribe_user_id' => $user_id,
-            '_axisubs_subscribe_price' => $price,
-            '_axisubs_subscribe_setup_cost' => $setup_cost,
-            '_axisubs_subscribe_total_price' => $totalCost,
-            '_axisubs_subscribe_payment_type' => '',
-            '_axisubs_subscribe_payment_status' => "");
+        }
 
         $extraFields = array_merge($extraFields, $extraFieldsTrial);
 

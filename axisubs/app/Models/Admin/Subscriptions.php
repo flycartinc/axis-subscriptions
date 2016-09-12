@@ -147,9 +147,14 @@ class Subscriptions extends Post{
             $select = '<select name="'.$name.'" id="'.$id.'" class="required" onchange="autoPopulatePlanDetails(this.value);">';
             $select .= '<option value="">Select Plan</option>';
             foreach ($plans as $key => $plan){
+                if($selected == $plan->ID){
+                    $selectedText = ' selected="selected"';
+                } else {
+                    $selectedText = '';
+                }
                 $planMeta = $plan->meta;
                 $planPrefix = $plan->ID.'_'.$plan->post_type.'_';
-                $select .= '<option value="'.$plan->ID.'">'.$planMeta[$planPrefix.'name'].'</option>';
+                $select .= '<option value="'.$plan->ID.'"'.$selectedText.'>'.$planMeta[$planPrefix.'name'].'</option>';
             }
             $select .= '</select>';
         } else {

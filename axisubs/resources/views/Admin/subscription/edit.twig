@@ -59,7 +59,7 @@
                       <label for="subscribe_trial_start_on">Trial starts on</label>
                   </div>
                   <div class="axisubs-fields-content">
-                      <input type="text" disabled="disabled" name="subscribe_trial_start_on" id="subscribe_trial_start_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+                      <input type="text" disabled="disabled" name="subscribe_trial_start_on" id="subscribe_trial_start_on" value="{{ subscriptionMeta[subscriptionPrefix~'trial_start_on'] }}"/>
                   </div>
               </div>
               <div class="axisubs-fields">
@@ -67,7 +67,7 @@
                       <label for="subscribe_trial_ends_on">Trial ends on</label>
                   </div>
                   <div class="axisubs-fields-content">
-                      <input type="text" disabled="disabled" name="subscribe_trial_ends_on" id="subscribe_trial_ends_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+                      <input type="text" disabled="disabled" name="subscribe_trial_ends_on" id="subscribe_trial_ends_on" value="{{ subscriptionMeta[subscriptionPrefix~'trial_end_on'] }}"/>
                   </div>
               </div>
               <div class="axisubs-fields">
@@ -83,7 +83,7 @@
                       <label for="subscribe_end_on">Subscription ends on</label>
                   </div>
                   <div class="axisubs-fields-content">
-                      <input type="text" disabled="disabled" name="subscribe_end_on" id="subscribe_end_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+                      <input type="text" disabled="disabled" name="subscribe_end_on" id="subscribe_end_on" value="{{ subscriptionMeta[subscriptionPrefix~'end_on'] }}"/>
                   </div>
               </div>
 
@@ -115,6 +115,7 @@
           <div class="axisubs-fields">
               <div class="axisubs-fields-label">
                   <input type="hidden" name="task" value="addNewSubscription"/>
+                  <input type="hidden" name="sid" value="{{ subscription['ID'] }}"/>
               </div>
               <div class="axisubs-fields-content">
                   <button class="btn page-title-action" type="button" onclick="addNewSubscription()">Save</button>

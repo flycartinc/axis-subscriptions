@@ -2,6 +2,9 @@
    <div class="axisubs-plan_details-header">
       <div class="axisubs-plan_details-title">
          <h3>{{ pagetitle }}</h3>
+         <a class="btn page-title-action" href="?page=subscriptions-index&task=edit&user_id={{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_user_id'] }}&sid={{ subscriber['ID'] }}">Edit</a>
+         <a href="?page=subscriptions-index&task=delete&id={{ subscriber['ID'] }}" class="btn page-title-action">Delete</a>
+         <a class="btn page-title-action" href="?page=subscriptions-index">Back</a>
       </div>
       <div class="axisubs-plan_details-summary">
          <div class="axisubs-plan-billinfo-fields">
@@ -44,6 +47,30 @@
             <div class="axisubs-billinfo-f-c">
                <div class="axisubs-billinfo-f-i">
                   <div class="axisubs-billinfo-f-label">
+                     Trial start date
+                  </div>
+                  <div class="axisubs-billinfo-f-field">
+                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_trial_start_on'] }}
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="axisubs-plan-billinfo-fields">
+            <div class="axisubs-billinfo-f-c">
+               <div class="axisubs-billinfo-f-i">
+                  <div class="axisubs-billinfo-f-label">
+                     Trial end date
+                  </div>
+                  <div class="axisubs-billinfo-f-field">
+                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_trial_end_on'] }}
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="axisubs-plan-billinfo-fields">
+            <div class="axisubs-billinfo-f-c">
+               <div class="axisubs-billinfo-f-i">
+                  <div class="axisubs-billinfo-f-label">
                      Subscription start date
                   </div>
                   <div class="axisubs-billinfo-f-field">
@@ -60,6 +87,42 @@
                   </div>
                   <div class="axisubs-billinfo-f-field">
                      {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_end_on'] }}
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="axisubs-plan-billinfo-fields">
+            <div class="axisubs-billinfo-f-c">
+               <div class="axisubs-billinfo-f-i">
+                  <div class="axisubs-billinfo-f-label">
+                     Price
+                  </div>
+                  <div class="axisubs-billinfo-f-field">
+                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_price'] }}
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="axisubs-plan-billinfo-fields">
+            <div class="axisubs-billinfo-f-c">
+               <div class="axisubs-billinfo-f-i">
+                  <div class="axisubs-billinfo-f-label">
+                     Setup cost
+                  </div>
+                  <div class="axisubs-billinfo-f-field">
+                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost'] }}
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="axisubs-plan-billinfo-fields">
+            <div class="axisubs-billinfo-f-c">
+               <div class="axisubs-billinfo-f-i">
+                  <div class="axisubs-billinfo-f-label">
+                     Total Price
+                  </div>
+                  <div class="axisubs-billinfo-f-field">
+                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_total_price'] }}
                   </div>
                </div>
             </div>
