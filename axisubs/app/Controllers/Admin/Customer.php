@@ -73,12 +73,11 @@ class Customer extends Controller
     public function edit()
     {
         $http = Http::capture();
+        $currency = new Currency();
+        $currencyData['code'] = $currency->getCurrencyCode();
+        $currencyData['currency'] = $currency->getCurrency();
+        $site_url = get_site_url();
         if($http->get('id')) {
-            $currency = new Currency();
-            $currencyData['code'] = $currency->getCurrencyCode();
-            $currencyData['currency'] = $currency->getCurrency();
-            $site_url = get_site_url();
-
             $pagetitle = 'Edit Customer';
             if($http->get('edit_task') == 'save'){
                 $result = Customers::saveCustomer($http->all(), $http->get('id'));
