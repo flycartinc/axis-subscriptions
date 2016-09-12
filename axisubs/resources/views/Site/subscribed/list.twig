@@ -58,8 +58,10 @@
                     No subscription found.
                 </div>
             {% endfor %}
-            {{ paginationD['limitbox'] | raw }}
-            {{ paginationD['links'] | raw }}
+            {% if subscribers|length > 0 %}
+                {{ paginationD['limitbox'] | raw }}
+                {{ paginationD['links'] | raw }}
+            {% endif %}
         </div>
     </form>
 </div>

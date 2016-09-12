@@ -13,6 +13,8 @@ use Herbert\Framework\Models\PostMeta;
 use Axisubs\Helper\Duration;
 use Axisubs\Helper\ManageUser;
 use Axisubs\Helper\AxisubsRedirect;
+use Axisubs\Models\Admin\Customers;
+use Axisubs\Helper\DateFormat;
 
 class Plans extends Post{
     /**
@@ -254,7 +256,6 @@ class Plans extends Post{
         $subscribers = $subscribers->forPage($pageLimit['start'], $pageLimit['limit']);
 
         foreach($subscribers as $key => $value){
-            $today = date("Y-m-d g:i:s");
             $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $plan = Plans::loadPlan($item->meta[$item->ID.'_axisubs_subscribe_plan_id']);
@@ -323,6 +324,7 @@ class Plans extends Post{
      * Add Subscription
      * */
     public function addSubscribe($post, $plans){
+        $dateFormat = DateFormat::getInstance();
         $sessionData = Session()->get('axisubs_subscribers');
         $postTable = array();
         if(isset($sessionData[$plans->ID]) && $sessionData[$plans->ID]->subscriberId){
@@ -357,7 +359,7 @@ class Plans extends Post{
             $price = 0;
         }
 
-        $now = date("Y-m-d g:i:s");
+        $now = $dateFormat->getCarbonDate();//date("Y-m-d g:i:s");
         $extraFieldsTrial = array();
         if(count($existAlready)){
             $startDate = Plans::getEndDateOfSubscriber($existAlready);
@@ -428,6 +430,110 @@ class Plans extends Post{
         }
     }
 
+    //add subscription through backend
+    public function addSubscriptionThroughBackend($user_id, $plan_id, $sub_id, $subs_startDate = ''){
+        $dateFormat = DateFormat::getInstance();
+        $postTable = array();
+        if($sub_id){
+            $postDB = Post::where('post_type', 'axisubs_subscribe')->get();
+            $postTable = $postDB->find($sub_id);
+        }
+        if(empty($postTable)){
+            $postTable = new Post();
+            $postTable->post_name = 'Subscribers';
+            $postTable->post_title = 'Subscribers';
+            $postTable->post_type = 'axisubs_subscribe';
+            $postTable->save();
+        }
+        $customer = Customers::loadCustomer($user_id);
+        $customerMeta = $customer->meta;
+        $customerPrefix = $customer->ID.'_'.$customer->post_type.'_';
+        foreach ($customerMeta as $key => $val) {
+            $field = explode($customerPrefix, $key);
+            if(isset($field['1'])) {
+                $newkey = $postTable->ID . '_axisubs_subscribe_' . $field['1'];
+                $postTable->meta->$newkey = $val;
+            }
+        }
+
+        $plans = Plans::loadPlan($plan_id, 1);
+        //check already has active or future subscriptions
+        $existAlready = Plans::getSubscribedDetails($plan_id, $user_id);
+
+        if(isset($plans->meta[$plans->ID.'_axisubs_plans_price']) && $plans->meta[$plans->ID.'_axisubs_plans_price'] > 0){
+            $price = $plans->meta[$plans->ID.'_axisubs_plans_price'];
+        } else {
+            $price = 0;
+        }
+
+        $now = $dateFormat->getCarbonDate();
+        $extraFieldsTrial = array();
+        if(count($existAlready)){
+            if($subs_startDate == '') {
+                $startDate = Plans::getEndDateOfSubscriber($existAlready);
+            } else {
+                $startDate = $dateFormat->getCarbonDate($subs_startDate);
+            }
+            $setup_cost = 0;
+        } else {
+            if($subs_startDate == ''){
+                $startDate = $now;    
+            } else {
+                $startDate = $dateFormat->getCarbonDate($subs_startDate);
+            }
+            
+            $planType = $plans->meta[$plans->ID.'_axisubs_plans_type'];
+            if($planType == 'renewal_with_trial' || $planType == 'recurring_with_trial'){
+                $endDate = Plans::calculateEndDate($startDate, $plans, 1);
+                $extraFieldsTrial = array('_axisubs_subscribe_trial_start_on' => $startDate,
+                    '_axisubs_subscribe_trial_end_on' => $endDate);
+                $startDate = $endDate;
+            }
+            if(isset($plans->meta[$plans->ID.'_axisubs_plans_setup_cost']) && $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'] > 0){
+                $setup_cost = $plans->meta[$plans->ID.'_axisubs_plans_setup_cost'];
+            } else {
+                $setup_cost = 0;
+            }
+
+        }
+        //Calculate End Date
+        $endDate = Plans::calculateEndDate($startDate, $plans);
+
+        $this->price = $price;
+        $this->setup_cost = $setup_cost;
+        $this->existAlready = $existAlready;
+
+        //calculate Total price
+        $totalCost = $this->getTotalPrice();//$price+$setup_cost;
+
+
+        $extraFields = array('_axisubs_subscribe_plan_id' => $plan_id,
+            '_axisubs_subscribe_status' => 'PENDING',
+            '_axisubs_subscribe_created_on' => $now,
+            '_axisubs_subscribe_start_on' => $startDate,
+            '_axisubs_subscribe_end_on' => $endDate,
+            '_axisubs_subscribe_user_id' => $user_id,
+            '_axisubs_subscribe_price' => $price,
+            '_axisubs_subscribe_setup_cost' => $setup_cost,
+            '_axisubs_subscribe_total_price' => $totalCost,
+            '_axisubs_subscribe_payment_type' => '',
+            '_axisubs_subscribe_payment_status' => "");
+
+        $extraFields = array_merge($extraFields, $extraFieldsTrial);
+
+        foreach ($extraFields as $key1 => $val1) {
+            $key1 = $postTable->ID . $key1;
+            $postTable->meta->$key1 = $val1;
+        }
+
+        $result = $postTable->save();
+        if($result){
+            return $postTable->ID;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * get End Date
      * */
@@ -459,15 +565,17 @@ class Plans extends Post{
         } else{
             $days = $duration->getDurationInDays($planPeriod, $planPeriodUnit);
         }
-
-        return date("Y-m-d g:i:s", strtotime($startDate." +".$days." days"));
+        $dateFormat = DateFormat::getInstance();
+        $endDate = $dateFormat->getCarbonDate(date("Y-m-d g:i:s", strtotime($startDate." +".$days." days")));
+        return $endDate;
     }
 
     /**
      * get end date from previous subscriber
      * */
     public static function getEndDateOfSubscriber($subscribers){
-        $newEndDate = date("Y-m-d g:i:s");
+        $dateFormat = DateFormat::getInstance();
+        $newEndDate = $dateFormat->getCarbonDate();
         foreach($subscribers as $key => $value){
             $endDateKey = $value->ID.'_axisubs_subscribe_end_on';
             $endDate = $value->meta[$endDateKey];
@@ -546,10 +654,12 @@ class Plans extends Post{
      * */
     public function checkForActiveSubscription($subscription)
     {
+        $dateFormat = DateFormat::getInstance();
         $subscription = Plans::loadSubscriber($subscription->ID);
         $subsPrefix = $subscription->ID.'_axisubs_subscribe_';
         $subscriptions = Plans::getSubscribedDetails($subscription->meta[$subsPrefix.'plan_id'], $subscription->meta[$subsPrefix.'user_id']);
-        $newEndDate = date("Y-m-d g:i:s");
+        $newEndDate = $dateFormat->getCarbonDate();//date("Y-m-d g:i:s");
+
         $lastSubscription = array();
         foreach($subscriptions as $key => $value){
             if($subscription->ID == $value->ID){
@@ -587,6 +697,7 @@ class Plans extends Post{
      * create a copy of subscription
      * */
     public function createACopyOfSubscription($subscription_id){
+        $dateFormat = DateFormat::getInstance();
         $oldSubscription = Plans::loadSubscriber($subscription_id);
         $oldSubscriptionPrefix = $oldSubscription->ID.'_axisubs_subscribe_';
         $planId = $oldSubscription->meta[$oldSubscriptionPrefix.'plan_id'];
@@ -600,7 +711,7 @@ class Plans extends Post{
             $price = 0;
         }
 
-        $now = date("Y-m-d g:i:s");
+        $now = $dateFormat->getCarbonDate();//date("Y-m-d g:i:s");
         $setup_cost = 0;
         if(count($existAlready)){
             $startDate = Plans::getEndDateOfSubscriber($existAlready);

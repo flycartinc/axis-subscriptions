@@ -144,7 +144,7 @@ class Subscriptions extends Post{
     public static function loadPlanSelectbox($selected = '', $name = 'axisubs_plan', $id = 'axisubs_plan'){
         $plans = Plans::getItems(0);
         if(count($plans)){
-            $select = '<select name="'.$name.'" id="'.$id.'" onchange="autoPopulatePlanDetails(this.value);">';
+            $select = '<select name="'.$name.'" id="'.$id.'" class="required" onchange="autoPopulatePlanDetails(this.value);">';
             $select .= '<option value="">Select Plan</option>';
             foreach ($plans as $key => $plan){
                 $planMeta = $plan->meta;
@@ -157,5 +157,11 @@ class Subscriptions extends Post{
         }
 
         return $select;
+    }
+    
+    public function addSubscription($user_id, $plan_id, $sub_id = 0, $start_on = ''){
+        $planObj = Plans::getInstance();
+        $result = $planObj->addSubscriptionThroughBackend($user_id, $plan_id, $sub_id, $start_on);
+        return $result;
     }
 }

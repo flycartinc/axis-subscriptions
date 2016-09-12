@@ -100,6 +100,85 @@ function addCustomertype(val){
     })(axisubs.jQuery);
 }
 
+// For auto populate plan fields for create subscription
+function autoPopulatePlanDetails(val){
+    (function ($) {
+        var postData = {
+            id: val,
+            task: "loadPlanDetails",
+            view: "Subscription"
+        };
+        $.ajax({
+            url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            type: 'POST',
+            data: postData,
+            dataType: 'json',
+            beforeSend: function () {
+                // $('.axisubs-fields-plantypes-con-o .loader-ajax').show();
+            },
+            complete: function () {
+                // $('.axisubs-fields-plantypes-con-o .loader-ajax').hide();
+            },
+            success: function (data) {
+                if(data['status'] == 'success'){
+                    poupulatePlanData(data['fields']);
+                } else {
+                    poupulatePlanData();
+                }
+
+            }
+        });
+
+        function poupulatePlanData(data){
+            $('.autopopulate_fields input').each(function (e) {
+                $(this).val('');
+            });
+            if(data != undefined){
+                if(data.price != '')
+                    $('#subscribe_price').val(data.price);
+            } else {
+
+            }
+        }
+    })(axisubs.jQuery);
+}
+
+// Add new subscription
+function addNewSubscription(){
+    (function ($) {
+        var valid = validateRequiredFields("#subscriptionForm");
+        if(valid){
+            $('#subscriptionForm').submit();
+        } else {
+            
+        }
+        var fields = $("#subscriptionForm").serializeArray();
+        /*fields.push({'name':'id','value':val});
+        fields.push({'name':'task','value': 'addNewSubscription'});
+        fields.push({'name':'view','value': 'Subscription'});
+        $.ajax({
+            url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            type: 'POST',
+            data: fields,
+            dataType: 'json',
+            beforeSend: function () {
+                // $('.axisubs-fields-plantypes-con-o .loader-ajax').show();
+            },
+            complete: function () {
+                // $('.axisubs-fields-plantypes-con-o .loader-ajax').hide();
+            },
+            success: function (data) {
+                if(data['status'] == 'success'){
+                    poupulateCustomerData(data['fields']);
+                } else {
+                    poupulateCustomerData();
+                }
+
+            }
+        });*/
+    })(axisubs.jQuery);
+}
+
 // For auto populate fields
 function autoPopulateCustomerDetails(val){
     (function ($) {

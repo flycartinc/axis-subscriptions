@@ -57,6 +57,7 @@ class Subscription extends Controller
      * */
     public function edit(){
         $http = Http::capture();
+        $site_url = get_site_url();
         if ($http->get('user_id')) {
             $data['customer'] = Customers::loadCustomer($http->get('user_id'));
             $data['planSelectbox'] = Subscriptions::loadPlanSelectbox();
@@ -81,6 +82,54 @@ class Subscription extends Controller
             }
         }
 
+        return $this->index();
+    }
+
+    /**
+     * Load plan details for auto populate
+     * */
+    public function loadPlanDetails(){
+        $http = Http::capture();
+        $id = $http->get('id');
+        $data = Subscriptions::loadPlan($id);
+        $result = array();
+        if(!empty($data)){
+            $prefix = $data->ID.'_'.$data->post_type.'_';
+            $meta = $data->meta;
+            $result['plan_id'] = $data->ID;
+            foreach ($meta as $key => $value){
+                $field = explode($prefix, $key);
+                if(isset($field['1'])) {
+                    $result[$field['1']] = $value;
+                } else {
+                    $result[$field['0']] = $value;
+                }
+            }
+            $response['status'] = 'success';
+            $response['fields'] = $result;
+        } else {
+            $response['status'] = 'failed';
+            $response['fields'] = $result;
+        }
+        echo json_encode($response);
+    }
+    
+    /**
+     * Add new subscription
+     * */
+    public function addNewSubscription(){
+        $http = Http::capture();
+        $user_id = $http->get('user_id');
+        $plan_id = $http->get('axisubs_plan');
+        $start_on = $http->get('subscribe_start_on', '');
+        $model = $this->getModel('Subscriptions');
+        $sub_id = 0;
+        $result = $model->addSubscription($user_id, $plan_id, $sub_id, $start_on);
+        if($result){
+            Notifier::success('Subscription created successfully');
+        } else {
+            Notifier::error('Failed to create subscription');
+        }
         return $this->index();
     }
 }
