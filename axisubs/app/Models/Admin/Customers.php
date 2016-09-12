@@ -12,6 +12,7 @@ use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 use Axisubs\Models\Site\Plans;
 use Corcel\User;
+use Axisubs\Helper\AxisubsRedirect;
 
 class Customers extends Post{
     /**
@@ -148,6 +149,8 @@ class Customers extends Post{
         if(!empty($postDB)){
             $postDB->meta()->delete();
             return $postDB->delete();
+        } else {
+            AxisubsRedirect::redirect('?page=customers-index');
         }
     }
 

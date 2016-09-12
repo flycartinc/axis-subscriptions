@@ -13,6 +13,7 @@ use Herbert\Framework\Models\PostMeta;
 use Axisubs\Models\Site\Plans;
 use Events\Event;
 use Axisubs\Helper\ManageUser;
+use Axisubs\Helper\AxisubsRedirect;
 
 class Subscriptions extends Post{
     /**
@@ -136,7 +137,7 @@ class Subscriptions extends Post{
             }
             return $result;
         } else {
-            return false;
+            AxisubsRedirect::redirect('?page=subscriptions-index');
         }
     }
 

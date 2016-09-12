@@ -12,6 +12,7 @@ use Corcel\Post;
 use Herbert\Framework\Models\PostMeta;
 use Axisubs\Helper\Duration;
 use Axisubs\Helper\ManageUser;
+use Axisubs\Helper\AxisubsRedirect;
 
 class Plans extends Post{
     /**
@@ -166,6 +167,8 @@ class Plans extends Post{
             if(!empty($postTable)){
                 $postTable->meta()->delete();
                 return $postTable->delete();
+            } else {
+                AxisubsRedirect::redirect('?page=plans-index');
             }
         } else {
             return false;
