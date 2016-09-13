@@ -706,6 +706,11 @@ class Plans extends Post{
      * */
     public function getNextRenewal($subscription_id, $trans_id = ''){
         if($trans_id != ''){
+            $oldSubscrption = Plans::loadSubscriber($subscription_id);
+            $subsPrefix = $oldSubscrption->ID.'_'.$oldSubscrption->post_type.'_';
+            if((!isset($oldSubscrption->meta[$subsPrefix.'transaction_ref_id']) || $oldSubscrption->meta[$subsPrefix.'transaction_ref_id'] == '')){
+                return $subscription_id;
+            }
             $subs = $this->checkForTransactionId($trans_id);
         } else {
             $subs = 0;

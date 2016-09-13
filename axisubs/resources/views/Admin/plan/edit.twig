@@ -55,7 +55,7 @@
              <div class="axisubs-fields-content">
                  <select name="axisubs[plans][type]" id="axisub_plan_status" onchange="loadFieldsOfPlanType(this.value, '{{ item['ID'] }}')">
                      <option value="free" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'free' %} selected {% endif %}>Free</option>
-                     <option value="non_renewal" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'non_renewal' %} selected {% endif %}>Non Renewal</option>
+                     <!--<option value="non_renewal" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'non_renewal' %} selected {% endif %}>Non Renewal</option>-->
                      <option value="renewal" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'renewal' %} selected {% endif %}>Non-recurring</option>
                      <option value="renewal_with_trial" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'renewal_with_trial' %} selected {% endif %}>Non-recurring with trial</option>
                      <option value="recurring" {% if item['meta'][item['ID']~'_axisubs_plans_type'] == 'recurring' %} selected {% endif %}>Recurring</option>

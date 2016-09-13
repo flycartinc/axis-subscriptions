@@ -103,9 +103,9 @@ class Plan extends Controller{
             //Check eligibility
             $eligible = Plans::isEligible($item);
             if($eligible) {
-                $result = $model->addSubscribe($http->all(), $item);                
+                $result = $model->addSubscribe($http->all(), $item);
                 if ($result) {
-                    $data['hasActiveSubs'] = count($model->existAlready);                    
+                    $data['hasActiveSubs'] = count($model->existAlready);
                     $subscriber = Plans::loadSubscriber($result);
                     if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
                         if($http->get('payment', '') != ''){
@@ -116,7 +116,7 @@ class Plan extends Controller{
                             $this->message = FrontEndMessages::failure('Invalid payment option');
                             return $this->index();
                         }
-                    }                    
+                    }
                     return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'data'));
                 } else {
                     $message = FrontEndMessages::failure('Failed to subscribe');
@@ -173,14 +173,19 @@ class Plan extends Controller{
         $http = Http::capture();
         if($http->get('payment_type') != ''){
             $sessionData = Session()->get('axisubs_subscribers');
-            if(isset($sessionData['current_subscription_id']) && $sessionData['current_subscription_id']){
+            //if(isset($sessionData['current_subscription_id']) && $sessionData['current_subscription_id']){
+            if((isset($sessionData['current_subscription_id']) && $sessionData['current_subscription_id']) || ($http->get('apptask') == 'notify')){
                 $payment = new PaymentPlugins();
                 $result = $payment->executePaymentTasks();
-                Session()->set('axisubs_subscribers', null);
-                if($result['status'] == 200){
-                    $message = FrontEndMessages::success($result['message']);
-                } else {
-                    $message = FrontEndMessages::failure($result['message']);
+                //Session()->set('axisubs_subscribers', null);
+                if($http->get('apptask') != 'notify') {
+                    Session()->set('axisubs_subscribers', null);
+
+                    if($result['status'] == 200){
+                        $message = FrontEndMessages::success($result['message']);
+                    } else {
+                        $message = FrontEndMessages::failure($result['message']);
+                    }
                 }
             } else {
                 $message = FrontEndMessages::failure('Session expired');
