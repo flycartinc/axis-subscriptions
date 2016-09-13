@@ -12,9 +12,62 @@
  */
 
 use Events\Event;
+use Axisubs\Helper\SubscriptionMails;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';
+
+Event::listen('mailPaymentCanceled', 'sendMailPaymentCanceled', '1');
+Event::listen('mailSubscriptionExpired', 'sendMailSubscriptionExpired', '1');
+Event::listen('mailPaymentCompleted', 'sendMailPaymentCompleted', '1');
+Event::listen('mailPaymentFailed', 'sendMailPaymentFailed', '1');
+Event::listen('mailSubscriptionActive', 'sendMailSubscriptionActive', '1');
+Event::listen('mailPaymentPending', 'sendMailPaymentPending', '1');
+
+/**
+ * sendMailPaymentCanceled
+ * */
+function sendMailPaymentCanceled($subscription_id){
+    SubscriptionMails::subscriptionPaymentCanceled($subscription_id);
+}
+
+/**
+ * sendMailSubscriptionExpired
+ * */
+function sendMailSubscriptionExpired($subscription_id){
+    SubscriptionMails::subscriptionExpired($subscription_id);
+}
+
+/**
+ * sendMailPaymentCompleted
+ * */
+function sendMailPaymentCompleted($subscription_id){
+    SubscriptionMails::subscriptionPaymentCompleted($subscription_id);
+}
+
+/**
+ * sendMailPaymentCompleted
+ * */
+function sendMailPaymentFailed($subscription_id){
+    SubscriptionMails::subscriptionPaymentFailed($subscription_id);
+}
+
+/**
+ * sendMailPaymentCompleted
+ * */
+function sendMailSubscriptionActive($subscription_id){
+    SubscriptionMails::subscriptionActive($subscription_id);
+}
+
+/**
+ * sendMailPaymentCompleted
+ * */
+function sendMailPaymentPending($subscription_id){
+    SubscriptionMails::subscriptionPending($subscription_id);
+}
+
+
+
 
 function filter_single_plan_display($content)
 {

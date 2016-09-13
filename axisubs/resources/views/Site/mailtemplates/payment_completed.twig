@@ -1,0 +1,12 @@
+{% set subscription = data['subscription'] %}
+{% set subscriptionMeta = subscription['meta'] %}
+{% set subscriptionPrefix = subscription['ID']~'_'~subscription['post_type']~'_' %}
+{% set plan = data['plan'] %}
+{% set planMeta = plan['meta'] %}
+{% set planPrefix = plan['ID']~'_'~plan['post_type']~'_' %}
+
+<div class="axisubs wrap">
+    Dear {{ subscriptionMeta[subscriptionPrefix~'first_name'] }}<br><br>
+    Your payment for the subscription plan: {{ planMeta[planPrefix~'name'] }} is completed.<br><br>
+    Thank you
+</div>

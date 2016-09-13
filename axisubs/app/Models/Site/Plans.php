@@ -15,6 +15,7 @@ use Axisubs\Helper\ManageUser;
 use Axisubs\Helper\AxisubsRedirect;
 use Axisubs\Models\Admin\Customers;
 use Axisubs\Helper\DateFormat;
+use Events\Event;
 
 class Plans extends Post{
     /**
@@ -835,7 +836,11 @@ class Plans extends Post{
                 $postDB->meta->$key = 'PENDING';
                 $key = $subsPrefix.'status';
                 $postDB->meta->$key = 'PENDING';
-                return $postDB->save();
+                $result = $postDB->save();
+                
+                //Trigger Mail
+                Event::trigger( 'mailPaymentPending', $subscription_id, 'filter');
+                return $result;
             } else {
                 return false;
             }
@@ -861,7 +866,10 @@ class Plans extends Post{
                 $postDB->meta->$key = 'FAILED';
                 $key = $subsPrefix.'status';
                 $postDB->meta->$key = 'FAILED';
-                return $postDB->save();
+                $result = $postDB->save();
+                //Trigger Mail
+                Event::trigger( 'mailPaymentFailed', $subscription_id, 'filter');
+                return $result;
             } else {
                 return false;
             }
@@ -885,7 +893,10 @@ class Plans extends Post{
 
                 $key = $subsPrefix.'payment_status';
                 $postDB->meta->$key = 'SUCCESS';
-
+                
+                //Trigger Mail
+                Event::trigger( 'mailPaymentCompleted', $subscription_id, 'filter');
+                
                 //For check to set Active or Future
                 $activeSubs = $this->checkForActiveSubscription($postDB);
                 $key = $subsPrefix.'status';
@@ -921,7 +932,11 @@ class Plans extends Post{
                 $postDB->meta->$key = 'CANCELED';
                 $key = $subsPrefix.'status';
                 $postDB->meta->$key = 'CANCELED';
-                return $postDB->save();
+                $result = $postDB->save();
+                //Trigger Mail
+                Event::trigger( 'mailPaymentCanceled', $subscription_id, 'filter');
+                
+                return $result;
             } else {
                 return false;
             }
@@ -951,6 +966,9 @@ class Plans extends Post{
         $subscription->meta->$statusKey = 'EXPIRED';
 
         $result = $subscription->save();
+        //Trigger Mail
+        Event::trigger( 'mailSubscriptionExpired', $subscription->ID, 'filter');
+        
         if($result){
             //Remove user Role
             $planKey = $subscription->ID.$subscriptionPrefix.'plan_id';
@@ -988,6 +1006,10 @@ class Plans extends Post{
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'ACTIVE';
         $result = $subscription->save();
+
+        //Trigger Mail
+        Event::trigger( 'mailSubscriptionActive', $subscription->ID, 'filter');
+        
         if($result){
             //Add user Role
             $planKey = $subscription->ID.$subscriptionPrefix.'plan_id';
