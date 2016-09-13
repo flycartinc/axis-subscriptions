@@ -33,11 +33,23 @@ class Config extends Post
      */
     public $timestamps = false;
 
+    public $_item = array();
+
+    public static $instance = null;
+
+    public static function getInstance(array $config = array())
+    {
+        if (!self::$instance)
+        {
+            self::$instance = new self($config);
+        }
+
+        return self::$instance;
+    }
 
     /**
      * Settings constructor.
      */
-
     public static function all($columns = ['*'])
     {
         $item = parent::all()->where('post_type', 'axisubs_config')->first();
@@ -68,6 +80,24 @@ class Config extends Post
             $postTable->meta->$key = $val;
         }
         $result = $postTable->save();
+
+        return $result;
+    }
+
+    public function getConfigData($fieldName, $default = ''){
+        if(empty($this->_item)){
+            $this->_item = Config::all();
+        }
+        if(!empty($this->_item)){
+            $key = $this->_item->ID . '_'.$this->_item->post_type.'_' . $fieldName;
+            if(isset($this->_item->meta[$key])){
+                $result = $this->_item->meta[$key];
+            } else {
+                $result = $default;
+            }
+        } else {
+            $result = $default;
+        }
 
         return $result;
     }

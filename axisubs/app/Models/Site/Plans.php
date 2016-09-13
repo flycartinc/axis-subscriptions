@@ -147,7 +147,6 @@ class Plans extends Post{
             } else {
                 $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
             }
-            $meta['allow_setupcost'] = 1;//count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
             if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost']) && $meta['allow_setupcost']) {
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
             } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
