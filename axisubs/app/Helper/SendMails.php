@@ -1,6 +1,7 @@
 <?php
 
 namespace Axisubs\Helper;
+use Events\Event;
 
 class SendMails{
 
@@ -19,7 +20,7 @@ class SendMails{
 	/**
 	 * get an instance
 	 * @param array $config
-	 * @return 
+	 * @return
 	 * * */
 	public static function getInstance(array $config = array())
 	{
@@ -39,6 +40,8 @@ class SendMails{
 				$this->headers[] = 'Cc: '.$val;
 			}
 		}
+		$this->headers[] = 'MIME-Version: 1.0' . "\r\n";
+		$this->headers[] = 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 		return wp_mail( $this->to, $this->subject, $this->body, $this->headers, $this->attachments );
 	}
 
