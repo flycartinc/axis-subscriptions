@@ -39,11 +39,21 @@
                         <div class="col-3">
                             <div class="col-data">
                                 <span class="col-data-title">Price: </span>
-                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_price'] }}</span>
+                                {% if item['meta'][item['ID']~'_axisubs_plans_price'] %}
+                                    {% set price = currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] %}
+                                {% else %}
+                                    {% set price = '-' %}
+                                {% endif %}
+                                <span class="col-data-content">{{ price }}</span>
                             </div>
                             <div class="col-data">
                                 <span class="col-data-title">Setup cost: </span>
-                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}</span>
+                                {% if item['meta'][item['ID']~'_axisubs_plans_setup_cost'] %}
+                                    {% set setupcost = currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_setup_cost'] %}
+                                {% else %}
+                                    {% set setupcost = '-' %}
+                                {% endif %}
+                                <span class="col-data-content">{{ setupcost }}</span>
                             </div>
                         </div>
                         <div class="col-3">

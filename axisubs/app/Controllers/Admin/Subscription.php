@@ -49,7 +49,7 @@ class Subscription extends Controller
         $pagination = new Pagination(Subscriptions::$_start, Subscriptions::$_limit, Subscriptions::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
-        return view('@Axisubs/Admin/subscriptions/list.twig', compact('pagetitle', 'items', 'paginationD'));
+        return view('@Axisubs/Admin/subscriptions/list.twig', compact('pagetitle', 'items', 'paginationD', 'currencyData'));
     }
 
     /**

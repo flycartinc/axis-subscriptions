@@ -98,7 +98,7 @@
                      Price
                   </div>
                   <div class="axisubs-billinfo-f-field">
-                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_price'] }}
+                     {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_price'] }}
                   </div>
                </div>
             </div>
@@ -110,7 +110,7 @@
                      Setup cost
                   </div>
                   <div class="axisubs-billinfo-f-field">
-                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost'] }}
+                     {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_setup_cost'] }}
                   </div>
                </div>
             </div>
@@ -122,7 +122,7 @@
                      Total Price
                   </div>
                   <div class="axisubs-billinfo-f-field">
-                     {{ subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_total_price'] }}
+                     {{ currencyData['code']~subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_total_price'] }}
                   </div>
                </div>
             </div>

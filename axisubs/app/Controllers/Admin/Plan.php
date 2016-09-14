@@ -13,6 +13,7 @@ use Herbert\Framework\Notifier;
 use Axisubs\Helper\Pagination;
 use Axisubs\Models\Admin\Customers;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\Currency;
 
 class Plan extends Controller
 {
@@ -23,6 +24,9 @@ class Plan extends Controller
      * */
     public function index()
     {
+        $currency = new Currency();
+        $currencyData['code'] = $currency->getCurrencyCode();
+        $currencyData['currency'] = $currency->getCurrency();
         $http = Http::capture();
         $pagetitle = 'Plans';
         Plans::populateStates($http->all());
@@ -31,7 +35,7 @@ class Plan extends Controller
         $pagination = new Pagination(Plans::$_start, Plans::$_limit, Plans::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
-        return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items', 'paginationD'));
+        return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items', 'paginationD', 'currencyData'));
     }
 
     /**
