@@ -34,7 +34,7 @@ class ExpiryControl
             ->pluck('post_id');
 
         $subscriptionPrefix = '_axisubs_subscribe_';
-        $today = $date->getOnlyDate();
+        $today = $date->getCarbonDate();
         $todayTime = new \DateTime($today);
         foreach($subscribers as $key => $value){
             $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
@@ -43,9 +43,9 @@ class ExpiryControl
 //            $statusKey = $value.$subscriptionPrefix.'status';
 
             if($meta[$endKey] != '-' && $meta[$endKey] != '0000-00-00 00:00:00'){
-                $endDate = $date->getOnlyDate($meta[$endKey]);
+                $endDate = $date->getCarbonDate($meta[$endKey]);
                 $endTime = new \DateTime($endDate);
-                if($endTime<$todayTime){
+                if($endTime<=$todayTime){
 //                    $item->meta->$statusKey = 'EXPIRED';
 //                    $item->save();
                     $planObject->markExpired($item);
@@ -66,15 +66,15 @@ class ExpiryControl
             ->pluck('post_id');
 
         $subscriptionPrefix = '_axisubs_subscribe_';
-        $today = $date->getOnlyDate();
+        $today = $date->getCarbonDate();
         $todayTime = new \DateTime($today);
         foreach($subscribers as $key => $value){
             $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $startKey = $value.$subscriptionPrefix.'start_on';
-            $endDate = $date->getOnlyDate($meta[$startKey]);
+            $endDate = $date->getCarbonDate($meta[$startKey]);
             $endTime = new \DateTime($endDate);
-            if($endTime == $todayTime){
+            if($endTime <= $todayTime){
                 $planObject->markActive($item);
             }
         }
@@ -91,15 +91,15 @@ class ExpiryControl
             ->pluck('post_id');
 
         $subscriptionPrefix = '_axisubs_subscribe_';
-        $today = $date->getOnlyDate();
+        $today = $date->getCarbonDate();
         $todayTime = new \DateTime($today);
         foreach($subscribers as $key => $value){
             $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $endKey = $value.$subscriptionPrefix.'trial_end_on';
-            $endDate = $date->getOnlyDate($meta[$endKey]);
+            $endDate = $date->getCarbonDate($meta[$endKey]);
             $endTime = new \DateTime($endDate);
-            if($endTime == $todayTime){
+            if($endTime <= $todayTime){
                 $planObject->markActive($item);
             }
         }
