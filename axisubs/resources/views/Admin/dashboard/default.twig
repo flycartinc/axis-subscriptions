@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <h3>Over all Report</h3>
+    <h3>Target Report</h3>
     <!-- Chart -->
     <div class="container-fluid">
         <div class="row">
@@ -180,7 +180,13 @@
         </div>
     </div>
     <input type="hidden" id="site_url" value="{{ site_url }}"/>
-    <script>
+    <script type="application/javascript">
+        if (typeof(axisubs) == 'undefined') {
+            var axisubs = {};
+        }
+        if (typeof(axisubs.jQuery) == 'undefined') {
+            axisubs.jQuery = jQuery.noConflict();
+        }
         ( function ($){
             $( document ).ready(function() {
                 $("#circle1").circliful
@@ -206,6 +212,6 @@
                     percent: {{ pendingTargetPercent }}
             });
             });
-        })(jQuery.noConflict())
+        })(axisubs.jQuery);
     </script>
 {% endblock %}
