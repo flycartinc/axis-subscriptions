@@ -114,7 +114,7 @@ class Subscriptions extends Post{
      * For deleting a Subscription
      * */
     public static function deleteSubscriptions($id){
-        $postDB = Post::where('post_type', 'axisubs_subscribe')->first()->find($id);
+        $postDB = Post::where('post_type', 'axisubs_subscribe')->find($id);
         if(!empty($postDB)) {
             //On before delete trigger
             Event::trigger('onBeforeSubscriptionDelete', array($id));
@@ -139,6 +139,48 @@ class Subscriptions extends Post{
         } else {
             AxisubsRedirect::redirect('?page=subscriptions-index');
         }
+    }
+
+    /**
+     * For activating a Subscription
+     * */
+    public static function activateSubscriptions($id){
+        $subscription = Subscriptions::loadSubscriber($id);
+        if(!empty($subscription)) {
+            $subscriptionPrefix = $subscription->ID.'_'.$subscription->post_type.'_';
+            if($subscription->meta[$subscriptionPrefix.'status'] == 'PENDING'){
+                return Plans::getInstance()->markActive($subscription->ID);
+            }
+        }
+        AxisubsRedirect::redirect('?page=subscriptions-index');
+    }
+
+    /**
+     * For cancel a Subscription
+     * */
+    public static function cancelSubscriptions($id){
+        $subscription = Subscriptions::loadSubscriber($id);
+        if(!empty($subscription)) {
+            $subscriptionPrefix = $subscription->ID.'_'.$subscription->post_type.'_';
+            if($subscription->meta[$subscriptionPrefix.'status'] != 'CANCELED'){
+                return Plans::getInstance()->markCancel($subscription->ID);
+            }
+        }
+        AxisubsRedirect::redirect('?page=subscriptions-index');
+    }
+
+    /**
+     * For mark as pending
+     * */
+    public static function pendingSubscriptions($id){
+        $subscription = Subscriptions::loadSubscriber($id);
+        if(!empty($subscription)) {
+            $subscriptionPrefix = $subscription->ID.'_'.$subscription->post_type.'_';
+            if($subscription->meta[$subscriptionPrefix.'status'] != 'PENDING'){
+                return Plans::getInstance()->markPending($subscription->ID);
+            }
+        }
+        AxisubsRedirect::redirect('?page=subscriptions-index');
     }
 
     public static function loadPlanSelectbox($selected = '', $name = 'axisubs_plan', $id = 'axisubs_plan'){

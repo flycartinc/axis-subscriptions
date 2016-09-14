@@ -92,6 +92,60 @@ class Subscription extends Controller
     }
 
     /**
+     * Activate
+     * */
+    public function activate()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
+            $result = Subscriptions::activateSubscriptions($http->get('id'));
+            if($result){
+                Notifier::success('Subscription activated successfully');
+            } else {
+                Notifier::error('Failed to activate');
+            }
+        }
+
+        return $this->index();
+    }
+
+    /**
+     * Cancel
+     * */
+    public function cancel()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
+            $result = Subscriptions::cancelSubscriptions($http->get('id'));
+            if($result){
+                Notifier::success('Subscription canceled successfully');
+            } else {
+                Notifier::error('Failed to cancel subscription');
+            }
+        }
+
+        return $this->index();
+    }
+
+    /**
+     * pending
+     * */
+    public function pending()
+    {
+        $http = Http::capture();
+        if($http->get('id')) {
+            $result = Subscriptions::pendingSubscriptions($http->get('id'));
+            if($result){
+                Notifier::success('Subscription marked as pending successfully');
+            } else {
+                Notifier::error('Failed to mark as pending');
+            }
+        }
+
+        return $this->index();
+    }
+
+    /**
      * Load plan details for auto populate
      * */
     public function loadPlanDetails(){

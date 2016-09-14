@@ -53,6 +53,16 @@
                                 <a class="page-title-action" href="{{ '?page=subscriptions-index&task=edit&user_id='~meta[subscribe['ID']~'_axisubs_subscribe_user_id']~'&sid='~subscribe['ID'] }}">Edit</a>
                             </div>
                             <div class="axisubs-subscribed-block-data">
+                                {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] == 'PENDING' %}
+                                    <a class="page-title-action" href="?page=subscriptions-index&task=activate&id={{ subscribe['ID'] }}">Mark Active</a>
+                                {% endif %}
+                                {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] != 'PENDING' %}
+                                    <a class="page-title-action" href="?page=subscriptions-index&task=pending&id={{ subscribe['ID'] }}">Mark Pending</a>
+                                {% endif %}
+                                {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] != 'CANCELED' %}
+                                    <a class="page-title-action" href="?page=subscriptions-index&task=cancel&id={{ subscribe['ID'] }}">Mark Canceled</a>
+                                {% endif %}
+
                                 <a class="page-title-action" href="?page=subscriptions-index&task=delete&id={{ subscribe['ID'] }}">Delete</a>
                             </div>
                         </div>

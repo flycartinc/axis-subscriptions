@@ -947,8 +947,8 @@ class Plans extends Post{
         } else {
             return false;
         }
-    }
-
+    }    
+    
     /**
      * Mark as Expired
      * */
@@ -1087,6 +1087,50 @@ class Plans extends Post{
         $subscriptionPrefix = '_axisubs_subscribe_';
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'FUTURE';
+        return $subscription->save();
+    }
+
+    /**
+     * Mark as Cancel
+     * */
+    public function markCancel($subscription){
+        //TODO: Change this condition as required
+        if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
+        } else {
+            if((int)$subscription){
+                $subscription = Post::where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                if(empty($subscription)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $subscriptionPrefix = '_axisubs_subscribe_';
+        $statusKey = $subscription->ID.$subscriptionPrefix.'status';
+        $subscription->meta->$statusKey = 'CANCELED';
+        return $subscription->save();
+    }
+
+    /**
+     * Mark as Pending
+     * */
+    public function markPending($subscription){
+        //TODO: Change this condition as required
+        if((isset($subscription->ID) && $subscription->ID) && (isset($subscription->post_type) && $subscription->post_type == 'axisubs_subscribe')){
+        } else {
+            if((int)$subscription){
+                $subscription = Post::where('post_type', 'axisubs_subscribe')->find((int)$subscription);
+                if(empty($subscription)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $subscriptionPrefix = '_axisubs_subscribe_';
+        $statusKey = $subscription->ID.$subscriptionPrefix.'status';
+        $subscription->meta->$statusKey = 'PENDING';
         return $subscription->save();
     }
 }
