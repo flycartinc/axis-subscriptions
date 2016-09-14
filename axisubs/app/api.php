@@ -1,6 +1,7 @@
 <?php namespace Axisubs;
 
 use Axisubs\Helper\ExpiryControl;
+use Axisubs\Helper\Common;
 /** @var \Herbert\Framework\API $api */
 
 /**
@@ -16,3 +17,5 @@ $api->add('helper', function ()
 });
 
 (new ExpiryControl)->processSubscriptionExpiry();
+
+(new Common)->createLogFolder();
