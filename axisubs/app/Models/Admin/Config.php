@@ -91,7 +91,11 @@ class Config extends Post
         if(!empty($this->_item)){
             $key = $this->_item->ID . '_'.$this->_item->post_type.'_' . $fieldName;
             if(isset($this->_item->meta[$key])){
-                $result = $this->_item->meta[$key];
+                if($this->_item->meta[$key] == ''){
+                    $result = $default;
+                } else {
+                    $result = $this->_item->meta[$key];
+                }
             } else {
                 $result = $default;
             }

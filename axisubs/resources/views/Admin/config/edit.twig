@@ -70,6 +70,25 @@
                  <input type="text" name="axisubs[config][currency_code]" id="axisuba_config_currency_code" value="{{ all['meta'][all['ID']~'_axisubs_config_currency_code'] }}"/>
              </div>
          </div>
+         <h3>Dashboard Settings</h3>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_daily_target">Daily Target</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][daily_target]" placeholder="5" id="axisuba_config_daily_target" value="{{ all['meta'][all['ID']~'_axisubs_config_daily_target'] }}"/>
+                 <span class="help-text">Target for daily subscription.</span>
+             </div>
+         </div>
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisuba_config_all_time_target">All Time Target</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 <input type="text" name="axisubs[config][all_time_target]" id="axisuba_config_all_time_target" placeholder="2000" value="{{ all['meta'][all['ID']~'_axisubs_config_all_time_target'] }}"/>
+                 <span class="help-text">Total target amount for All time.</span>
+             </div>
+         </div>
          <div class="axisubs-fields">
              <div class="axisubs-fields-label">
                  <input type="hidden" name="task" value="save"/>
@@ -78,7 +97,7 @@
              </div>
              <div class="axisubs-fields-content">
                  <button class="btn page-title-action" type="submit">Save</button>
-                 <a class="btn page-title-action" href="?page=plans-index">Cancel</a>
+                 <a class="btn page-title-action" href="?page=dashboard-index">Cancel</a>
              </div>
          </div>
       </div>

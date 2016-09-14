@@ -94,6 +94,13 @@ class Subscriptions extends Post{
         return $items;
     }
 
+    //get Total
+    public static function getTotal(){
+        $postO = new Post();
+        $totalItem = $postO->all()->where('post_type', 'axisubs_subscribe');
+        return count($totalItem);
+    }
+
     //Load Single Subscriber
     public static function loadSubscriber($id){
         $item = Post::where('post_type', 'axisubs_subscribe')->find($id);

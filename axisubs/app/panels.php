@@ -4,9 +4,19 @@
 // For Main menu
 $panel->add([
     'type'   => 'panel',
-    'as'     => 'plans',
+    'as'     => 'dashboard',
     'title'  => 'Axisubs',
-    'rename' => 'Plans',
+    'rename' => 'Dashboard',
+    'slug'   => 'dashboard-index',
+    'uses'   => __NAMESPACE__ . '\Controllers\Admin\Dashboard@execute'
+]);
+
+// For Plans menu
+$panel->add([
+    'type'   => 'sub-panel',
+    'parent' => 'dashboard',
+    'as'     => 'plans',
+    'title'  => 'Plans',
     'slug'   => 'plans-index',
     'uses'   => __NAMESPACE__ . '\Controllers\Admin\Plan@execute'
 ]);
@@ -14,7 +24,7 @@ $panel->add([
 // For Subscriptions menu
 $panel->add([
     'type'   => 'sub-panel',
-    'parent' => 'plans',
+    'parent' => 'dashboard',
     'as'     => 'subscriptions',
     'title'  => 'Subscriptions',
     'slug'   => 'subscriptions-index',
@@ -24,7 +34,7 @@ $panel->add([
 // For Subscriptions menu
 $panel->add([
     'type'   => 'sub-panel',
-    'parent' => 'plans',
+    'parent' => 'dashboard',
     'as'     => 'customers',
     'title'  => 'Customers',
     'slug'   => 'customers-index',
@@ -34,7 +44,7 @@ $panel->add([
 // For configuration menu
 $panel->add([
     'type'   => 'sub-panel',
-    'parent' => 'plans',
+    'parent' => 'dashboard',
     'as'     => 'configuration',
     'title'  => 'Configuration',
     'slug'   => 'config-index',
@@ -44,7 +54,7 @@ $panel->add([
 // For App menu
 $panel->add([
     'type'   => 'sub-panel',
-    'parent' => 'plans',
+    'parent' => 'dashboard',
     'as'     => 'app',
     'title'  => 'Apps',
     'slug'   => 'app-index',

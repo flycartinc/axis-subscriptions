@@ -221,6 +221,98 @@ ul.pagination-ul > li > a{
     font-size: 15px;
 }
 
+/*Dashboard*/
+.dashboard-menu-item-c {
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 255px;
+    max-width: 100%;
+    position: relative;
+}
+.dashboard-menu-a{
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+.dashboard-menu-each-i-l {
+    border-radius: 5px 0 0 5px;
+    color: #fff;
+    float: left;
+    font-size: 32px;
+    text-align: center;
+    width: 35%;
+}
+.dashboard-menu-each-i-r {
+    border-radius: 0 5px 5px 0;
+    color: #fff;
+    float: left;
+    font-weight: bold;
+    width: 65%;
+}
+.dashboard-menu-each-i {
+    height: 40px;
+    padding: 15px;
+    font-size: 15px;
+    box-sizing: unset !important;
+}
+.dashboard-menu-img {
+    height: 40px;
+    margin: 15px auto;
+    width: 40px;
+}
+.plan-color-dark{
+    background: #ff0000 none repeat scroll 0 0;
+}
+.plan-color-light{
+    background: #ff4554 none repeat scroll 0 0;
+}
+.dashboard-menu-img.plans{
+    background: rgba(0, 0, 0, 0) url("../images/plan.png") no-repeat scroll 0 0;
+}
+.subscriptions-color-dark{
+    background: #0060ff none repeat scroll 0 0;
+}
+.subscriptions-color-light{
+    background: #3380ff none repeat scroll 0 0;
+}
+.dashboard-menu-img.subscriptions{
+    background: rgba(0, 0, 0, 0) url("../images/subscription.png") no-repeat scroll 0 0;
+}
+.customers-color-dark{
+    background: #127847 none repeat scroll 0 0;
+}
+.customers-color-light{
+    background: #19a964 none repeat scroll 0 0;
+}
+.dashboard-menu-img.customers{
+    background: rgba(0, 0, 0, 0) url("../images/customer.png") no-repeat scroll 0 0;
+}
+.config-color-dark{
+    background: #EB3E00 none repeat scroll 0 0;
+}
+.config-color-light{
+    background: #F05A24 none repeat scroll 0 0;
+}
+.dashboard-menu-img.config{
+    background: rgba(0, 0, 0, 0) url("../images/configuration.png   ") no-repeat scroll 0 0;
+}
+.app-color-dark{
+    background: #DBA300 none repeat scroll 0 0;
+}
+.app-color-light{
+    background: #F7C841 none repeat scroll 0 0;
+}
+.dashboard-menu-img.app{
+    background: rgba(0, 0, 0, 0) url("../images/apps.png") no-repeat scroll 0 0;
+}
+.p-t-40 {
+    padding-top: 10%;
+}
+
 
 @media screen and (max-width: 250px){
     .axisubs h1{

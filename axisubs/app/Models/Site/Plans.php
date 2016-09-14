@@ -104,6 +104,13 @@ class Plans extends Post{
         return $items;
     }
 
+    //get Total
+    public static function getTotal(){
+        $postO = new Post();
+        $totalItem = $postO->all()->where('post_type', 'axisubs_plans');
+        return count($totalItem);
+    }
+
     /**
      * Load plans for front end
      * */

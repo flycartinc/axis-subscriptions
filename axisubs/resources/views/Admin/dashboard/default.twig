@@ -1,0 +1,211 @@
+{% extends '@Axisubs/Admin/tabs/tab.twig' %}
+
+{% block body %}
+<div class="axisubs axisubs-bs3 wrap">
+    <h1>{{ pagetitle }}
+    </h1>
+    <div class="dashboard-menu-cont">
+        <div class="dashboard-menu-item-c">
+            <div class="dashboard-menu-each-i-l plan-color-dark">
+                <div class="dashboard-menu-i">
+                    <div class="dashboard-menu-img plans"></div>
+                </div>
+            </div>
+            <div class="dashboard-menu-each-i-r plan-color-light">
+                <div class="dashboard-menu-each-i">
+                    <div class="dashboard-menu-count">
+                        {{ data['planCount'] }}
+                    </div>
+                    <div class="dashboard-menu-name">
+                        Plans
+                    </div>
+                </div>
+            </div>
+            <a href="?page=plans-index" class="dashboard-menu-a"></a>
+            <div class="clear"></div>
+        </div>
+
+        <div class="dashboard-menu-item-c">
+            <div class="dashboard-menu-each-i-l subscriptions-color-dark">
+                <div class="dashboard-menu-i">
+                    <div class="dashboard-menu-img subscriptions"></div>
+                </div>
+            </div>
+            <div class="dashboard-menu-each-i-r subscriptions-color-light">
+                <div class="dashboard-menu-each-i">
+                    <div class="dashboard-menu-count">
+                        {{ data['subscriptionCount'] }}
+                    </div>
+                    <div class="dashboard-menu-name">
+                        Subscriptions
+                    </div>
+                </div>
+            </div>
+            <a href="?page=subscriptions-index" class="dashboard-menu-a"></a>
+            <div class="clear"></div>
+        </div>
+
+        <div class="dashboard-menu-item-c">
+            <div class="dashboard-menu-each-i-l customers-color-dark">
+                <div class="dashboard-menu-i">
+                    <div class="dashboard-menu-img customers"></div>
+                </div>
+            </div>
+            <div class="dashboard-menu-each-i-r customers-color-light">
+                <div class="dashboard-menu-each-i">
+                    <div class="dashboard-menu-count">
+                        {{ data['customerCount'] }}
+                    </div>
+                    <div class="dashboard-menu-name">
+                        Customers
+                    </div>
+                </div>
+            </div>
+            <a href="?page=customers-index" class="dashboard-menu-a"></a>
+            <div class="clear"></div>
+        </div>
+
+        <div class="dashboard-menu-item-c">
+            <div class="dashboard-menu-each-i-l config-color-dark">
+                <div class="dashboard-menu-i">
+                    <div class="dashboard-menu-img config"></div>
+                </div>
+            </div>
+            <div class="dashboard-menu-each-i-r config-color-light">
+                <div class="dashboard-menu-each-i">
+                    <div class="dashboard-menu-count">
+                    </div>
+                    <div class="dashboard-menu-name">
+                        Configuration
+                    </div>
+                </div>
+            </div>
+            <a href="?page=config-index" class="dashboard-menu-a"></a>
+            <div class="clear"></div>
+        </div>
+
+        <div class="dashboard-menu-item-c">
+            <div class="dashboard-menu-each-i-l app-color-dark">
+                <div class="dashboard-menu-i">
+                    <div class="dashboard-menu-img app"></div>
+                </div>
+            </div>
+            <div class="dashboard-menu-each-i-r app-color-light">
+                <div class="dashboard-menu-each-i">
+                    <div class="dashboard-menu-count">
+                        {{ data['appCount'] }}
+                    </div>
+                    <div class="dashboard-menu-name">
+                        Apps
+                    </div>
+                </div>
+            </div>
+            <a href="?page=app-index" class="dashboard-menu-a"></a>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <h3>Over all Report</h3>
+    <!-- Chart -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class= "col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="circleborder">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div id="circle1" ></div>
+                        </div>
+                        {% if data['todaySales'] == 0 %}
+                            {% set todayTargetPercent = 0 %}
+                        {% else %}
+                            {% set todayTargetPercent = ((data['todaySales']/data['todayTarget'])*100) %}
+                            {% if todayTargetPercent > 100 %}
+                                {% set todayTargetPercent = 100 %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="col-md-6 col-sm-6 col-xs-6 p-t-40">
+                            <h3 class="text-success counter">{{ data['todaySales']  }}</h3>
+                            <p class="text-muted text-nowrap">Today</p>
+                            <p class="text-muted text-nowrap"><b>Target: </b>{{ data['todayTarget'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="circleborder">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div id="circle2" ></div>
+                        </div>
+                        {% if data['totalPrice'] == 0 %}
+                            {% set totalTargetPercent = 0 %}
+                        {% else %}
+                            {% set totalTargetPercent = ((data['totalPrice']/data['totalTarget'])*100) %}
+                            {% if totalTargetPercent > 100 %}
+                                {% set totalTargetPercent = 100 %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="col-md-6 col-sm-6 p-t-40 col-xs-6">
+                            <h3 class="text-primary"><span class="counter">{{ data['totalPrice'] }}</span></h3>
+                            <p class="text-muted text-nowrap">All time</p>
+                            <p class="text-muted text-nowrap"><b>Target: </b>{{ data['totalTarget'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="circleborder">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div id="circle3" ></div>
+                        </div>
+                        {% if data['totalPending'] == 0 %}
+                            {% set pendingTargetPercent = 0 %}
+                        {% else %}
+                            {% set pendingTargetPercent = ((data['totalPending']/data['subscriptionCount'])*100) %}
+                            {% if pendingTargetPercent > 100 %}
+                                {% set pendingTargetPercent = 100 %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="col-md-6 col-sm-6 p-t-40 col-xs-6">
+                            <h3 class="text-danger counter">{{ data['totalPending'] }}</h3>
+                            <p class="text-muted text-nowrap">Pending</p>
+                            <p class="text-muted text-nowrap"><b>Total: </b>{{ data['subscriptionCount'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="site_url" value="{{ site_url }}"/>
+    <script>
+        ( function ($){
+            $( document ).ready(function() {
+                $("#circle1").circliful
+                ({
+                    foregroundColor: "#3c763d",
+                    backgroundColor: "#eee",
+                    fontColor: '#3c763d',
+                    percent: {{ todayTargetPercent }},
+
+                });
+                $("#circle2").circliful
+                ({
+                    foregroundColor: "#3498DB",
+                    backgroundColor: "#eee",
+                    fontColor: '#aaa',
+                    percent: {{ totalTargetPercent }}
+            });
+                $("#circle3").circliful
+                ({
+                    foregroundColor: "#a94442",
+                    backgroundColor: "#eee",
+                    fontColor: '#a94442',
+                    percent: {{ pendingTargetPercent }}
+            });
+            });
+        })(jQuery.noConflict())
+    </script>
+{% endblock %}

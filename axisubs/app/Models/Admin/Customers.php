@@ -96,6 +96,13 @@ class Customers extends Post{
         return $items;
     }
 
+    //get Total
+    public static function getTotal(){
+        $postO = new Post();
+        $totalItem = $postO->where('post_type', 'like', 'axisubs_user_%')->get();
+        return count($totalItem);
+    }
+
     /**
      * load plan
      * */
