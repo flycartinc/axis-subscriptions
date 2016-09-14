@@ -14,6 +14,17 @@ class Status
         return $this->getTextFromCode($code);
     }
 
+    public static function getAllStatusCodes(){
+        $status = array('ORDER_PAGE' => 'New',
+            'ACTIVE' => 'Active',
+            'PENDING' => 'Pending',
+            'TRIAL' => 'In Trial',
+            'EXPIRED' => 'Expired',
+            'CANCELED' => 'Canceled',
+            'FUTURE' => 'Future');
+        return $status;
+    }
+
     protected function getTextFromCode($code){
         $text = '';
         switch ($code){
@@ -31,6 +42,12 @@ class Status
                 break;
             case 'EXPIRED':
                 $text = 'Expired';
+                break;
+            case 'CANCELED':
+                $text = 'Canceled';
+                break;
+            case 'FUTURE':
+                $text = 'Future';
                 break;
             default:
                 $text = $code;

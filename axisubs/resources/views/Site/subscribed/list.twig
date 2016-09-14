@@ -1,3 +1,4 @@
+{% set statusText = data['statusText'] %}
 <div class="axisubs wrap">
     <div class="axisubs-subscribed-title">
         <h3>{{ pagetitle }}</h3>
@@ -40,7 +41,7 @@
                             </div>
                             <div class="axisubs-subscribed-block-data">
                                 <span class="axisubs-data-title">Status: </span>
-                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_status'] }}</span>
+                                <span class="axisubs-data-content">{{ statusText[meta[subscribe['ID']~'_axisubs_subscribe_status']] }}</span>
                             </div>
                         </div>
 

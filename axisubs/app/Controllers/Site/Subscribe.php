@@ -46,8 +46,9 @@ class Subscribe extends Controller{
         } else {
             $subscribers = array();
         }
+        $data['statusText'] = Status::getAllStatusCodes();
         $message = $this->message;
-        return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url', 'message', 'paginationD'));
+        return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url', 'message', 'paginationD', 'data'));
     }
 
     /**
