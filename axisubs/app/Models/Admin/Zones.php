@@ -9,21 +9,12 @@
 namespace Axisubs\Models\Admin;
 
 use Events\Event;
-use Corcel\Post;
-use Herbert\Framework\Models\PostMeta;
-class App extends Post{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+use Illuminate\Database\Eloquent\Model;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['title'];
+class Zones extends Model{
+
+    protected $table = 'axisubs_zones';
+    protected $primaryKey = 'axisubs_zone_id';
 
     /**
      * Indicates if the model should be timestamped.
@@ -32,63 +23,62 @@ class App extends Post{
      */
     public $timestamps = false;
 
-    // Get all App related to Axisubs
-    public static function getAllApps(){
-        //$plugins = get_option('active_plugins');
-        $plugins = get_plugins();
-        foreach($plugins as $key => $value){
-            $arrayKey = explode('-app-', $key);
-            if($arrayKey[0] == 'axisubs'){
-                $names = explode('/', $key);
-                $axisubsAppsNames = $names[0];
-                $value['pluginPath'] = $key;
-                $value['pluginFolder'] = $axisubsAppsNames;
-                if(is_plugin_active($key)){
-                    $value['active'] = true;
-                } else {
-                    $value['active'] = false;
-                }
-                $axisubsApps[] = $value;
-            }
+    /**
+     * Get all Zones based on country code
+     * */
+    public function getZones($countryCode = ''){
+        if($countryCode == ''){
+            return array();
+        } else {
+            return $this->all()->where('country_code', $countryCode);
         }
-       // echo "<pre>";print_r($axisubsApps);exit;
-        return $axisubsApps;
     }
 
     /**
-     * Get active payment Apps
+     * Get Province name based on code
      * */
-    public static function getActivePaymentApps(){
-        $allApps = App::getAllApps();
-        $axisubsApps = array();
-        foreach($allApps as $key => $value){
-            $folderArray = explode('-', $value['pluginFolder']);
-            if($folderArray[2] == 'payment' && $value['active'] == '1'){
-                $axisubsApps[] = $value;
-            }
+    public function getProvinceName($provinceCode = '', $countryCode = ''){
+        if($provinceCode == ''){
+            return '';
+        } else {
+            $data = $this->all()->where('zone_code', $provinceCode)->where('country_code', $countryCode)->first();
+            if(isset($data->zone_name))
+                return $data->zone_name;
+            else
+                return '';
         }
-        return $axisubsApps;
     }
 
-    //For enable a plugin
-    public static function enableApp($path){
-        $result = activate_plugin( $path );
-        return $result;
+    /**
+     * Get Province name based on code
+     * */
+    public function getProvinceSelectBox($countryCode = '', $selected = '', $name = 'province', $id = 'province', $class = '', $option = 0)
+    {
+        $provinces =  $this->getZones($countryCode);
+        if(!$option)
+            $select = '<select name="'.$name.'" id="'.$id.'" class="axisubs_province '.$class.'">';
+        else
+            $select = '';
+        $select .= '<option value="">-- Select Province --</option>';
+        foreach ($provinces as $key => $province){
+            if($selected == $province->zone_code){
+                $selectedText = ' selected="selected"';
+            } else {
+                $selectedText = '';
+            }
+            $select .= '<option value="'.$province->zone_code.'"'.$selectedText.'>'.$province->zone_name.'</option>';
+        }
+        if(!$option)
+            $select .= '</select>';
+
+        return $select;
     }
 
-    //for disable aplugin
-    public static function disableApp($path){
-        $result = deactivate_plugins( $path );
-        return $result;
-    }
-
-    // For load app View
-    public static function loadAppView($folder){
-        Event::trigger( $folder.'_loadView', '');
-    }
-
-    // For load app View
-    public static function loadAppTask($folder){
-        Event::trigger( $folder.'_appTask', '');
+    /**
+     * Get Province name based on code for ajax
+     * */
+    public function getProvinceSelectBoxOptions($countryCode, $selected = '', $name = 'province', $id = 'province', $class = '')
+    {
+        return $this->getProvinceSelectBox($countryCode, $selected, $name, $id, $class, 1);
     }
 }

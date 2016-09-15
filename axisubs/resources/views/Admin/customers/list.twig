@@ -56,7 +56,8 @@
                                 </div>
                                 <div class="col-data">
                                     <span class="col-data-title">Country: </span>
-                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'country'] }}</span>
+                                    {% set country = data['countries'][item['meta'][metaPrefix~'country']] %}
+                                    <span class="col-data-content">{{ country }}</span>
                                 </div>
                             </div>
                             <div class="col-3">

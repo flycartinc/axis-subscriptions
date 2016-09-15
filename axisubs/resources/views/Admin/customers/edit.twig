@@ -149,7 +149,7 @@
                   </label>
                </div>
                <div class="axisubs-fields-content">
-                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'country'] }}" name="axisubs[subscribe][country]" id="axisubs_subscribe_country"/>
+                  {{ data['country'] | raw }}
                </div>
             </div>
             <div class="axisubs-fields">
@@ -159,7 +159,7 @@
                   </label>
                </div>
                <div class="axisubs-fields-content">
-                  <input type="text" class="required" value="{{ customerMeta[customerPrefix~'province'] }}" name="axisubs[subscribe][province]" id="axisubs_subscribe_province"/>
+                  {{ data['province'] | raw }}
                </div>
             </div>
             <div class="axisubs-fields">

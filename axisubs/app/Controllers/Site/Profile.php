@@ -14,6 +14,7 @@ use Herbert\Framework\Notifier;
 use Axisubs\Helper;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\ManageUser;
+use Axisubs\Helper\Countries;
 
 class Profile extends Controller{
 
@@ -37,6 +38,15 @@ class Profile extends Controller{
         if(isset($wp_user->data->user_email)) {
             $wp_userD['email'] = $wp_user->data->user_email;
         }
-        return view('@Axisubs/Site/myprofile/myprofile.twig', compact('pagetitle', 'subscribtions_url', 'site_url', 'user', 'wp_userD'));
+        $custProvince = $custCountry = '';
+        if(!empty($user)){
+            $custPrefix = $user->ID.'_'.$user->post_type.'_';
+            $custProvince = $user->meta[$custPrefix.'province'];
+            $custCountry =$user->meta[$custPrefix.'country'];
+        }
+        $modelZone = $this->getModel('Zones', 'Admin');
+        $data['country'] = Countries::getCountriesSelectBox($custCountry, 'axisubs[subscribe][country]', 'axisubs_subscribe_country', 'required');
+        $data['province'] = $modelZone->getProvinceSelectBox($custCountry, $custProvince, 'axisubs[subscribe][province]', 'axisubs_subscribe_province', 'required');
+        return view('@Axisubs/Site/myprofile/myprofile.twig', compact('pagetitle', 'data', 'subscribtions_url', 'site_url', 'user', 'wp_userD'));
     }
 }

@@ -16,6 +16,7 @@ use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
 use Axisubs\Controllers\Controller;
 use Axisubs\Models\Admin\Customers;
+use Axisubs\Helper\Countries;
 
 class Subscription extends Controller
 {
@@ -40,8 +41,14 @@ class Subscription extends Controller
                 $status = new Status();
                 $statusCode = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_status'];
                 $statusText = $status->getStatusText($statusCode);
+                $custCountry = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_country'];
+                $custProvince = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_province'];
+                $data['country'] = Countries::getCountryName($custCountry);
+                $modelZone = $this->getModel('Zones');
+                $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
             }
-            return view('@Axisubs/Admin/subscriptions/detail.twig', compact('pagetitle', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText'));
+
+            return view('@Axisubs/Admin/subscriptions/detail.twig', compact('pagetitle', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText', 'data'));
         }
         Subscriptions::populateStates($http->all());
         // Load Listing layout

@@ -129,8 +129,7 @@
                                 </label>
                             </div>
                             <div class="axisubs-billinfo-f-field">
-                                {% set country = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_country'] %}
-                                <input type="text" class="required" value="{{ country }}" name="axisubs[subscribe][country]" id="axisubs_subscribe_country"/>
+                                {{ data['country'] | raw }}
                             </div>
                         </div>
                     </div>
@@ -142,8 +141,7 @@
                                 </label>
                             </div>
                             <div class="axisubs-billinfo-f-field">
-                                {% set province = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_province'] %}
-                                <input type="text" class="required" value="{{ province }}" name="axisubs[subscribe][province]" id="axisubs_subscribe_province"/>
+                                {{ data['province'] | raw }}
                             </div>
                         </div>
                     </div>

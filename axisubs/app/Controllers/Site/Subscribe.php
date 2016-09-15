@@ -17,6 +17,7 @@ use Axisubs\Helper;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\ManageUser;
 use Axisubs\Helper\Pagination;
+use Axisubs\Helper\Countries;
 
 class Subscribe extends Controller{
 
@@ -72,7 +73,12 @@ class Subscribe extends Controller{
                     $status = new Status();
                     $statusCode = $subscriber->meta[$subscriber->ID . '_axisubs_subscribe_status'];
                     $statusText = $status->getStatusText($statusCode);
-                    return view('@Axisubs/Site/subscribed/singlesubscription.twig', compact('pagetitle', 'subscribtions_url', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText'));
+                    $custCountry = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_country'];
+                    $custProvince = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_province'];
+                    $modelZone = $this->getModel('Zones', 'Admin');
+                    $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
+                    $data['country'] = Countries::getCountryName($custCountry);
+                    return view('@Axisubs/Site/subscribed/singlesubscription.twig', compact('data', 'pagetitle', 'subscribtions_url', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText'));
                 } else {
                     $this->message = FrontEndMessages::failure('Invalid access');
                 }

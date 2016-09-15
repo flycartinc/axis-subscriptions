@@ -267,12 +267,7 @@
                                 </label>
                             </div>
                             <div class="axisubs-billinfo-f-field">
-                                {% if(subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_country']) %}
-                                    {% set country = subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_country'] %}
-                                {% else %}
-                                    {% set country = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_country'] %}
-                                {% endif %}
-                                <input type="text" class="required" value="{{ country }}" name="axisubs[subscribe][country]" id="axisubs_subscribe_country"/>
+                                {{ data['country'] | raw }}
                             </div>
                         </div>
                     </div>
@@ -284,12 +279,7 @@
                                 </label>
                             </div>
                             <div class="axisubs-billinfo-f-field">
-                                {% if(subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_province']) %}
-                                    {% set province = subscriber['meta'][subscriber['ID']~'_axisubs_subscribe_province'] %}
-                                {% else %}
-                                    {% set province = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_province'] %}
-                                {% endif %}
-                                <input type="text" class="required" value="{{ province }}" name="axisubs[subscribe][province]" id="axisubs_subscribe_province"/>
+                                {{ data['province'] | raw }}
                             </div>
                         </div>
                     </div>

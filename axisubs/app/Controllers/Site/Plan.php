@@ -18,6 +18,7 @@ use Axisubs\Helper\FrontEndMessages;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\PaymentPlugins;
 use Axisubs\Helper\ManageUser;
+use Axisubs\Helper\Countries;
 
 class Plan extends Controller{
 
@@ -73,7 +74,15 @@ class Plan extends Controller{
                     $payment = new PaymentPlugins();
                     $data['paymentMethods'] = $payment->loadPaymentOptions();
                 }
-
+                $custProvince = $custCountry = '';
+                if(!empty($user)){
+                    $custPrefix = $user->ID.'_'.$user->post_type.'_';
+                    $custProvince = $user->meta[$custPrefix.'province'];
+                    $custCountry =$user->meta[$custPrefix.'country'];
+                }
+                $modelZone = $this->getModel('Zones', 'Admin');
+                $data['country'] = Countries::getCountriesSelectBox($custCountry, 'axisubs[subscribe][country]', 'axisubs_subscribe_country', 'required');
+                $data['province'] = $modelZone->getProvinceSelectBox($custCountry, $custProvince, 'axisubs[subscribe][province]', 'axisubs_subscribe_province', 'required');
                 return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id', 'data'));
             } else {
                 $this->message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
@@ -117,6 +126,12 @@ class Plan extends Controller{
                             return $this->index();
                         }
                     }
+                    $custCountry = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_country'];
+                    $custProvince = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_province'];
+                    $modelZone = $this->getModel('Zones', 'Admin');
+                    $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
+                    $data['country'] = Countries::getCountryName($custCountry);
+
                     return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'data'));
                 } else {
                     $message = FrontEndMessages::failure('Failed to subscribe');

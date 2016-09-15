@@ -58,4 +58,17 @@ class User extends Controller
         }
         echo json_encode($data);
     }
+
+    /**
+     * For load provinces through ajax
+     * */
+    public function loadProvinces(){
+        $modelZone = $this->getModel('Zones');
+        $http = Http::capture();
+        if($http->get('code')){
+            echo $modelZone->getProvinceSelectBoxOptions($http->get('code'));
+        } else {
+            echo '<option value="">-- Select Province --</option>';
+        }
+    }
 }

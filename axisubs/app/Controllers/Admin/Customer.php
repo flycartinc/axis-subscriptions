@@ -11,12 +11,12 @@ use Axisubs\Helper;
 use Axisubs\Models\Admin\Customers;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
-
 use Axisubs\Helper\Status;
 use Axisubs\Helper\Currency;
 use Axisubs\Helper\Pagination;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\ManageUser;
+use Axisubs\Helper\Countries;
 
 class Customer extends Controller
 {
@@ -41,6 +41,7 @@ class Customer extends Controller
         } else {
             $data['flag'] = '';
         }
+        $data['countries'] = Countries::getCountries();
         $pagination = new Pagination(Customers::$_start, Customers::$_limit, Customers::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
@@ -59,9 +60,16 @@ class Customer extends Controller
             $currencyData['currency'] = $currency->getCurrency();
             $pagetitle = 'Customers';
             $site_url = get_site_url();
-
             $item = Customers::loadCustomer($http->get('id'));
-            return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'item', 'currencyData', 'site_url'));
+            if(!empty($item)){
+                $custPrefix = $item->ID.'_'.$item->post_type.'_';
+                $custProvince = $item->meta[$custPrefix.'province'];
+                $custCountry =$item->meta[$custPrefix.'country'];
+            }
+            $modelZone = $this->getModel('Zones');
+            $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
+            $data['country'] = Countries::getCountryName($custCountry);
+            return view('@Axisubs/Admin/customers/detail.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'data'));
         }
 
         return $this->index();
@@ -88,19 +96,30 @@ class Customer extends Controller
                 }
             }
             $item = Customers::loadCustomer($http->get('id'));
+            if(!empty($item)){
+                $custPrefix = $item->ID.'_'.$item->post_type.'_';
+                $custProvince = $item->meta[$custPrefix.'province'];
+                $custCountry =$item->meta[$custPrefix.'country'];
+            }
+            $modelZone = $this->getModel('Zones');
+            $data['country'] = Countries::getCountriesSelectBox($custCountry, 'axisubs[subscribe][country]', 'axisubs_subscribe_country', 'required');
+            $data['province'] = $modelZone->getProvinceSelectBox($custCountry, $custProvince, 'axisubs[subscribe][province]', 'axisubs_subscribe_province', 'required');
             $wp_userDetails = ManageUser::getInstance()->getUserDetails($http->get('id'));
             if($wp_userDetails->data->user_login){
                 $wp_userD['user_login'] = $wp_userDetails->data->user_login;
             } else {
                 $wp_userD = array();
             }
-            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD'));
+            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD', 'data'));
         } else {
             $item = array();
             $newuser = 1;
             $newCustomersSelectBox = Customers::loadNewUsersNotInCustomersSelectbox();
+            $data['country'] = Countries::getCountriesSelectBox('', 'axisubs[subscribe][country]', 'axisubs_subscribe_country', 'required');
+            $modelZone = $this->getModel('Zones');
+            $data['province'] = $modelZone->getProvinceSelectBox('', '', 'axisubs[subscribe][province]', 'axisubs_subscribe_province', 'required');
             $pagetitle = 'Add Customer';
-            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD', 'newCustomersSelectBox', 'newuser'));
+            return view('@Axisubs/Admin/customers/edit.twig', compact('pagetitle', 'item', 'currencyData', 'site_url', 'wp_userD', 'newCustomersSelectBox', 'newuser', 'data'));
         }
 
         return $this->index();

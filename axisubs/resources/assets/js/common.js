@@ -34,8 +34,32 @@ function removeMessageClass(id){
 
 function disableTags(id, val){
     if(val == '1'){
-        axisubs.jQuery(id+' input, '+id+'select').attr('disabled', 'disabled');
+        axisubs.jQuery(id+' input, '+id+' select').attr('disabled', 'disabled');
     } else {
-        axisubs.jQuery(id+' input, '+id+'select').removeAttr('disabled');
+        axisubs.jQuery(id+' input, '+id+' select').removeAttr('disabled');
     }
 }
+
+(function ($) {
+    $(document).ready(function () {
+        $('.axisubs_country').change(function() {
+            var postData = {
+                code: jQuery(this).val(),
+                task: "loadProvinces",
+                view: "User"
+            };
+            $.ajax({
+                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
+                type: 'POST',
+                data: postData,
+                async	: false,
+                success: function(json) {
+                    $('.axisubs_province').html(json);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        });
+    });
+})(axisubs.jQuery);
