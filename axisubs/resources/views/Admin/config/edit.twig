@@ -56,18 +56,20 @@
          </div>
          <div class="axisubs-fields">
              <div class="axisubs-fields-label">
-                 <label for="axisuba_config_currency">Currency</label>
+                 <label for="axisuba_config_currency">Currency Code</label>
              </div>
              <div class="axisubs-fields-content">
                  <input type="text" name="axisubs[config][currency]" id="axisuba_config_currency" value="{{ all['meta'][all['ID']~'_axisubs_config_currency'] }}"/>
+                 <span class="help-text">Eg: USD, AUD</span>
              </div>
          </div>
          <div class="axisubs-fields">
              <div class="axisubs-fields-label">
-                 <label for="axisuba_config_currency_code">Currency Code</label>
+                 <label for="axisuba_config_currency_code">Currency Symbol</label>
              </div>
              <div class="axisubs-fields-content">
                  <input type="text" name="axisubs[config][currency_code]" id="axisuba_config_currency_code" value="{{ all['meta'][all['ID']~'_axisubs_config_currency_code'] }}"/>
+                 <span class="help-text">Eg: $</span>
              </div>
          </div>
          <h3>Dashboard Settings</h3>
