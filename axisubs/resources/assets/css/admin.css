@@ -310,7 +310,23 @@ ul.pagination-ul > li > a{
     background: rgba(0, 0, 0, 0) url("../images/apps.png") no-repeat scroll 0 0;
 }
 .p-t-40 {
-    padding-top: 10%;
+    padding-top: 2%;
+}
+.dashboard-instructions-o{
+    background: #cf7bf3 none repeat scroll 0 0;
+    color: #fff;
+    border-radius: 5px;
+}
+.dashboard-instructions-container {
+    margin-bottom: 18px;
+}
+.dashboard-instruc-text {
+    font-size: 14px;
+    padding: 10px 0;
+}
+.dashboard-instruc-code {
+    font-size: 14px;
+    padding: 10px 0;
 }
 
 
