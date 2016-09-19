@@ -2,13 +2,13 @@
 
 /**
  * @wordpress-plugin
- * Plugin Name:       Axisubs
+ * Plugin Name:       Axis Subscriptions
  * Plugin URI:        http://flycart.org/
  * Description:       A plugin for subscription management.
- * Version:           1.0.0
- * Author:            Ashlin
+ * Version:           0.8.0
+ * Author:            Flycart
  * Author URI:        http://flycart.org/
- * License:           MIT
+ * License:           GPLv3
  */
 
 use Events\Event;
