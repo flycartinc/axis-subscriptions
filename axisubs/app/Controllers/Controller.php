@@ -49,7 +49,8 @@ class Controller
      * Execute
      * */
     public function execute(Http $http){
-        $task = $http->get('task');
+        $task = $http->get('task')? $http->get('task') : get_query_var('task');
+        $http->request->set('task', $task);
         $controller = $http->get('controller', $this->_controller);
         $path = $http->get('path', $this->_path);
         $className = '\\'.$this->_package.'\\Controllers\\'.$path.'\\'.$controller;
@@ -82,6 +83,69 @@ class Controller
         } else {
             echo 'Class not available'; // TODO: handle error
         }
+    }
+
+    /**
+     * For get the query strings if sef URL
+     * */
+    public function getQueryStringData($http){
+        $vars = array('slug', 'id', 'task', 'sid');
+        foreach ($vars as $val){
+            if($http->get($val) == null){
+                if(get_query_var($val) != null){
+                    $http->request->set($val, get_query_var($val));
+                }
+            }
+        }
+        return $http;
+    }
+
+    /**
+     * For get / generate dynamic url
+     * */
+    public function getAxiSubsURLs($view, $task = '', $id = '', $slug = ''){
+        $customPermalink = get_option('permalink_structure');
+        $permalinkPlain = $customPermalink ? 0: 1;
+        $url = get_site_url();
+        if($permalinkPlain){
+            if($view == 'plan'){
+                $url .= '/index.php?axisubs_plan=plans';
+                if($task)
+                    $url .= '&task='.$task;
+                if($slug)
+                    $url .= '&slug='.$slug;
+                if($id)
+                    $url .= '&id='.$id;
+            } else if($view == 'subscribe'){
+                $url .= '/index.php?axisubs_subscribes=subscribe';
+                if($task)
+                    $url .= '&task='.$task;
+                if($id)
+                    $url .= '&sid='.$id;
+            }
+        } else {
+            $prefix = '';
+            $permalinkArray = explode('/index.php', $customPermalink);
+            if(isset($permalinkArray[0]) && $permalinkArray[0] == ''){
+                $prefix = '/index.php';
+            }
+            if($view == 'plan'){
+                $url .= $prefix.'/axisplan/plans';
+                if($task)
+                    $url .= '/'.$task;
+                if($slug)
+                    $url .= '/'.$slug;
+                if($id)
+                    $url .= '/'.$id;
+            } else if($view == 'subscribe'){
+                $url .= $prefix.'/axisubs/subscribe';
+                if($task)
+                    $url .= '/'.$task;
+                if($id)
+                    $url .= '/'.$id;
+            }
+        }
+        return $url;
     }
 
 }

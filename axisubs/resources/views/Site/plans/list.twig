@@ -62,7 +62,9 @@
                             <div class="axisubs-plans-duration">
                                 <!--<input type="hidden" name="slug" value="" id="slug"/>
                                 <button type="button" class="btn" onclick="jQuery('#slug').val('{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}');this.form.submit();">Subscribe</button>-->
-                                <a class="axisubs-btn" href="index.php?axisubs_plan=plans&task=view&slug={{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}&id={{ item['ID'] }}">Subscribe</a>
+                                <!--<a class="axisubs-btn" href="index.php?axisubs_plan=plans&task=view&slug={{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}&id={{ item['ID'] }}">Subscribe</a>-->
+                                <a class="axisubs-btn" href="{{ item['plan_url'] }}">Subscribe</a>
+
                             </div>
                         </div>
                     </div>

@@ -16,6 +16,7 @@ use Axisubs\Helper\AxisubsRedirect;
 use Axisubs\Models\Admin\Customers;
 use Axisubs\Helper\DateFormat;
 use Events\Event;
+use Axisubs\Controllers\Controller;
 
 class Plans extends Post{
     /**
@@ -115,6 +116,7 @@ class Plans extends Post{
      * Load plans for front end
      * */
     public static function allFrontEndPlans(){
+        $countrollerOb = new Controller();
         $items = parent::all()->where('post_type', 'axisubs_plans');
         /*$postO = new Post();
         $items = $postO->where('post_type', 'axisubs_plans')->meta()->where('meta_key','like','%_axisubs_plans_status')
@@ -133,6 +135,7 @@ class Plans extends Post{
         if(count($items)){
             foreach ($items as $key => $item){
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+                $item->plan_url = $countrollerOb->getAxiSubsURLs('plan', 'view', $item->ID, $item->meta[$item->ID.'_axisubs_plans_slug']);
                 if($item->meta[$item->ID.'_axisubs_plans_status'] == "0"){
                     unset($items[$key]);
                 }
@@ -148,11 +151,13 @@ class Plans extends Post{
     public static function loadPlan($id, $backend = 0){
         $item = Post::where('post_type', 'axisubs_plans')->find($id);
         if($item) {
+            $countrollerOb = new Controller();
             $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             if($backend){
                 $meta['allow_setupcost'] = 1;//count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
             } else {
                 $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+                $item->plan_url = $countrollerOb->getAxiSubsURLs('plan', 'view', $item->ID, $meta[$item->ID.'_axisubs_plans_slug']);
             }
             if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost']) && $meta['allow_setupcost']) {
                 $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
@@ -252,7 +257,8 @@ class Plans extends Post{
         if($id){
             $userId = $id;
         } else {
-            $userId =get_current_user_id();   
+            $userId = get_current_user_id();
+            $countrollerOb = new Controller();
         }        
         $subscribers = PostMeta::where('meta_key','like','%_axisubs_subscribe_user_id')
             ->where('meta_value', $userId)->orderBy('post_id','desc')
@@ -264,6 +270,9 @@ class Plans extends Post{
 
         foreach($subscribers as $key => $value){
             $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
+            if(!$id){
+                $item->subscription_url = $countrollerOb->getAxiSubsURLs('subscribe', 'view', $value);
+            }
             $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
             $plan = Plans::loadPlan($item->meta[$item->ID.'_axisubs_subscribe_plan_id']);
             $item->plan = $plan;

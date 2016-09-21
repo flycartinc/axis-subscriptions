@@ -28,7 +28,7 @@ class Axisubs_Plan {
 				'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
 			];
 			$rewrite = [
-				'slug'                => 'items',
+				'slug'                => 'axisplan',
 				'with_front'          => true,
 				'pages'               => true,
 				'feeds'               => true,
@@ -49,8 +49,8 @@ class Axisubs_Plan {
 				'exclude_from_search' => false,
 				'publicly_queryable'  => true,
 				'query_var'           => true,
-//				'rewrite'             => $rewrite,
-				'rewrite'             => false,
+				'rewrite'             => $rewrite,
+//				'rewrite'             => true,
 				'capability_type'     => 'page',
 				'supports'           => array( 'title', 'editor', 'thumbnail','page-attributes')
 			];

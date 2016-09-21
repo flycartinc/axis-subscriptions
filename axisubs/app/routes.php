@@ -26,3 +26,15 @@ $router->post([
     'uri' => '/axisubs-site-ajax',
     'uses' => __NAMESPACE__ . '\Controllers\Controller@ajaxCallSite'
 ]);
+
+$router->post([
+    'as' => "axisubsAjaxI",
+    'uri' => '/index.php/axisubs-admin-ajax',
+    'uses' => __NAMESPACE__ . '\Controllers\Controller@ajaxCall'
+]);
+
+$router->post([
+    'as' => "axisubsAjaxSiteAllI",
+    'uri' => '/index.php/axisubs-site-ajax',
+    'uses' => __NAMESPACE__ . '\Controllers\Controller@ajaxCallSite'
+]);

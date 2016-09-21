@@ -2,7 +2,8 @@
     {{ message | raw }}
     {% if item['ID'] > 0 %}
         {% set id = item['ID'] %}
-    <form action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">
+    <form action="{{ data['plan_url'] }}" method="post">
+        <!--<form action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">-->
         <div class="axisubs-plan_details-header">
             <div class="axisubs-plan_details-title">
                 <h3>{{ pagetitle }}</h3>

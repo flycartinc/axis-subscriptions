@@ -35,7 +35,8 @@ class Subscribe extends Controller{
         $currencyData['currency'] = $currency->getCurrency();
         $site_url = get_site_url();
         $pagetitle = "Subscriptions";
-        $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
+        //$subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
+        $subscribtions_url = $this->getAxiSubsURLs('subscribe');
         $wp_user = ManageUser::getInstance()->getUserDetails();
         $user_id = $wp_user->ID;
         if($user_id){
@@ -57,12 +58,14 @@ class Subscribe extends Controller{
      * */
     public function view(){
         $http = Http::capture();
+        $http = $this->getQueryStringData($http);
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
         $site_url = get_site_url();
         $pagetitle = "Subscriptions";
-        $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
+        //$subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
+        $subscribtions_url = $this->getAxiSubsURLs('subscribe');
         $wp_user = ManageUser::getInstance()->getUserDetails();
         $user_id = $wp_user->ID;
         if($http->get('sid')) {

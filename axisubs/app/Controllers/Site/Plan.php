@@ -35,7 +35,7 @@ class Plan extends Controller{
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
         $site_url = get_site_url();
-        $subscribtions_url = get_site_url().'/index.php?axisubs_subscribes=subscribe';
+        $subscribtions_url = $this->getAxiSubsURLs('subscribe');
         $duration = new Duration();
         $unitInWords = $duration->getDurationInFormatInArray();
         $pagetitle = "Plans";
@@ -50,42 +50,48 @@ class Plan extends Controller{
     public function view(){
         $data = array();
         $http = Http::capture();
+        $http = $this->getQueryStringData($http);
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
         $site_url = get_site_url();
-        if($http->get('slug')=='') {
+        if($http->get('slug') == '' || $http->get('id') == '') {
             return $this->index();
         } else {
             $pagetitle = "Order Summary";
             $item = Plans::loadPlan($http->get('id'));
-            $meta = $item->meta;
+            if($item) {
+                $meta = $item->meta;
 
-            //Check eligibility
-            $eligible = Plans::isEligible($item);
-            if($eligible) {
-                $subscriber = Plans::loadOldSubscriber($item);
-                $user = Plans::getUserDetails();
-                //From WP
-                $wp_user = ManageUser::getInstance()->getUserDetails();
-                $user_id = $wp_user->ID;
-                if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
-                    //For loading payment options
-                    $payment = new PaymentPlugins();
-                    $data['paymentMethods'] = $payment->loadPaymentOptions();
+                //Check eligibility
+                $eligible = Plans::isEligible($item);
+                if ($eligible) {
+                    $data['plan_url'] = $this->getAxiSubsURLs('plan', 'view', $http->get('id'), $http->get('slug'));
+                    $subscriber = Plans::loadOldSubscriber($item);
+                    $user = Plans::getUserDetails();
+                    //From WP
+                    $wp_user = ManageUser::getInstance()->getUserDetails();
+                    $user_id = $wp_user->ID;
+                    if ($meta[$item->ID . '_axisubs_plans_type'] != 'free') {
+                        //For loading payment options
+                        $payment = new PaymentPlugins();
+                        $data['paymentMethods'] = $payment->loadPaymentOptions();
+                    }
+                    $custProvince = $custCountry = '';
+                    if (!empty($user)) {
+                        $custPrefix = $user->ID . '_' . $user->post_type . '_';
+                        $custProvince = $user->meta[$custPrefix . 'province'];
+                        $custCountry = $user->meta[$custPrefix . 'country'];
+                    }
+                    $modelZone = $this->getModel('Zones', 'Admin');
+                    $data['country'] = Countries::getCountriesSelectBox($custCountry, 'axisubs[subscribe][country]', 'axisubs_subscribe_country', 'required');
+                    $data['province'] = $modelZone->getProvinceSelectBox($custCountry, $custProvince, 'axisubs[subscribe][province]', 'axisubs_subscribe_province', 'required');
+                    return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id', 'data'));
+                } else {
+                    $this->message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
+                    return $this->index();
                 }
-                $custProvince = $custCountry = '';
-                if(!empty($user)){
-                    $custPrefix = $user->ID.'_'.$user->post_type.'_';
-                    $custProvince = $user->meta[$custPrefix.'province'];
-                    $custCountry =$user->meta[$custPrefix.'country'];
-                }
-                $modelZone = $this->getModel('Zones', 'Admin');
-                $data['country'] = Countries::getCountriesSelectBox($custCountry, 'axisubs[subscribe][country]', 'axisubs_subscribe_country', 'required');
-                $data['province'] = $modelZone->getProvinceSelectBox($custCountry, $custProvince, 'axisubs[subscribe][province]', 'axisubs_subscribe_province', 'required');
-                return view('@Axisubs/Site/subscribe/details.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'user', 'user_id', 'data'));
             } else {
-                $this->message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
                 return $this->index();
             }
         }
@@ -98,6 +104,7 @@ class Plan extends Controller{
         $model = $this->getModel('Plans');
         $data = array();
         $http = Http::capture();
+        $http = $this->getQueryStringData($http);
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
@@ -107,38 +114,43 @@ class Plan extends Controller{
         } else {
             $pagetitle = "Order Summary";
             $item = Plans::loadPlan($http->get('id'));
-            $meta = $item->meta;
+            if($item) {
+                $meta = $item->meta;
 
-            //Check eligibility
-            $eligible = Plans::isEligible($item);
-            if($eligible) {
-                $result = $model->addSubscribe($http->all(), $item);
-                if ($result) {
-                    $data['hasActiveSubs'] = count($model->existAlready);
-                    $subscriber = Plans::loadSubscriber($result);
-                    if($meta[$item->ID.'_axisubs_plans_type'] != 'free'){
-                        if($http->get('payment', '') != ''){
-                            //For loading payment options
-                            $payment = new PaymentPlugins();
-                            $data['paymentForm'] = $payment->loadPaymentForm($http->get('payment'), $subscriber, $item);
-                        } else {
-                            $this->message = FrontEndMessages::failure('Invalid payment option');
-                            return $this->index();
+                //Check eligibility
+                $eligible = Plans::isEligible($item);
+                if ($eligible) {
+                    $result = $model->addSubscribe($http->all(), $item);
+                    $data['plan_url'] = $this->getAxiSubsURLs('plan', 'view', $http->get('id'), $http->get('slug'));
+                    if ($result) {
+                        $data['hasActiveSubs'] = count($model->existAlready);
+                        $subscriber = Plans::loadSubscriber($result);
+                        if ($meta[$item->ID . '_axisubs_plans_type'] != 'free') {
+                            if ($http->get('payment', '') != '') {
+                                //For loading payment options
+                                $payment = new PaymentPlugins();
+                                $data['paymentForm'] = $payment->loadPaymentForm($http->get('payment'), $subscriber, $item);
+                            } else {
+                                $this->message = FrontEndMessages::failure('Invalid payment option');
+                                return $this->index();
+                            }
                         }
-                    }
-                    $custCountry = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_country'];
-                    $custProvince = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_province'];
-                    $modelZone = $this->getModel('Zones', 'Admin');
-                    $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
-                    $data['country'] = Countries::getCountryName($custCountry);
+                        $custCountry = $subscriber->meta[$subscriber->ID . '_axisubs_subscribe_country'];
+                        $custProvince = $subscriber->meta[$subscriber->ID . '_axisubs_subscribe_province'];
+                        $modelZone = $this->getModel('Zones', 'Admin');
+                        $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
+                        $data['country'] = Countries::getCountryName($custCountry);
 
-                    return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'data'));
+                        return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'data'));
+                    } else {
+                        $message = FrontEndMessages::failure('Failed to subscribe');
+                        return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'currencyData', 'site_url', 'message'));
+                    }
                 } else {
-                    $message = FrontEndMessages::failure('Failed to subscribe');
-                    return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'currencyData', 'site_url', 'message'));
+                    $this->message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
+                    return $this->index();
                 }
             } else {
-                $this->message = FrontEndMessages::failure('You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.');
                 return $this->index();
             }
         }
@@ -149,6 +161,7 @@ class Plan extends Controller{
      * */
     public function updateFreePlan(){
         $http = Http::capture();
+        $http = $this->getQueryStringData($http);
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
@@ -168,7 +181,8 @@ class Plan extends Controller{
                     $message = FrontEndMessages::success('Subscribed successfully');
                     //wp_redirect($site_url.'index.php?axisubs_subscribes=subscribe');
                     //$subscriber = Plans::loadAllSubscribes();
-                    $subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
+                    //$subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
+                    $subscribtions_url = $this->getAxiSubsURLs('subscribe');
                     return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle', 'subscribtions_url', 'message'));
                 } else {
                     $message = FrontEndMessages::failure('Failed to subscribe');
@@ -186,6 +200,7 @@ class Plan extends Controller{
      * */
     public function paymentComplete(){
         $http = Http::capture();
+        $http = $this->getQueryStringData($http);
         if($http->get('payment_type') != ''){
             $sessionData = Session()->get('axisubs_subscribers');
             //if(isset($sessionData['current_subscription_id']) && $sessionData['current_subscription_id']){
@@ -208,7 +223,8 @@ class Plan extends Controller{
         } else {
             $message = FrontEndMessages::failure('Invalid Request');
         }
-        $subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
+        //$subscribtions_url = get_site_url() . '/index.php?axisubs_subscribes=subscribe';
+        $subscribtions_url = $this->getAxiSubsURLs('subscribe');
         return view('@Axisubs/Site/subscribed/success.twig', compact('pagetitle', 'subscribtions_url', 'message'));
     }
 }

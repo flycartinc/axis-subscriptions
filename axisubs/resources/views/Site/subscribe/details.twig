@@ -60,7 +60,8 @@
         </ul>
     </div>
     <div class="axisubs_login_form_con tab_con">
-        <form id="login_user" action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">
+        <form id="login_user" action="{{ data['plan_url'] }}" method="post">
+            <!--<form id="login_user" action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">-->
             <div class="axisubs-plan-billinfo-con">
                 <div class="axisubs-plan_details-title">
                     <h3>Login</h3>
@@ -108,7 +109,8 @@
     </div>
     {% endif %}
     <div class="axisubs_registration_form_con tab_con {% if(user_id == '') %} hide {% endif %}">
-        <form id="register_user" action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">
+        <form id="register_user" action="{{ data['plan_url'] }}" method="post">
+            <!--<form id="register_user" action="?axisubs_plan=plans&slug={{ meta[id~'_axisubs_plans_slug'] }}&id={{ id }}" method="post">-->
             <div class="axisubs-plan-billinfo-con">
                 <div class="axisubs-plan_details-title">
                     <h3>Billing Info</h3>

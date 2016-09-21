@@ -28,7 +28,7 @@ class Axisubs_Subscribe {
 				'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
 			];
 			$rewrite = [
-				'slug'                => 'items',
+				'slug'                => 'axisubs',
 				'with_front'          => true,
 				'pages'               => true,
 				'feeds'               => true,
@@ -49,8 +49,8 @@ class Axisubs_Subscribe {
 				'exclude_from_search' => false,
 				'publicly_queryable'  => true,
 				'query_var'           => true,
-//				'rewrite'             => $rewrite,
-				'rewrite'             => false,
+				'rewrite'             => $rewrite,
+//				'rewrite'             => true,
 				'capability_type'     => 'page',
 				'supports'           => array( 'title', 'editor', 'thumbnail','page-attributes')
 			];
