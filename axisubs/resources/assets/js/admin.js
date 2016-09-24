@@ -12,10 +12,12 @@ function loadFieldsOfPlanType(val, id) {
             id: id,
             type: val,
             view: "Plan",
-            task: "loadPlanFields"
+            task: "loadPlanFields",
+            action: 'axisubs_ajax_admin'
         };
         $.ajax({
-            url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            // url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
             type: 'POST',
             data: postData,
             beforeSend: function () {
@@ -55,9 +57,10 @@ function addCustomer(){
             var fields = $("#my_profile").serializeArray();
             fields.push({'name':'task','value': 'addCustomer'});
             fields.push({'name':'view','value': 'Customer'});
+            fields.push({'name':'action','value': 'axisubs_ajax_admin'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
                 dataType: 'json',
                 data: fields,
                 cache: false,
@@ -106,10 +109,11 @@ function autoPopulatePlanDetails(val){
         var postData = {
             id: val,
             task: "loadPlanDetails",
-            view: "Subscription"
+            view: "Subscription",
+            action: 'axisubs_ajax_admin'
         };
         $.ajax({
-            url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
             type: 'POST',
             data: postData,
             dataType: 'json',
@@ -185,10 +189,11 @@ function autoPopulateCustomerDetails(val){
         var postData = {
             id: val,
             task: "loadCustomerDetails",
-            view: "Customer"
+            view: "Customer",
+            action: 'axisubs_ajax_admin'
         };
         $.ajax({
-            url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+            url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
             type: 'POST',
             data: postData,
             dataType: 'json',
@@ -265,7 +270,8 @@ function checkForeverIsChoosen(){
             var postData = {
                 id: jQuery(this).attr('data-attr'),
                 task: "loadCustomerSubscriptions",
-                view: "Customer"
+                view: "Customer",
+                action: 'axisubs_ajax_admin'
             };
             var contentDiv = selected.children('.more_subscriptions-data');
             //selected.find('.more_subscriptions-data').show();
@@ -278,7 +284,7 @@ function checkForeverIsChoosen(){
                 selected.attr('send-attr', '1');
             }
             $.ajax({
-                url: $('#site_url').val()+'/index.php/axisubs-admin-ajax',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
                 type: 'POST',
                 data: postData,
                 async	: false,

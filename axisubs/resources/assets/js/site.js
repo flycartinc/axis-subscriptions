@@ -13,9 +13,11 @@ function loginUser(){
         if(valid) {
             var fields = $("#login_user").serializeArray();
             fields.push({'name':'view','value':'User'});
+            fields.push({'name':'action','value':'axisubs_ajax'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
+                //url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
                 dataType: 'json',
                 data: fields,
                 cache: false,
@@ -59,9 +61,10 @@ function updateProfile(){
             var fields = $("#my_profile").serializeArray();
             fields.push({'name':'view','value':'User'});
             fields.push({'name':'task','value':'updateProfile'});
+            fields.push({'name':'action','value':'axisubs_ajax'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
                 dataType: 'json',
                 data: fields,
                 cache: false,
@@ -125,9 +128,10 @@ function registerUser(){
             var fields = $("#register_user").serializeArray();
             fields.push({'name':'view','value':'User'});
             fields.push({'name':'task','value':'registerUser'});
+            fields.push({'name':'action','value':'axisubs_ajax'});
             $.ajax({
                 type: 'post',
-                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
                 dataType: 'json',
                 data: fields,
                 cache: false,

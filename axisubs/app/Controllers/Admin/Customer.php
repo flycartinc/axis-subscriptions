@@ -150,7 +150,12 @@ class Customer extends Controller
         $http = Http::capture();
         $id = $http->get('id');
         $items = Customers::loadSubscriptionsByUserId($id);
-        return view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
+        $data = view('@Axisubs/Admin/customers/moresubscriptions.twig', compact('items'));
+        if($data->getStatusCode() == 200){
+            echo $data->getBody();
+        } else {
+            echo "Something goes wrong!";
+        }
     }
 
     /**

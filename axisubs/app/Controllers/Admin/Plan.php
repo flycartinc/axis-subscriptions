@@ -107,9 +107,14 @@ class Plan extends Controller
         $id = $http->get('id');
         $item = Plans::loadPlan($id);
         if($planType != ''){
-            return view('@Axisubs/Admin/plan/types/'.$planType.'.twig', compact('item'));
+            $data = view('@Axisubs/Admin/plan/types/'.$planType.'.twig', compact('item'));
         } else {
-            return view('@Axisubs/Admin/plan/types/free.twig', compact('item'));
+            $data = view('@Axisubs/Admin/plan/types/free.twig', compact('item'));
+        }
+        if($data->getStatusCode() == 200){
+            echo $data->getBody();
+        } else {
+            echo "Something goes wrong!";
         }
     }
 }

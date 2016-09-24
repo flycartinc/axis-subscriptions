@@ -46,10 +46,11 @@ function disableTags(id, val){
             var postData = {
                 code: jQuery(this).val(),
                 task: "loadProvinces",
-                view: "User"
+                view: "User",
+                action: 'axisubs_ajax'
             };
             $.ajax({
-                url: $('#site_url').val()+'/index.php/axisubs-site-ajax',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
                 type: 'POST',
                 data: postData,
                 async	: false,

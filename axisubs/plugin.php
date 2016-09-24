@@ -13,6 +13,7 @@
 
 use Events\Event;
 use Axisubs\Helper\SubscriptionMails;
+use Axisubs\Controllers\Controller;
 //dd(get_option('rewrite_rules'));
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -35,6 +36,33 @@ function axisubsRewriteQueryVars( $vars )
     return $vars;
 }
 
+//For login users
+Event::listen('wp_ajax_axisubs_ajax', 'ajaxRequestAxisubs', '1');
+Event::listen('wp_ajax_axisubs_ajax_admin', 'ajaxRequestAxisubsAdmin', '1');
+//For non login user trigger
+Event::listen('wp_ajax_nopriv_axisubs_ajax', 'ajaxRequestAxisubs', '1');
+
+/**
+ * For ajax site request
+ * */
+function ajaxRequestAxisubs(){
+    $controller = new Controller();
+    $controller->ajaxCallSite();
+    wp_die();
+}
+
+/**
+ * For ajax admin request
+ * */
+function ajaxRequestAxisubsAdmin(){
+    $controller = new Controller();
+    $controller->ajaxCall();
+    wp_die();
+}
+
+/**
+ * For Rewrite URL
+ * */
 Event::listen('init', 'rewriteAxisURL', '1');
 function rewriteAxisURL(){
     $permalinkPlain = get_option('permalink_structure')? 0: 1;

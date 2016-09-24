@@ -19,8 +19,11 @@ class Controller
     /**
      * For ajax Call
      * */
-    public function ajaxCall(Http $http)
+    public function ajaxCall($http = '')
     {
+        if($http == ''){
+            $http = Http::capture();
+        }
         $task = $http->get('task');
         $controller = $http->get('view');
         $path = $http->get('path', 'Admin');
@@ -40,7 +43,8 @@ class Controller
     /**
      * For front end ajax call
      * */
-    public function ajaxCallSite(Http $http){
+    public function ajaxCallSite(){
+        $http = Http::capture();
         $http->request->set('path', 'Site');
         return $this->ajaxCall($http);
     }
