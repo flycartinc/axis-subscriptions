@@ -25,7 +25,7 @@ axisubs_installd();
 
 function axisubs_installd(){
     global $wpdb;
-    $file = site_url()."/wp-content/plugins/axisubs/sql/zones.sql";
+    $file = WP_PLUGIN_URL."/axisubs/sql/zones.sql";
     $f = file_get_contents($file);
     $sql = str_replace("#__", $wpdb->prefix, $f);
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

@@ -16,12 +16,4 @@ class Common
 
         return 'axisubs_wp-'.$subscription_id; //TODO: Make it dynamic.
     }
-
-    /**
-     * For creating log Folder
-     * */
-    public function createLogFolder(){
-        $path = ABSPATH;
-        wp_mkdir_p($path.'wp-content/axisubs-log');
-    }
 }

@@ -17,5 +17,3 @@ $api->add('helper', function ()
 });
 
 (new ExpiryControl)->processSubscriptionExpiry();
-
-(new Common)->createLogFolder();
