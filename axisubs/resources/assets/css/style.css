@@ -174,3 +174,10 @@
 .axisubs-profile-payment-con {
     padding: 15px 0;
 }
+.axisubs_content_area {
+    margin: 15px 0;
+}
+.axisubs_country,
+.axisubs_province{
+    max-width: 300px;
+}
