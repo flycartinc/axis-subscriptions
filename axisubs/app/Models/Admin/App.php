@@ -36,6 +36,7 @@ class App extends Post{
     public static function getAllApps(){
         //$plugins = get_option('active_plugins');
         $plugins = get_plugins();
+        $axisubsApps = array();
         foreach($plugins as $key => $value){
             $arrayKey = explode('-app-', $key);
             if($arrayKey[0] == 'axisubs'){

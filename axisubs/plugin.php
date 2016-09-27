@@ -151,9 +151,6 @@ function sendMailPaymentPending($subscription_id){
     SubscriptionMails::subscriptionPending($subscription_id);
 }
 
-
-
-
 function filter_single_plan_display($content)
 {
     global $post;
@@ -198,11 +195,7 @@ function axisubs_single_subscribe_template($single_template)
     return $single_template;
 }
 
-//Event::listen('single_template', 'axisubs_single_plan_template', '', 'filter');
-//Event::listen('single_template', 'axisubs_single_subscribe_template', '', 'filter');
-add_filter('single_template', 'axisubs_single_plan_template', '');
-add_filter('single_template', 'axisubs_single_subscribe_template', '');
-
-add_action('axisubs_single_plan', 'filter_single_plan_display', '');
-add_action('axisubs_single_subscribe', 'filter_single_subscribe_display', '');
-
+Event::listen('single_template', 'axisubs_single_plan_template', '', 'filter');
+Event::listen('single_template', 'axisubs_single_subscribe_template', '', 'filter');
+Event::listen('axisubs_single_plan', 'filter_single_plan_display', '');
+Event::listen('axisubs_single_subscribe', 'filter_single_subscribe_display', '');
