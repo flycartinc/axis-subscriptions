@@ -10,6 +10,7 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+Capsule::schema()->dropIfExists('axisubs_zones');
 Capsule::schema()->create('axisubs_zones', function($table)
 {
     $table->increments('axisubs_zone_id');
@@ -21,9 +22,9 @@ Capsule::schema()->create('axisubs_zones', function($table)
 });
 
 //For adding zone data
-axisubs_installd();
+axisubs_installTables();
 
-function axisubs_installd(){
+function axisubs_installTables(){
     global $wpdb;
     $file = WP_PLUGIN_URL."/axisubs/sql/zones.sql";
     $f = file_get_contents($file);
