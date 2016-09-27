@@ -10,7 +10,6 @@
 get_header(); ?>
 
     <div id="primary" class="content-area axisubs_content_area">
-        <div id="content" class="site-content" role="main">
             <?php
             // Start the Loop.
             while ( have_posts() ) : the_post();
@@ -20,8 +19,8 @@ get_header(); ?>
                  * use this in a child theme, then include a file called called content-___.php
                  * (where ___ is the post format) and that will be used instead.
                  */
-                    the_content();
-                //do_action('axisubs_single_plan');
+                    //the_content();
+                do_action('axisubs_single_plan');
                 // Previous/next post navigation.
 //                twentyfourteen_post_nav();
 
@@ -31,7 +30,6 @@ get_header(); ?>
                 }*/
             endwhile;
             ?>
-        </div><!-- #content -->
     </div><!-- #primary -->
 
 <?php
