@@ -80,8 +80,6 @@ function rewriteAxisURL(){
     $plan_structure = 'axisplan/%plan%/%task%/%slug%/%id%';
     add_permastruct('axisubs_single_plan', $plan_structure, false);
 
-
-
     $subscriptions_structure = 'axisubs/%subscribe%';
     add_rewrite_tag("%subscribe%", '([^/]+)', "axisubs_subscribes=");
     add_permastruct('axisubs_single_subscribe', $subscriptions_structure, false);
@@ -90,23 +88,6 @@ function rewriteAxisURL(){
 
     $subscription_structure = 'axisubs/%subscribe%/%task%/%sid%';
     add_permastruct('axisubs_single_subscribe', $subscription_structure, false);
-
-
-
-
-//    add_rewrite_tag("%plan%", '([^/]+)/([^/]+)/([^/]+)/([^/]+)', "axisubs_plan=");
-//    add_rewrite_rule(
-//        'plans(/([^/]+))?(/([^/]+))?(/([^/]+))?/?',
-//        'index.php?axisubs_plan=plans&task=$matches[2]&view=$matches[4]&id=$matches[6]',
-//        'top'
-//    );
-
-//    add_rewrite_tag("%subscribe%", '([^/]+)', "axisubs_subscribes=");
-//    add_permastruct('axisubs_single_subscribe', $storepress_structure, false);
-
-//    $option = get_option('rewrite_rules');
-//    echo "<pre>";
-//    print_r($option);exit;
 }
 
 /**
