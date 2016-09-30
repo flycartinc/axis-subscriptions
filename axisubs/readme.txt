@@ -1,27 +1,32 @@
 === Axis Subscriptions ===
 Contributors: flycart
-Tags: membership, subscriptions, paypal, recurring
+Donate link: 
+Tags: membership, subscriptions, recurring billing, ecommerce, memberships, paypal
 Requires at least: 4.4.1
 Tested up to: 4.6.1
 Stable tag: 0.8
-License: GPLv3
+License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Axis Subscriptions is a simple subscription and membership management plugin. 
+Axis Subscriptions is a simple subscription and membership management plugin for Wordpress. Sell subscriptions easily.
 
 == Description ==
 
-Axis subscriptions is a simple subscription and membership management plugin for wordpress.
+Axis Subscriptions allows you to sell subscriptions and memberships easily in your WordPress website. It fully supports recurring subscriptions with expiration control. 
+You can create recurring subscriptions, subscription plans with trial period and more. 
 
-Features:
+Key Features:
 
+*   Sell subscriptions
 *   Sell Memberships
-*   Sell Recurring subscriptions through paypal 
+*   Sell Recurring subscriptions through Paypal 
+*   Create and manage subscriptions with trial period
 *   Free subscriptions
-*   Subscriptions with a Trial period
+*	Built with Herbert Framework. Implements HHMVC.
+*	Built with modern code base: Eloquent ORM, Twig for templating 
 *   Customisable layouts and design
-*   Mail notification for customer sign up, subsctiption payment, successful subscription purchase, term expiry notice.
-*   Mail notification and hooks for every notable event in the subscription process.
+*   Mail notifications for customer sign up, subscription payment, successful subscription purchase, term expiry notice.
+*   Mail notifications and hooks for every notable event in the subscription process.
 
 == Installation ==
 
@@ -33,10 +38,14 @@ Features:
 
 1. Upload the plugin files to the `/wp-content/plugins/axisubs` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Use the Settings->Plugin Name screen to configure the plugin
-1. (Make your instructions match the desired user flow for activating and installing your plugin. Include any steps that might be needed for explanatory purposes)
+1. Configure the basic settings and start creating plans
 
-== Frequently Asked Questions ==
+== Frequently asked questions ==
+
+= Does it support PayPal recurring payments =
+Yes. The plugin could create recurring payment profiles in PayPal
+= Can I add trial period to a plan =
+Yes. You can. You can also control the trial period duration
 
 == Screenshots ==
 
@@ -50,4 +59,8 @@ Features:
 
 == Changelog ==
 
-== Upgrade Notice ==
+0.8.1
+- Fixed absolute paths
+- Fixed CSS conflicts in the Dashboard
+
+== Upgrade notice ==
