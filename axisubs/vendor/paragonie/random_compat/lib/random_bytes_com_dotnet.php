@@ -37,6 +37,9 @@
  * 
  * @return string
  */
+if (!function_exists(random_bytes))
+{
+	
 function random_bytes($bytes)
 {
     try {
@@ -78,4 +81,7 @@ function random_bytes($bytes)
     throw new Exception(
         'Could not gather sufficient random data'
     );
+}
+
+
 }

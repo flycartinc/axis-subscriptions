@@ -43,6 +43,9 @@ if (!defined('RANDOM_COMPAT_READ_BUFFER')) {
  * 
  * @return string
  */
+if (!function_exists(random_bytes))
+{
+	
 function random_bytes($bytes)
 {
     static $fp = null;
@@ -145,4 +148,5 @@ function random_bytes($bytes)
     throw new Exception(
         'Error reading from source device'
     );
+}
 }
