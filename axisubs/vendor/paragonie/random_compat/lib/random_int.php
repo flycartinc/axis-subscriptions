@@ -36,6 +36,7 @@
  * 
  * @return int
  */
+if (!function_exists('random_int')) {
 function random_int($min, $max)
 {
     /**
@@ -188,4 +189,5 @@ function random_int($min, $max)
     } while (!is_int($val) || $val > $max || $val < $min);
 
     return (int) $val;
+}
 }
