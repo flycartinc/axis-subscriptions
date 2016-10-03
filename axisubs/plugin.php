@@ -19,6 +19,10 @@ use Axisubs\Controllers\Controller;
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';
 
+if (!defined('AXISUBS_PLUGIN_PATH')) {
+    define( 'AXISUBS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+}
+
 Event::listen('mailPaymentCanceled', 'sendMailPaymentCanceled', '1');
 Event::listen('mailSubscriptionExpired', 'sendMailSubscriptionExpired', '1');
 Event::listen('mailPaymentCompleted', 'sendMailPaymentCompleted', '1');
