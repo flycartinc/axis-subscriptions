@@ -105,6 +105,62 @@ class Plan extends Controller{
         $data = array();
         $http = Http::capture();
         $http = $this->getQueryStringData($http);
+        if(!$http->get('id')) {
+            $resultArray['message'] = 'Invalid Plan';
+            $resultArray['status'] = 'Failed';
+        } else {
+            $item = Plans::loadPlan($http->get('id'));
+            if($item) {
+                $meta = $item->meta;
+                //Check eligibility
+                $eligible = Plans::isEligible($item);
+                if ($eligible) {
+                    $plan_confirm_url = $this->getAxiSubsURLs('plan', 'confirm', $http->get('id'), $meta[$item->ID . '_axisubs_plans_slug']);
+                    $result = $model->addSubscribe($http->all(), $item);
+                    if ($result) {
+                        $data['hasActiveSubs'] = count($model->existAlready);
+                        $subscriber = Plans::loadSubscriber($result);
+                        if ($meta[$item->ID . '_axisubs_plans_type'] != 'free') {
+                            if ($http->get('payment', '') != '') {
+                                //For loading payment options
+                                $payment = new PaymentPlugins();
+                                $data['paymentForm'] = $payment->loadPaymentForm($http->get('payment'), $subscriber, $item);
+                                $resultArray['message'] = 'Loading please wait..';
+                                $resultArray['status'] = 'success';
+                                $resultArray['redirect'] = $plan_confirm_url;
+                            } else {
+                                $resultArray['message'] = 'Invalid payment option';
+                                $resultArray['status'] = 'Failed';
+                            }
+                        } else {
+                            $resultArray['message'] = 'Loading please wait..';
+                            $resultArray['status'] = 'success';
+                            $resultArray['redirect'] = $plan_confirm_url;
+                        }
+                    } else {
+                        $resultArray['message'] = 'Failed to subscribe';
+                        $resultArray['status'] = 'Failed';
+                    }
+                } else {
+                    $resultArray['message'] = 'You have already subscribed for this plan. Please try another plan / try again after end date of current subscription.';
+                    $resultArray['status'] = 'Failed';
+                }
+            } else {
+                $resultArray['message'] = 'Invalid Plan';
+                $resultArray['status'] = 'Failed';
+            }
+        }
+        echo json_encode($resultArray);
+    }
+
+    /**
+     * confirm a subscription
+     * */
+    public function confirm(){
+        $model = $this->getModel('Plans');
+        $data = array();
+        $http = Http::capture();
+        $http = $this->getQueryStringData($http);
         $currency = new Currency();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
@@ -116,24 +172,32 @@ class Plan extends Controller{
             $item = Plans::loadPlan($http->get('id'));
             if($item) {
                 $meta = $item->meta;
-
                 //Check eligibility
                 $eligible = Plans::isEligible($item);
                 if ($eligible) {
-                    $result = $model->addSubscribe($http->all(), $item);
+                    $sessionData = Session()->get('axisubs_subscribers');
+                    if (isset($sessionData[$http->get('id')]) && $sessionData[$http->get('id')]->subscriberId) {
+                        $result = $sessionData[$http->get('id')]->subscriberId;
+                    } else {
+                        $result = 0;
+                    }
                     $data['plan_url'] = $this->getAxiSubsURLs('plan', 'view', $http->get('id'), $http->get('slug'));
                     if ($result) {
                         $data['hasActiveSubs'] = count($model->existAlready);
                         $subscriber = Plans::loadSubscriber($result);
                         if ($meta[$item->ID . '_axisubs_plans_type'] != 'free') {
-                            if ($http->get('payment', '') != '') {
+                            $paymentType = $subscriber->ID . '_'.$subscriber->post_type.'_payment_type';
+                            if (isset($subscriber->meta[$paymentType]) &&
+                                $subscriber->meta[$paymentType] != '') {
                                 //For loading payment options
                                 $payment = new PaymentPlugins();
-                                $data['paymentForm'] = $payment->loadPaymentForm($http->get('payment'), $subscriber, $item);
+                                $data['paymentForm'] = $payment->loadPaymentForm($subscriber->meta[$paymentType], $subscriber, $item);
                             } else {
                                 $this->message = FrontEndMessages::failure('Invalid payment option');
                                 return $this->index();
                             }
+                        } else {
+                            $data['plan_url'] = $this->getAxiSubsURLs('plan', 'updateFreePlan', $http->get('id'), $http->get('slug'));
                         }
                         $custCountry = $subscriber->meta[$subscriber->ID . '_axisubs_subscribe_country'];
                         $custProvince = $subscriber->meta[$subscriber->ID . '_axisubs_subscribe_province'];
@@ -143,7 +207,7 @@ class Plan extends Controller{
 
                         return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'subscriber', 'currencyData', 'site_url', 'data'));
                     } else {
-                        $message = FrontEndMessages::failure('Failed to subscribe');
+                        $message = FrontEndMessages::failure('Invalid request');
                         return view('@Axisubs/Site/subscribe/subscribe.twig', compact('pagetitle', 'item', 'meta', 'currencyData', 'site_url', 'message'));
                     }
                 } else {
