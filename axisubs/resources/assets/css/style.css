@@ -181,3 +181,13 @@
 .axisubs_province{
     max-width: 300px;
 }
+.axisubs-pagination-cont{
+    margin: 18px 0;
+}
+.axisubs-pagination-cont .pagination-ul{
+    display: inline-block;
+}
+.axisubs-pagination-cont select {
+    display: inline-block;
+    width: auto;
+}

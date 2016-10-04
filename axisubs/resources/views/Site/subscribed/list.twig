@@ -62,8 +62,10 @@
                 </div>
             {% endfor %}
             {% if subscribers|length > 0 %}
-                {{ paginationD['limitbox'] | raw }}
-                {{ paginationD['links'] | raw }}
+                <div class="axisubs-pagination-cont">
+                    {{ paginationD['limitbox'] | raw }}
+                    {{ paginationD['links'] | raw }}
+                </div>
             {% endif %}
         </div>
     </form>
