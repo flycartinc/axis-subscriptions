@@ -49,13 +49,13 @@ Yes. You can. You can also control the trial period duration
 
 == Screenshots ==
 
-1. Axis subscription menu
+1. Axis subscription Plans
 2. Create plans 
-2. sell plans
-3. Subscription sign up
-4. Member's area
-5. Admin Dashboard
-6. Subscription management
+3. Sell plans
+4. Subscription sign up
+5. Subscription confirmation
+6. Customer managemnt
+7. Subscription management
 
 == Changelog ==
 
