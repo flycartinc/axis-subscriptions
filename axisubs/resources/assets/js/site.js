@@ -104,13 +104,44 @@ function validateForPaymentOption(){
 
 //Validate subscription
 function submitSubscriptions(){
-    var valid = validateRequiredFields("#register_user");
-    if(valid){
-        valid = validateForPaymentOption();
-    }
-    if(valid){
-        axisubs.jQuery("#register_user").submit();
-    }
+    (function ($) {
+        var valid = validateRequiredFields("#register_user");
+        if(valid){
+            valid = validateForPaymentOption();
+        }
+        if(valid){
+            //axisubs.jQuery("#register_user").submit();
+            var meesageText = $('.axisubs-register-message-text');
+            meesageText.hide();
+            var fields = $("#register_user").serializeArray();
+            fields.push({'name':'view','value':'Plan'});
+            fields.push({'name':'task','value':'save'});
+            fields.push({'name':'action','value':'axisubs_ajax'});
+            meesageText.html('Loading please wait..').show();
+            meesageText.addClass('message-success');
+            $.ajax({
+                type: 'post',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
+                dataType: 'json',
+                data: fields,
+                cache: false,
+                async: false,
+                success: function (json) {
+                    removeMessageClass('.axisubs-register-message-text');
+                    meesageText.html(json['message']).show();
+                    if (json['status'] == 'success') {
+                        meesageText.addClass('message-success');
+                        window.location.href = json['redirect'];
+                    } else {
+                        meesageText.addClass('message-danger');
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                }
+            });
+        }
+    })(axisubs.jQuery);
 }
 
 //for registering User
@@ -141,7 +172,8 @@ function registerUser(){
                     meesageText.html(json['message']).show();
                     if (json['status'] == 'success') {
                         meesageText.addClass('message-success');
-                        $("#register_user").submit();
+                        //$("#register_user").submit();
+                        submitSubscriptions();
                     } else {
                         meesageText.addClass('message-danger');
                     }
