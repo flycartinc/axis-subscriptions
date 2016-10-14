@@ -9,6 +9,7 @@
 /** @var  \Herbert\Framework\Widget $widget */
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Axisubs\Models\Admin\Setup;
 
 Capsule::schema()->create('axisubs_zones', function($table)
 {
@@ -22,6 +23,8 @@ Capsule::schema()->create('axisubs_zones', function($table)
 
 //For adding zone data
 axisubs_installd();
+//For activating additional plugins
+Setup::installAdditionalPlugins();
 
 function axisubs_installd(){
     global $wpdb;

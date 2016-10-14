@@ -1,0 +1,138 @@
+<div class="axisubs wrap">
+    <h1>{{ pagetitle }}
+    </h1>
+    {% set metaPrefix = item['ID']~'_axis_paypal_config_' %}
+    <form method="post" action="?page=app-index&task=appTask&p=axisubs-app-payment-paypal">
+        <div class="axisubs-fields-con">
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_title">Payment title</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[payment][title]" id="axisub_payment_title" value="{{ item['meta'][metaPrefix~'title'] }}"/>
+                    <span class="help-text">The title of the payment plugin, as displayed in the checkout page. If left blank, default value Paypal Payment will be used.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_image">Payment Display Image</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[payment][image]" id="axisub_payment_image" value="{{ item['meta'][metaPrefix~'image'] }}"/>
+                    <span class="help-text">Image shown while payment options are listed in checkout page.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_merchant_email">Paypal Email</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[payment][merchant_email]" id="axisub_payment_merchant_email" value="{{ item['meta'][metaPrefix~'merchant_email'] }}"/>
+                    <span class="help-text">Paypal merchant email.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_validate_ipn">Validate IPN</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <select id="axisub_payment_validate_ipn" name="axisubs[payment][validate_ipn]">
+                        {% set selected = item['meta'][metaPrefix~'validate_ipn'] %}
+                        <option value="0" {% if selected == '0' %} selected {% endif %}>No</option>
+                        <option value="1" {% if selected == '1' %} selected {% endif %}>Yes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_sandbox">Sandbox</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <select id="axisub_payment_sandbox" name="axisubs[payment][sandbox]">
+                        {% set selected = item['meta'][metaPrefix~'sandbox'] %}
+                        <option value="0" {% if selected == '0' %} selected {% endif %}>No</option>
+                        <option value="1" {% if selected == '1' %} selected {% endif %}>Yes</option>
+                    </select>
+                    <span class="help-text">Test or live payment.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_sandbox_email">Sandbox Email</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[payment][sandbox_email]" id="axisub_payment_sandbox_email" value="{{ item['meta'][metaPrefix~'sandbox_email'] }}"/>
+                    <span class="help-text">Paypal sandbox merchant email.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_debug">Debug</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <select id="axisub_payment_debug" name="axisubs[payment][debug]">
+                        {% set selected = item['meta'][metaPrefix~'debug'] %}
+                        <option value="1" {% if selected == '1' %} selected {% endif %}>Yes</option>
+                        <option value="0" {% if selected == '0' %} selected {% endif %}>No</option>
+                    </select>
+                    <span class="help-text">Debug the payment gateway.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_button_text">Payment button text</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" name="axisubs[payment][button_text]" id="axisub_payment_button_text" value="{{ item['meta'][metaPrefix~'button_text'] }}"/>
+                    <span class="help-text">Name of the payment button. Default is: Place order. You can enter a language constant as a value here if you are using a multi-lingual site and then write a language override. Refer the User guide for more information.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_cbt">CBT</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" name="axisubs[payment][cbt]" id="axisub_payment_cbt" value="{{ item['meta'][metaPrefix~'cbt'] }}"/>
+                    <span class="help-text">Sets the text for the Return to Merchant button on the PayPal Payment Complete page. For Business accounts, the return button displays your business name in place of the word Merchant by default.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_cpp_header_image">Image</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" name="axisubs[payment][cpp_header_image]" id="axisub_payment_cpp_header_image" value="{{ item['meta'][metaPrefix~'cpp_header_image'] }}"/>
+                    <span class="help-text">The URL of the 150x50-pixel image displayed as your logo in the upper left corner of the PayPal checkout pages.Default — Your business name, if you have a PayPal Business account, or your email address, if you have PayPal Premier or Personal account.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_cpp_headerback_color">Header Background</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" name="axisubs[payment][cpp_headerback_color]" id="axisub_payment_cpp_headerback_color" value="{{ item['meta'][metaPrefix~'cpp_headerback_color'] }}"/>
+                    <span class="help-text">The background color for the header of the checkout page. Valid value is case-insensitive six-character, HTML hexadecimal color code in ASCII.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_payment_cpp_headerborder_color">Header Border</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" name="axisubs[payment][cpp_headerborder_color]" id="axisub_payment_cpp_headerborder_color" value="{{ item['meta'][metaPrefix~'cpp_headerborder_color'] }}"/>
+                    <span class="help-text">The border color around the header of the checkout page. The border is a 2-pixel perimeter around the header space, which has a maximum size of 750 pixels wide by 90 pixels high.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <input type="hidden" name="task" value="appTask"/>
+                    <input type="hidden" name="apptask" value="save"/>
+                </div>
+                <div class="axisubs-fields-content">
+                    <button type="submit" class="btn page-title-action">Save</button>
+                    <a href="?page=app-index" class="btn page-title-action">Cancel</a>
+                </div>
+            </div>
+        </div>
+     </form>
+</div>
