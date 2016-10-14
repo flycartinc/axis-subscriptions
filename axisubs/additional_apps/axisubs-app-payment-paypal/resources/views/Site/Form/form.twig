@@ -1,0 +1,81 @@
+<form action='{{ vars.post_url }}' id="paypal_payment_form" method='post'>
+    <!--USER INFO-->
+    <input type='hidden' name='first_name' value='{{ vars.first_name }}' />
+    <input type='hidden' name='last_name' value='{{ vars.last_name }}' />
+    <input type='hidden' name='email' value='{{ vars.email }}' />
+    <!--SHIPPING ADDRESS PROVIDED-->
+    <input type='hidden' name='address1' value='{{ vars.address_1 }}' />
+    <input type='hidden' name='address2' value='{{ vars.address_2 }}' />
+    <input type='hidden' name='city' value='{{ vars.city }}' />
+    <input type='hidden' name='country' value='{{ vars.country }}' />
+    <input type='hidden' name='state' value='{{ vars.region }}' />
+    <input type='hidden' name='zip' value='{{ vars.postal_code }}' />
+    <!-- IPN-PDT  ONLY -->
+    <input type='hidden' name='custom' value='{{ vars.subscription['ID'] }}'>
+    <input type='hidden' name='invoice' value='{{ vars.invoice }}' />
+
+    <!--PAYPAL VARIABLES-->
+    <input type='hidden' name='cmd' value='{{ vars.cmd }}' />
+    <input type='hidden' name='rm' value='2' />
+    <input type="hidden" name="business" value="{{ vars.merchant_email }}" />
+    <input type='hidden' name='return' value='{{ vars.return_url }}' />
+    <input type='hidden' name='cancel_return' value='{{ vars.cancel_url }}' />
+    <input type="hidden" name="notify_url" value="{{ vars.notify_url }}" />
+    <input type='hidden' name='currency_code' value='{{ vars.currency_code }}' />
+    <input type='hidden' name='no_note' value='1' />
+    <input type='hidden' name='bn' value='{{ vars.button_text }}' />
+    <input type='hidden' name='upload' value='1' />
+    <input type='hidden' name='charset' value='{{ vars.charset }}' />
+
+    <!-- Subscription details -->
+    <input type='hidden' name='item_name' value='{{ vars.item_name }}' />
+
+    {% if vars.recurring == '1' %}
+        {% if vars.has_trial == '1' %}
+            <!-- trial vars -->
+            <input type='hidden' name='a1' value='{{ vars.a1 }}' />
+            <input type='hidden' name='p1' value='{{ vars.p1 }}' />
+            <input type='hidden' name='t1' value='{{ vars.t1 }}' />
+        {% endif %}
+
+        <!-- plan duration vars -->
+        <input type='hidden' name='a3' value='{{ vars.a3 }}' />
+        <input type='hidden' name='p3' value='{{ vars.p3 }}' />
+        <input type='hidden' name='t3' value='{{ vars.t3 }}' />
+
+        <!-- recurring flag -->
+        <input type='hidden' name='src' value='1' />
+        <!-- billing cycles count -->
+        <input type='hidden' name='srt' value='{{ vars.billing_cycles }}' />
+        <!-- failure reattempt flag -->
+        <input type='hidden' name='sra' value='{{ vars.sra }}' />
+
+    {% else %}
+        <input type="hidden" name="amount" value="{{ vars.total }}" />
+        {% if(vars.tax_cart) %}
+            <input type="hidden" name="tax" value="{{ vars.tax_cart }}" />
+        {% endif %}
+    {% endif %}
+
+    <!-- Payment screen style variables -->
+    <input type="hidden" name="cbt" value="{{ vars.cbt }}">
+    <input type="hidden" name="cpp_header_image" value="{{ vars.cpp_header_image }}">
+    <input type="hidden" name="cpp_headerback_color" value="{{ vars.cpp_headerback_color }}">
+    <input type="hidden" name="cpp_headerborder_color" value="{{ vars.cpp_headerborder_color }}">
+
+    <input type="submit" style="display: none">
+</form>
+<script type="application/javascript">
+    if(typeof(axisubs) == 'undefined') {
+        var axisubs = {};
+    }
+    if(typeof(axisubs.jQuery) == 'undefined') {
+        axisubs.jQuery = jQuery.noConflict();
+    }
+
+    function submitAxisubsPayment(){
+        (function($){
+            $('#paypal_payment_form').submit();
+        })(axisubs.jQuery);
+    }
+</script>

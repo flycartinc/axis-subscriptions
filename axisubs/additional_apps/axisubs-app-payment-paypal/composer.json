@@ -1,0 +1,19 @@
+{
+  "name": "getherbert/herbert-plugin",
+  "description": "Herbert plugin",
+  "license": "MIT",
+  "require": {
+    "getherbert/framework": "~0.9",
+    "jgrossi/corcel": "^1.1",
+    "flycartinc/events": "dev-master"
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "AxisubsAppPaypal\\": "app/"
+    }
+  }
+}
