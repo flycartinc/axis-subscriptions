@@ -31,6 +31,7 @@ class Subscribe extends Controller{
     public function index(){
         $http = Http::capture();        
         $currency = new Currency();
+        $data = array();
         $currencyData['code'] = $currency->getCurrencyCode();
         $currencyData['currency'] = $currency->getCurrency();
         $site_url = get_site_url();
@@ -48,8 +49,11 @@ class Subscribe extends Controller{
         } else {
             $subscribers = array();
         }
-        $data['statusText'] = Status::getAllStatusCodes();
+        $model = $this->getModel('Plans');
+        $model->additionalButtonsInSubscription($subscribers);
+        $data['statusText'] = Status::getAllStatusCodesWithHtml();
         $message = $this->message;
+        $data['plugin_url'] = AXISUBS_PLUGIN_URL;
         return view('@Axisubs/Site/subscribed/list.twig', compact('pagetitle', 'subscribtions_url', 'subscribers', 'currencyData', 'site_url', 'message', 'paginationD', 'data'));
     }
 
@@ -75,12 +79,18 @@ class Subscribe extends Controller{
                     $planDetails = Plans::loadPlan($subscriber->meta[$subscriber->ID . '_axisubs_subscribe_plan_id']);
                     $status = new Status();
                     $statusCode = $subscriber->meta[$subscriber->ID . '_axisubs_subscribe_status'];
-                    $statusText = $status->getStatusText($statusCode);
+                    $statusText = $status->getStatusTextInHTML($statusCode);
                     $custCountry = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_country'];
                     $custProvince = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_province'];
                     $modelZone = $this->getModel('Zones', 'Admin');
                     $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
                     $data['country'] = Countries::getCountryName($custCountry);
+                    $data['plugin_url'] = AXISUBS_PLUGIN_URL;
+                    //pre process the plan
+                    $model = $this->getModel('Plans');
+                    $subscriber->plan = $planDetails;
+                    $model->additionalButtonsInSubscription($subscriber);
+                    $model->preProcessSubscription($subscriber, $data);
                     return view('@Axisubs/Site/subscribed/singlesubscription.twig', compact('data', 'pagetitle', 'subscribtions_url', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText'));
                 } else {
                     $this->message = FrontEndMessages::failure('Invalid access');

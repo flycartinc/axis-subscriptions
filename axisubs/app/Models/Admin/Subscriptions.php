@@ -71,13 +71,14 @@ class Subscriptions extends Post{
     // Load all Subscriptions
     public static function all($columns = ['*']){
         $postO = new Post();
-        //$items = parent::all()->where('post_type', 'axisubs_subscribe')
-        $totalItem = $postO->all()->where('post_type', 'axisubs_subscribe');
+        //$totalItem = Post::where('post_type', 'axisubs_subscribe')->orderBy('ID','desc')->get();
+        $totalItem = $postO->all()->where('post_type', 'axisubs_subscribe')->sortBy('ID');
 
         //get pagination start and limit
         $pageLimit = Subscriptions::getPaginationStartAndLimit(count($totalItem));
         //get limited data
         $items = $totalItem->forPage($pageLimit['start'], $pageLimit['limit']);
+
         if(count($items)){
             foreach ($items as $key => $item){
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
@@ -90,7 +91,7 @@ class Subscriptions extends Post{
 
             }
         }
-
+        $items = $items->sortByDesc('ID');
         return $items;
     }
 

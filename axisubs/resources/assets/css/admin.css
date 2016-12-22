@@ -29,35 +29,7 @@
     margin: 5px 0;
     padding: 6px 0;
 }
-.axisubs-app-container {
-    background: #1aafd0 none repeat scroll 0 0;
-    border-radius: 5px;
-    color: #fff;
-    display: inline-block;
-    width: 25%;
-    margin: 6px;
-}
-.axisubs-app-container-i {
-    padding: 15px;
-}
-.axisubs-app-name {
-    font-size: 15px;
-    font-weight: bold;
-}
-.axisubs-app-author, .axisubs-app-version{
-    display: inline-block;
-}
-.axisubs-app-version {
-    float: right;
-    font-weight: bold;
-}
-.axisubs-app-description {
-    margin: 6px 0;
-}
-.axisubs-app-buttons {
-    display: block;
-    margin-top: 18px;
-}
+
 .loader-ajax-o{
     position: relative;
 }
@@ -157,51 +129,6 @@ ul.pagination-ul > li > a{
     padding: 12px;
 }
 
-
-
-.axisubs.axis-head h1{
-    background: #e84c3d none repeat scroll 0 0;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    line-height: 2;
-}
-
-.axisubs h1 a{
-    color: #E84C3D !important;
-    font-weight: 400 !important;
-}
-.axisubs h1 a:hover{
-    background-color: #E6DDB2 !important;
-    border-color: #E6DDB2 !important;
-}
-.axisubs-subscribed-i-con {
-    line-height: 2.6;
-    background: #E6DDB2 none repeat scroll 0 0;
-    border-bottom: 1px solid #eeeeee;
-}
-.axisubs-subscribed-i-con:nth-of-type(2n+2){
-    background: #efefef none repeat scroll 0 0;
-}
-.axisubs-subscribed-con {
-    max-with: 100%;
-}
-.axisubs-subscribed-i-block {
-    display: inline-block;
-    min-width: 225px;
-    padding: 5px 10px;
-    text-decoration: none;
-    color: #E84C3D;
-}
-.axisubs-subscribed-block-data{
-    padding: 0 15px;
-}
-.axisubs-subscribed-block-data a{
-    text-decoration: none;
-    color: #E84C3D;
-}
 .axisubs .info{
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -222,6 +149,33 @@ ul.pagination-ul > li > a{
 }
 
 /*Dashboard*/
+.toplevel_page_dashboard-index .axisubs-slidebar{
+  margin-top: 95px;
+}
+.toplevel_page_dashboard-index .axisubs-bs3 .dashboard-content{
+  padding-left: 0px;
+}
+.axisubs .head-title span{
+  font-size: 26px;
+  font-weight: bold;
+  color: #0073AA;
+}
+.axisubs .head-title small{
+  color: #555555;
+  font-size: 12px;
+  margin-left: 5px;
+}
+.axisubs-bs3.axisubs h2{
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.toplevel_page_dashboard-index .axisubs-bs3 .target-reports {
+    border: 2px solid #cccccc;
+    margin: 10px 6px;
+    padding: 25px;
+    width: 48%;
+    border-radius: 3px;
+}
 .dashboard-menu-item-c {
     display: inline-block;
     margin-bottom: 10px;
@@ -329,6 +283,14 @@ ul.pagination-ul > li > a{
     padding: 10px 0;
 }
 
+table.axisubs_list tbody tr.row0{
+    background: #fff none repeat scroll 0 0;
+    color: #555;
+}
+table.axisubs_list tbody tr.row1{
+    color: #555;
+    background: #f5f3eb none repeat scroll 0 0;
+}
 
 @media screen and (max-width: 250px){
     .axisubs h1{
@@ -337,4 +299,322 @@ ul.pagination-ul > li > a{
     .axisubs-subscribed-i-block {
         min-width: 175px;
     }
+}
+.col-2{
+    display: inline-block;
+    width: 14%;
+}
+@media(max-width: 1120px){
+    .col-2 {
+        width: 12%;
+    }
+}
+/* Subscription View page */
+.axisubs_page_subscriptions-index .axisubs-slidebar{
+  margin-top: 120px;
+}
+.axisubs-plan-billinfo-fields{
+  line-height: 2.5;
+}
+.subscribed-item-con .item-customer-details{
+  line-height: 3;
+}
+.subscribed-item-con .item-customer-details .customer-info{
+  margin-right: 5px;
+}
+.axisubs-plan_details{
+    padding: 0 15px;
+}
+.axisubs-plan_details .axisubs-billinfo-f-i{
+    padding: 10px 0;
+}
+.axisubs-plan_details .axisubs-billinfo-f-i .axisubs-billinfo-f-label{
+    color: #333333;
+}
+/* ******* Drop Down Button ******* */
+
+.dropdown_subs{
+    display: inline;
+}
+.dropdown_subs .dropbtn {
+    border: 1px solid #dddddd;
+    color: #555555;
+    font-size: 12px;
+    margin-left: 0px;
+    max-width: 128px;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    padding: 5px;
+    background: #ffffff url("../images/arrow.png") no-repeat scroll right center;
+}
+
+.dropdown_subs .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown_subs .dropdown-content{
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.dropdown_subs .dropdown-content a {
+    color: #333;
+    padding: 4px 16px;
+    text-decoration: none;
+    display: block;
+    outline: none;
+}
+.dropdown_subs .dropdown-content a:hover, .dropdown_subs .dropdown-content a:active, .dropdown_subs .dropdown-content a:focus{
+    color:#0073aa;
+    outline: none;
+}
+.dropdown_subs:hover .dropdown-content {
+    display: block;
+}
+.axisubs-message-ajax{
+    display: none;
+}
+.axisubs-block > .container-fluid > .row-fluid > .col-md-8{
+    width: 80%;
+    padding: 0;
+}
+.axisubs-block > .container-fluid > .row-fluid > .col-md-4{
+    width: 20%;
+    padding: 0;
+}
+@media screen and (max-width: 800px){
+    .axisubs-block > .container-fluid > .row-fluid > .col-md-8,
+    .axisubs-block > .container-fluid > .row-fluid > .col-md-4{
+        float: left;
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+.axisubs-slidebar {
+    background: #2583C3 none repeat scroll 0 0;
+    color: #fff;
+    font-size: 15px;
+    padding: 14px;
+    margin-top: 70px;
+    border-radius: 5px;
+    line-height: 1.6;
+}
+.upload_image_preview {
+    max-height: 50px;
+    max-width: 50px;
+}
+/* ******** axis_coupon_list ********** */
+.axisubs_list tbody td{
+  line-height: 2;
+}
+/* ******* Axis sub Apps ********** */
+.axisubs-app-container {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #333;
+    display: inline-block;
+    width: 47%;
+    margin: 6px;
+    height: auto;
+    border: 1px solid #ddd;
+}
+@media(max-width: 550px){
+  .axisubs-app-container{
+    width: 80%;
+  }
+}
+.axisubs-app-container-i {
+    padding: 15px;
+    line-height: 1.8;
+}
+.axisubs-app-name {
+  font-size: 18px;
+  margin: 10px 0;
+  text-align: center;
+  color: #000;
+}
+.axisubs-app-url{
+    margin-bottom: 10px;
+}
+.axisubs-app-url a{
+  text-decoration: none;
+  margin: 6px 0;
+}
+.axisubs-app-author, .axisubs-app-version{
+    display: inline-block;
+    font-weight: bold;
+}
+.axisubs-app-version {
+    float: right;
+    font-weight: bold;
+}
+.axisubs-app-description {
+    margin: 6px 0;
+}
+.axisubs-app-buttons {
+    display: block;
+    margin-top: 18px;
+    text-align: center;
+    line-height: 3;
+}
+.axisubs-app-buttons .page-title-action
+{
+    border-radius: 3px;
+    border: 1px solid #2ebc9a;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    height: 30px;
+    line-height: 1;
+    margin-right: 10px;
+    max-width: 100%;
+    padding: 9px 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out 0s;
+    width: 100px;
+    background-color: #2ebc9a;
+}
+#axisubs_list_form .subscription-list .new,
+.axisubs-data-content .new{
+    background-color: #FDA900
+}
+#axisubs_list_form .subscription-list .active,
+.axisubs-data-content .active {
+    background-color: #68ac23
+}
+#axisubs_list_form .subscription-list .pending,
+.axisubs-data-content .pending{
+    background-color: #0098CC;
+}
+
+.axisubs-app-buttons .page-title-action:hover, .axisubs-app-buttons .page-title-action:focus, .axisubs-app-buttons .page-title-action:active{
+  background-color: #2ebc9a;
+  border: 1px solid #2ebc9a;
+  padding: 9px 14px;
+  box-shadow: none;
+}
+.axisubs-app-buttons .page-title-action.app-button-view{
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+
+/* ********* plans ********** */
+ .axisubs-block .axisubs h2, .axisubs_page_app-index .axisubs h2, .axis-subscriptions_page_app-index .axisubs h2{
+  color: #444;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+.axisubs-block .axisubs .page-btn, .axisubs_page_app-index .page-btn, .axis-subscriptions_page_app-index .page-btn{
+  padding: 10px 0;
+  margin-bottom: 15px;
+}
+.axisubs .page-btn a, .axisubs .page-btn button{
+  padding: 8px 12px;
+  margin-left: 0px;
+  color: #2583C3;
+  border-radius: 3px;
+}
+.axisubs .page-btn a:active, .axisubs .page-btn button:active{
+  padding: 8px 12px;
+  margin-left: 0px;
+  border-radius: 3px;
+}
+.axisubs .page-btn a:hover, .axisubs .page-btn button:hover{
+  background-color: #2583C3;
+  border-color: #2583C3;
+  color: #ffffff;
+}
+.axisubs .page-btn a:focus, .axisubs .page-btn button:focus{
+  box-shadow: none;
+}
+.axisubs .page-btn #axisubs-import_from_stripe{
+  background-color: #2583C3;
+  border-color: #2583C3;
+  color: #ffffff;
+}
+.axisubs_page_plans-index .axisubs-block .axisubs-slidebar{
+  margin-top: 120px;
+}
+.axisubs #axisubs_list_form .axisubs-list table{
+  box-shadow: 2px 3px 5px #cccccc;
+  margin-bottom: 15px;
+}
+.axisubs-list table thead{
+  background-color: #2583C3;
+}
+.axisubs-list table thead tr th{
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 10px;
+}
+.axisubs-list table tbody  tr:nth-child(even){
+  background-color: #f0f0f0;
+}
+.axisubs-list table tbody  tr td{
+  line-height: 2;
+  font-size: 14px;
+}
+.axisubs-list table tbody  tr td .plane-name{
+  font-size: 16px;
+  font-weight: bold;
+}
+/* ****** Configuration ******** */
+.axisubs-fields-con .axisubs-fields .axisubs-fields-content input{
+  height: 32px;
+}
+table.wp-list-table .column-name{
+  width: auto !important;
+}
+.axisubs-block{
+    font-size: 14px;
+}
+/* ******* customer ******* */
+
+.axisubs_page_customers-index .axisubs-block .axisubs-slidebar {
+    margin-top: 120px;
+}
+/* ****** Coupon ********** */
+.axis-coupon .axisubs-list table thead{
+  /*background-color: #2583C3;*/
+}
+
+#axisubs_list_form .subscription-list .in-trial,
+.axisubs-data-content .in-trial{
+    background-color: #008000;
+}
+#axisubs_list_form .subscription-list .expired,
+.axisubs-data-content .expired{
+    background-color: #B81C36;
+}
+#axisubs_list_form .subscription-list .canceled,
+.axisubs-data-content .canceled{
+    background-color: #ff0000;
+}
+#axisubs_list_form .subscription-list .future,
+.axisubs-data-content .future{
+    background-color: #936DC0;
+}
+.axisubs.axisubs-bs3 td, .axisubs.axisubs-bs3 th {
+    padding: 8px 10px;
+}
+.axisubs .label {
+    border-radius: 0.25em;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px !important;
+    font-weight: 700;
+    line-height: 1;
+    padding: 5px 10px !important;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
 }

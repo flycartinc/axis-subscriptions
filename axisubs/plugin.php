@@ -1,16 +1,14 @@
 <?php
-
 /**
  * @wordpress-plugin
  * Plugin Name:       Axis Subscriptions
  * Plugin URI:        http://flycart.org/
- * Description:       A plugin for subscription management.
- * Version:           0.8.0
+ * Description:       A Simple Membership & Subscription Plugin.
+ * Version:           1.3.0
  * Author:            Flycart
  * Author URI:        http://flycart.org/
  * License:           GPLv3
  */
-
 use Events\Event;
 use Axisubs\Helper\SubscriptionMails;
 use Axisubs\Controllers\Controller;
@@ -21,6 +19,9 @@ require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';
 
 if (!defined('AXISUBS_PLUGIN_PATH')) {
     define( 'AXISUBS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+}
+if (!defined('AXISUBS_PLUGIN_URL')) {
+    define( 'AXISUBS_PLUGIN_URL', plugins_url('axis-subscriptions') );
 }
 
 Event::listen('mailPaymentCanceled', 'sendMailPaymentCanceled', '1');

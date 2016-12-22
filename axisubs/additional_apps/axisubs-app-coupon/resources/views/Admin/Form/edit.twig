@@ -1,0 +1,120 @@
+<div class="axisubs wrap">
+    <h2>{{ pagetitle }}
+    </h2>
+    {% set metaPrefix = item['ID']~'_'~item['post_type']~'_' %}
+    <form method="post" id="coupon_form" action="?page=app-index&task=appTask&p=axisubs-app-coupon">
+        <div class="axisubs-fields-con">
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_name">Name</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[coupon][name]" id="axisub_coupon_name" value="{{ item['meta'][metaPrefix~'name'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_code">Code</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[coupon][code]" id="axisub_coupon_code" value="{{ item['meta'][metaPrefix~'code'] }}"/>
+                    <span class="help-text">Coupon Code.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_status">Status</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <select id="axisub_coupon_status" name="axisubs[coupon][status]">
+                        {% set selected = item['meta'][metaPrefix~'status'] %}
+                        <option value="1" {% if selected == '1' %} selected {% endif %}>Enable</option>
+                        <option value="0" {% if selected == '0' %} selected {% endif %}>Disable</option>
+                    </select>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_value_type">Value type</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <select id="axisub_coupon_value_type" name="axisubs[coupon][value_type]">
+                        {% set selected = item['meta'][metaPrefix~'value_type'] %}
+                        <option value="percent" {% if selected == 'percent' %} selected {% endif %}>Percent</option>
+                        <option value="fixed" {% if selected == 'fixed' %} selected {% endif %}>Fixed</option>
+                    </select>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_value">Value</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[coupon][value]" id="axisub_coupon_value" value="{{ item['meta'][metaPrefix~'value'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_valid_from">Valid from</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="axisubs_date" name="axisubs[coupon][valid_from]" id="axisub_coupon_valid_from" value="{{ item['meta'][metaPrefix~'valid_from'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_coupon_valid_to">Valid to</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="axisubs_date" name="axisubs[coupon][valid_to]" id="axisub_coupon_valid_to" value="{{ item['meta'][metaPrefix~'valid_to'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <input type="hidden" name="id" value="{{ item['ID'] }}" id="coupon_id"/>
+                    <input type="hidden" name="task" value="appTask"/>
+                    <input type="hidden" name="apptask" value="save"/>
+                    <input type="hidden" name="site_url" value="{{ site_url }}" id="site_url"/>
+                </div>
+                <div class="axisubs-fields-content page-btn">
+                    <button type="button" onclick="validateCouponForm()" class="btn page-title-action">Save</button>
+                    <a href="?page=app-index&task=view&p=axisubs-app-coupon" class="btn page-title-action">Cancel</a>
+                </div>
+            </div>
+        </div>
+     </form>
+</div>
+<script type="application/javascript">
+    // For validationg plan
+    function validateCouponForm(){
+        (function($){
+            var valid = validateRequiredFields('#coupon_form');
+            if(valid){
+                var data = { id: $('#coupon_id').val(),
+                    coupon_code: $('#axisub_coupon_code').val(),
+                    action: 'axisubs_ajax',
+                    view: 'Plan', task: 'app',
+                    app: 'axisubs-app-coupon',
+                    apptask: 'checkCouponCodeExist' }
+                $.ajax({
+                    type: 'post',
+                    url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
+                    dataType: 'json',
+                    data: data,
+                    cache: false,
+                    async: false,
+                    success: function (json) {
+                        if(json == "1"){
+                            $('#axisub_coupon_code').addClass('invalid-field');
+                        } else {
+                            $('#coupon_form').submit();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        //alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        })(axisubs.jQuery);
+    }
+</script>

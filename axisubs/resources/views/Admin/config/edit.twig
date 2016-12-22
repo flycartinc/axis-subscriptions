@@ -2,8 +2,8 @@
 
 {% block body %}
 <div class="axisubs wrap">
-  <h1>{{ pagetitle }}
-  </h1>
+  <h2>{{ pagetitle }}
+  </h2>
   <form method="post" action="?page=config-index">
      <div class="axisubs-fields-con">
          <div class="axisubs-fields">
@@ -43,7 +43,8 @@
                  <label for="axisuba_config_country">Country</label>
              </div>
              <div class="axisubs-fields-content">
-                 <input type="text" name="axisubs[config][country]" id="axisuba_config_country" value="{{ all['meta'][all['ID']~'_axisubs_config_country'] }}"/>
+                 {#<input type="text" name="axisubs[config][country]" id="axisuba_config_country" value="{{ all['meta'][all['ID']~'_axisubs_config_country'] }}"/>#}
+                 {{ data['country'] | raw }}
              </div>
          </div>
          <div class="axisubs-fields">
@@ -51,7 +52,8 @@
                  <label for="axisuba_config_region">Zone / Region</label>
              </div>
              <div class="axisubs-fields-content">
-                 <input type="text" name="axisubs[config][region]" id="axisuba_config_region" value="{{ all['meta'][all['ID']~'_axisubs_config_region'] }}"/>
+                 {#<input type="text" name="axisubs[config][region]" id="axisuba_config_region" value="{{ all['meta'][all['ID']~'_axisubs_config_region'] }}"/>#}
+                 {{ data['province'] | raw }}
              </div>
          </div>
          <div class="axisubs-fields">
@@ -72,25 +74,6 @@
                  <span class="help-text">Eg: $</span>
              </div>
          </div>
-         <h3>Dashboard Settings</h3>
-         <div class="axisubs-fields">
-             <div class="axisubs-fields-label">
-                 <label for="axisuba_config_daily_target">Daily Target</label>
-             </div>
-             <div class="axisubs-fields-content">
-                 <input type="text" name="axisubs[config][daily_target]" placeholder="5" id="axisuba_config_daily_target" value="{{ all['meta'][all['ID']~'_axisubs_config_daily_target'] }}"/>
-                 <span class="help-text">Target for daily subscription.</span>
-             </div>
-         </div>
-         <div class="axisubs-fields">
-             <div class="axisubs-fields-label">
-                 <label for="axisuba_config_all_time_target">All Time Target</label>
-             </div>
-             <div class="axisubs-fields-content">
-                 <input type="text" name="axisubs[config][all_time_target]" id="axisuba_config_all_time_target" placeholder="2000" value="{{ all['meta'][all['ID']~'_axisubs_config_all_time_target'] }}"/>
-                 <span class="help-text">Total target amount for All time.</span>
-             </div>
-         </div>
          <div class="axisubs-fields">
              <div class="axisubs-fields-label">
                  <input type="hidden" name="task" value="save"/>
@@ -98,11 +81,14 @@
                  <input type="hidden" name="id" value="{{ all['ID'] }}"/>
              </div>
              <div class="axisubs-fields-content">
+               <div class="page-btn">
                  <button class="btn page-title-action" type="submit">Save</button>
                  <a class="btn page-title-action" href="?page=dashboard-index">Cancel</a>
+               </div>
              </div>
          </div>
       </div>
+      <input type="hidden" name="site_url" value="{{ site_url }}" id="site_url"/>
   </form>
-
+</div>
 {% endblock %}

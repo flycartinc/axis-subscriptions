@@ -2,8 +2,8 @@
 
 {% block body %}
 <div class="axisubs wrap">
-  <h1>{{ pagetitle }}
-  </h1>
+  <h2>{{ pagetitle }}
+  </h2>
     {% set customer = data['customer'] %}
     {% set customerMeta = customer['meta'] %}
     {% set customerPrefix = customer['ID']~'_'~customer['post_type']~'_' %}
@@ -49,7 +49,7 @@
                   <label for="subscribe_start_on">Start Date</label>
               </div>
               <div class="axisubs-fields-content">
-                  <input type="text" class="" name="subscribe_start_on" id="subscribe_start_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
+                  <input type="text" class="axisubs_date" name="subscribe_start_on" id="subscribe_start_on" value="{{ subscriptionMeta[subscriptionPrefix~'start_on'] }}"/>
                   <span class="help-text">Specify this if you want to start this subscription at a future date. Further if the selected plan has 'Trial' period configured it will go into 'Trial' state when it starts on the above specified date.</span>
               </div>
           </div>
@@ -117,7 +117,7 @@
                   <input type="hidden" name="task" value="addNewSubscription"/>
                   <input type="hidden" name="sid" value="{{ subscription['ID'] }}"/>
               </div>
-              <div class="axisubs-fields-content">
+              <div class="axisubs-fields-content page-btn">
                   <button class="btn page-title-action" type="button" onclick="addNewSubscription()">Save</button>
                   <a class="btn page-title-action" href="?page=subscriptions-index">Cancel</a>
               </div>
@@ -125,4 +125,5 @@
       </div>
       <input type="hidden" id="site_url" value="{{ site_url }}"/>
   </form>
+</div>
 {% endblock %}

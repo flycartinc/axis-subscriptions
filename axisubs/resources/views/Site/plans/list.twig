@@ -1,6 +1,3 @@
-{% extends '@Axisubs/Admin/tabs/tab.twig' %}
-
-{% block body %}
 <div class="axisubs wrap">
     {{ message | raw }}
     <form method="post" action="?p_id=1">
@@ -9,28 +6,22 @@
                 {% for item in items %}
                     <div class="axisubs-plans-con">
                         <div class="axisubs-plans-con-i">
-                            <div class="axisubs-plans-title">
+                            <div class="axisubs-plan-title">
                                 <h3>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</h3>
-                            </div>
-                            <div class="axisubs-plans-description">
-                                <p>{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</p>
-                            </div>
-                            <div class="axisubs-plans-cost">
-                                <div><span class="axisubs-plans-label-block">Price: </span>
-                                    <span class="axisubs-plans-text">
-                                        {% if item['meta'][item['ID']~'_axisubs_plans_price'] > 0 %}
-                                            {{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] }}
-                                        {% else %}
-                                            {{ currencyData['code']~'0' }}
-                                        {% endif %}
-                                    </span>
-                                </div>
+                                <span class="axisubs-price-text">
+                                    {% if item['meta'][item['ID']~'_axisubs_plans_price'] > 0 %}
+                                        {{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] }}
+                                    {% else %}
+                                        {{ currencyData['code']~'0' }}
+                                    {% endif %}
+                                </span>
                             </div>
                             {% if item['meta'][item['ID']~'_axisubs_plans_setup_cost'] > 0 %}
                                 <div class="axisubs-plans-setup_cost">
                                     <div><span class="axisubs-plans-label-block">Setup cost: </span><span class="axisubs-plans-text">{{ currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_setup_cost'] }}</span></div>
                                 </div>
                             {% endif %}
+                            {{ item['tax_info_html'] | raw }}
                             {% set type = item['meta'][item['ID']~'_axisubs_plans_type'] %}
                             {% if (type == 'renewal_with_trial' or type == 'recurring_with_trial') %}
                                 {% if item['meta'][item['ID']~'_axisubs_plans_trial_period'] > 0 %}
@@ -56,12 +47,11 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="axisubs-plans-description">
+                                <p>{{ item['meta'][item['ID']~'_axisubs_plans_description'] }}</p>
+                            </div>
                             <div class="axisubs-plans-duration">
-                                <!--<input type="hidden" name="slug" value="" id="slug"/>
-                                <button type="button" class="btn" onclick="jQuery('#slug').val('{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}');this.form.submit();">Subscribe</button>-->
-                                <!--<a class="axisubs-btn" href="index.php?axisubs_plan=plans&task=view&slug={{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}&id={{ item['ID'] }}">Subscribe</a>-->
                                 <a class="axisubs-btn" href="{{ item['plan_url'] }}">Subscribe</a>
-
                             </div>
                         </div>
                     </div>
@@ -74,4 +64,3 @@
         </div>
     </form>
 </div>
-{% endblock %}

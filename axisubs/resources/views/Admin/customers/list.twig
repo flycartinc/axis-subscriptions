@@ -6,30 +6,50 @@
         {% set choose_customer = 1 %}
     {% endif %}
     <div class="axisubs wrap">
-        <h1>{{ pagetitle }}
-            <a class="page-title-action" href="?page=customers-index&task=edit">Add New</a>
-        </h1>
+        <h2>{{ pagetitle }}
+        </h2>
+        <div class="page-btn">
+          <a class="page-title-action" href="?page=customers-index&task=edit">Add New</a>
+        </div>
         {% if choose_customer %}
             <div class="info">
                 <p>Choose customer First</p>
             </div>
         {% endif %}
         <form method="post" action="?page=customers-index{% if choose_customer %}&flag=choose_customer{% endif %}" id="axisubs_list_form">
-            <div class="axisubs-plans">
-                <div class="axisubs-plans">
-                    {% for item in items %}
-                        {% set metaPrefix = item['ID']~'_'~item['post_type']~'_'  %}
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="col-data">
-                                    <span class="col-data-title">Customer Id: </span>
-                                    <span class="col-data-content">{{ item['ID'] }}</span>
-                                </div>
-                                <div class="col-data">
-                                    <span class="col-data-title">Subscriptions: </span>
+            <div class="axisubs-customers">
+                <div class="axisubs-list">
+                    <table class="wp-list-table widefat fixed striped posts">
+                        <thead>
+                        <tr>
+                            <th scope="col" id="title" class="manage-column column-cust-id column-primary"><span>Customer Id</span></th>
+                            <th scope="col" id="title" class="manage-column column-subscriptions column-primary"><span>Subscriptions</span></th>
+                            <th scope="col" id="name" class="manage-column column-name">Name</th>
+                            <th scope="col" id="email" class="manage-column column-email">Email</th>
+                            <th scope="col" id="country" class="manage-column column-country">Country</th>
+                            <th scope="col" id="phone" class="manage-column column-phone">Phone</th>
+                            <th scope="col" id="created-on" class="manage-column column-created-on">Created On</th>
+                            {% if choose_customer %}
+                              <th scope="col" id="created-on" class="manage-column column-created-on"></th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody id="the-list">
+                        {% for item in items %}
+                            {% set metaPrefix = item['ID']~'_'~item['post_type']~'_'  %}
+                            <tr id="customer-1" class="iedit author-self level-0 customer-1 type-customer-list status-publish format-standard hentry category-uncategorized">
+
+                                <td class="title column-title has-row-actions column-primary page-title" data-colname="Title"><strong>{{ item['ID'] }}</strong>
+                                    <div class="row-actions">
+                                        <span class="edit"><a href="?page=customers-index&task=edit&id={{ item['meta'][metaPrefix~'user_id'] }}">Edit</a> | </span>
+                                        <a href="?page=customers-index&task=delete&id={{ item['meta'][metaPrefix~'user_id'] }}">Delete</a> | </span><span class="view"><a href="?page=customers-index&task=view&id={{ item['meta'][metaPrefix~'user_id'] }}">View</a></span>
+                                    </div>
+                                    <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                                </td>
+                                <td class="subscription column-subscription" data-colname="subscription">
                                     {% if item['subscription'] is empty %}
                                         {% set customerSubs = 'No subscriptions' %}
-                                        <span class="col-data-content">{{ customerSubs }}</span>
+                                        <span>{{ customerSubs }}</span>
                                     {% else %}
                                         {% set plan = item['subscription']['0']['plan'] %}
                                         {% set planMeta = item['subscription']['0']['plan']['meta'] %}
@@ -42,59 +62,113 @@
                                             </div>
                                         </div>
                                     {% endif %}
-
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="col-data">
-                                    <span class="col-data-title">Name: </span>
+                                </td>
+                                <td class="name column-name" data-colname="Name">
                                     <span class="col-data-content">{{ item['meta'][metaPrefix~'first_name']~' '~item['meta'][metaPrefix~'last_name'] }}</span>
-                                </div>
-                                <div class="col-data">
-                                    <span class="col-data-title">Email: </span>
-                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'email'] }}</span>
-                                </div>
-                                <div class="col-data">
-                                    <span class="col-data-title">Country: </span>
+                                </td>
+                                <td class="email column-email" data-colname="Email">
+                                    <span>{{ item['meta'][metaPrefix~'email'] }}</span>
+                                </td>
+                                <td class="country column-country" data-colname="country">
                                     {% set country = data['countries'][item['meta'][metaPrefix~'country']] %}
-                                    <span class="col-data-content">{{ country }}</span>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="col-data">
-                                    <span class="col-data-title">Phone: </span>
-                                    <span class="col-data-content">{{ item['meta'][metaPrefix~'phone'] }}</span>
-                                </div>
-                                <div class="col-data">
-                                    <span class="col-data-title">Created On: </span>
-                                    <span class="col-data-content">{{ item['post_date'] }}</span>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="col-data">
-                                    {% if choose_customer %}
-                                        <span class="col-data-content">
-                                            <a class="page-title-action" href="?page=subscriptions-index&task=edit&user_id={{ item['meta'][metaPrefix~'user_id'] }}">Choose customer</a>
-                                        </span>
-                                    {% else %}
+                                    <span>{{ country }}</span>
+                                </td>
+                                <td class="phone column-phone" data-colname="phone">
+                                    <span>{{ item['meta'][metaPrefix~'phone'] }}</span>
+                                </td>
+                                <td class="created-on column-created-on" data-colname="Created-On">
+                                    <span>{{ item['post_date'] }}</span>
+                                </td>
+                                {% if choose_customer %}
+                                <td>
                                     <span class="col-data-content">
-                                        <a class="page-title-action" href="?page=customers-index&task=view&id={{ item['meta'][metaPrefix~'user_id'] }}">View</a>
+                                        <a href="?page=subscriptions-index&task=edit&user_id={{ item['meta'][metaPrefix~'user_id'] }}">Choose customer</a>
                                     </span>
-                                    <span class="col-data-content">
-                                        <a class="page-title-action" href="?page=customers-index&task=edit&id={{ item['meta'][metaPrefix~'user_id'] }}">Edit</a>
-                                    </span>
-                                    <span class="col-data-content">
-                                        <a class="page-title-action" href="?page=customers-index&task=delete&id={{ item['meta'][metaPrefix~'user_id'] }}">Delete</a>
-                                    </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="row">
-                            No customer available.
-                        </div>
-                    {% endfor %}
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {#<div class="row">#}
+                                {#<div class="col-3">#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Customer Id: </span>#}
+                                        {#<span class="col-data-content">{{ item['ID'] }}</span>#}
+                                    {#</div>#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Subscriptions: </span>#}
+                                        {#{% if item['subscription'] is empty %}#}
+                                            {#{% set customerSubs = 'No subscriptions' %}#}
+                                            {#<span class="col-data-content">{{ customerSubs }}</span>#}
+                                        {#{% else %}#}
+                                            {#{% set plan = item['subscription']['0']['plan'] %}#}
+                                            {#{% set planMeta = item['subscription']['0']['plan']['meta'] %}#}
+                                            {#{% set subcriptionMeta = item['subscription']['0']['meta'] %}#}
+                                            {#{% set customerSubs = planMeta[plan['ID']~'_axisubs_plans_name'] %}#}
+                                            {#<div class="load_more_subscriptions" data-attr="{{ item['meta'][metaPrefix~'user_id'] }}">#}
+                                                {#<a>{{ customerSubs }}</a><span class="more_subscriptions">...</span>#}
+                                                {#<span class="more_subscriptions-data-left-arrow"></span>#}
+                                                {#<div class="more_subscriptions-data">#}
+                                                {#</div>#}
+                                            {#</div>#}
+                                        {#{% endif %}#}
+
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="col-3">#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Name: </span>#}
+                                        {#<span class="col-data-content">{{ item['meta'][metaPrefix~'first_name']~' '~item['meta'][metaPrefix~'last_name'] }}</span>#}
+                                    {#</div>#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Email: </span>#}
+                                        {#<span class="col-data-content">{{ item['meta'][metaPrefix~'email'] }}</span>#}
+                                    {#</div>#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Country: </span>#}
+                                        {#{% set country = data['countries'][item['meta'][metaPrefix~'country']] %}#}
+                                        {#<span class="col-data-content">{{ country }}</span>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="col-3">#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Phone: </span>#}
+                                        {#<span class="col-data-content">{{ item['meta'][metaPrefix~'phone'] }}</span>#}
+                                    {#</div>#}
+                                    {#<div class="col-data">#}
+                                        {#<span class="col-data-title">Created On: </span>#}
+                                        {#<span class="col-data-content">{{ item['post_date'] }}</span>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="col-3">#}
+                                    {#<div class="col-data">#}
+                                        {#{% if choose_customer %}#}
+                                            {#<span class="col-data-content">#}
+                                                {#<a class="page-title-action" href="?page=subscriptions-index&task=edit&user_id={{ item['meta'][metaPrefix~'user_id'] }}">Choose customer</a>#}
+                                            {#</span>#}
+                                        {#{% else %}#}
+                                        {#<span class="col-data-content">#}
+                                            {#<a class="page-title-action" href="?page=customers-index&task=view&id={{ item['meta'][metaPrefix~'user_id'] }}">View</a>#}
+                                        {#</span>#}
+                                        {#<span class="col-data-content">#}
+                                            {#<a class="page-title-action" href="?page=customers-index&task=edit&id={{ item['meta'][metaPrefix~'user_id'] }}">Edit</a>#}
+                                        {#</span>#}
+                                        {#<span class="col-data-content">#}
+                                            {#<a class="page-title-action" href="?page=customers-index&task=delete&id={{ item['meta'][metaPrefix~'user_id'] }}">Delete</a>#}
+                                        {#</span>#}
+                                        {#{% endif %}#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {% else %}
+                            <tr>
+                                <td colspan="7">
+                                    <div class="row">
+                                        No customer available.
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
                 {{ paginationD['limitbox'] | raw }}
                 {{ paginationD['links'] | raw }}

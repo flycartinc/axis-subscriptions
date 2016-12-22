@@ -11,6 +11,7 @@ use Axisubs\Models\Admin\Config as ModelConfig;
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\Countries;
 
 class Config extends Controller
 {
@@ -22,8 +23,18 @@ class Config extends Controller
     public function index()
     {
         $all = ModelConfig::all();
+        $configProvince = $configCountry = '';
+        if(!empty($all)){
+            $configPrefix = $all->ID.'_'.$all->post_type.'_';
+            $configProvince = $all->meta[$configPrefix.'region'];
+            $configCountry =$all->meta[$configPrefix.'country'];
+        }
+        $modelZone = $this->getModel('Zones');
+        $data['country'] = Countries::getCountriesSelectBox($configCountry, 'axisubs[config][country]', 'axisubs_config_country', '');
+        $data['province'] = $modelZone->getProvinceSelectBox($configCountry, $configProvince, 'axisubs[config][region]', 'axisubs_config_region', '');
         $pagetitle = "Configuration";
-        return view('@Axisubs/Admin/config/edit.twig', compact('all', 'pagetitle'));
+        $site_url = get_site_url();
+        return view('@Axisubs/Admin/config/edit.twig', compact('all', 'pagetitle', 'data', 'site_url'));
     }
 
     /**

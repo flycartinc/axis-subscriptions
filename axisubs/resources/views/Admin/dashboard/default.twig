@@ -2,11 +2,12 @@
 
 {% block body %}
 <div class="axisubs axisubs-bs3 wrap">
-    <h1>{{ pagetitle }}
-    </h1>
+    <div class="head-title"><span> Axis Subscriptions </span><small>version {{ data['plugin_details']['Version'] }}</small></div>
+    <h2>{{ pagetitle }}
+    </h2>
     <div class="container-fluid">
         <div class="row">
-            <div class= "col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class= "col-xs-12 col-sm-12 col-md-8 col-lg-8 dashboard-content">
                 <div class="dashboard-menu-cont">
                     <div class="dashboard-menu-item-c">
                         <div class="dashboard-menu-each-i-l plan-color-dark">
@@ -108,79 +109,150 @@
                     </div>
                 </div>
 
-                <h3>Target Report</h3>
-                <!-- Chart -->
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class= "col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <div class="circleborder">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <div id="circle1" ></div>
-                                    </div>
-                                    {% if data['todaySales'] == 0 %}
-                                        {% set todayTargetPercent = 0 %}
-                                    {% else %}
-                                        {% set todayTargetPercent = ((data['todaySales']/data['todayTarget'])*100) %}
-                                        {% if todayTargetPercent > 100 %}
-                                            {% set todayTargetPercent = 100 %}
-                                        {% endif %}
-                                    {% endif %}
-                                    <div class="col-md-6 col-sm-6 col-xs-6 p-t-40">
-                                        <h3 class="text-success counter">{{ data['todaySales']  }}</h3>
-                                        <p class="text-muted text-nowrap">Today</p>
-                                        <p class="text-muted text-nowrap"><b>Target: </b>{{ data['todayTarget'] }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <div class="circleborder">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <div id="circle2" ></div>
-                                    </div>
-                                    {% if data['totalPrice'] == 0 %}
-                                        {% set totalTargetPercent = 0 %}
-                                    {% else %}
-                                        {% set totalTargetPercent = ((data['totalPrice']/data['totalTarget'])*100) %}
-                                        {% if totalTargetPercent > 100 %}
-                                            {% set totalTargetPercent = 100 %}
-                                        {% endif %}
-                                    {% endif %}
-                                    <div class="col-md-6 col-sm-6 p-t-40 col-xs-6">
-                                        <h3 class="text-primary"><span class="counter">{{ data['totalPrice'] }}</span></h3>
-                                        <p class="text-muted text-nowrap">All time</p>
-                                        <p class="text-muted text-nowrap"><b>Target: </b>{{ data['totalTarget'] }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <div class="circleborder">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <div id="circle3" ></div>
-                                    </div>
-                                    {% if data['totalPending'] == 0 %}
-                                        {% set pendingTargetPercent = 0 %}
-                                    {% else %}
-                                        {% set pendingTargetPercent = ((data['totalPending']/data['subscriptionCount'])*100) %}
-                                        {% if pendingTargetPercent > 100 %}
-                                            {% set pendingTargetPercent = 100 %}
-                                        {% endif %}
-                                    {% endif %}
-                                    <div class="col-md-6 col-sm-6 p-t-40 col-xs-6">
-                                        <h3 class="text-danger counter">{{ data['totalPending'] }}</h3>
-                                        <p class="text-muted text-nowrap">Pending</p>
-                                        <p class="text-muted text-nowrap"><b>Total: </b>{{ data['subscriptionCount'] }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <h3>Last 5 Subscriptions</h3>
+                <!-- Last 5 Subscriptions -->
+                <div class="axisubs-plans">
+                    <div class="axisubs-plan-list">
+                        <table class="wp-list-table widefat fixed striped plans">
+                            <thead>
+                            <tr>
+                                <th scope="col" id="name" class="manage-column column-name column-primary"><span>ID</span></th>
+                                <th scope="col" id="status" class="manage-column column-status"><span>Plan Name</span></th>
+                                <th scope="col" id="p-slug" class="manage-column column-planslug"><span>Total Cost</span></th>
+                                <th scope="col" id="period" class="manage-column column-period"><span>Status</span></th>
+                            </tr>
+                            </thead>
+                            <tbody id="the-list">
+                            {% for subscribe in data['last_five_subscription'] %}
+                                {% set plan = subscribe['plan'] %}
+                                {% set planMeta = subscribe['plan']['meta'] %}
+                                {% set meta = subscribe['meta'] %}
+                                <tr id="plan-1" class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                    <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                        <div class="plan_id">
+                                            <a class="" href="{{ '?page=subscriptions-index&sid='~subscribe['ID'] }}">
+                                                {{ subscribe['ID'] }}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="status column-status" data-colname="Status">
+                                        <span>{{ planMeta[plan['ID']~'_axisubs_plans_name'] }}</span>
+                                    </td>
+                                    <td class="slug column-slug" data-colname="Slug">
+                                        <span>{{ currencyData['code']~meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}</span>
+                                    </td>
+                                    <td class="period column-period" data-colname="Period">
+                                        {% set statusText = data['status_codes'] %}
+                                        <span class="axisubs-data-content">{{ statusText[meta[subscribe['ID']~'_axisubs_subscribe_status']] | raw }}</span>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="">
+                                            No subscriptions available.
+                                        </div>
+                                    <td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+                <h3>Statistics</h3>
+                <!-- Statistics -->
+                <div class="axisubs-statistics_con">
+                    <table class="wp-list-table widefat fixed striped plans">
+                        <tbody id="the-list">
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>Last year</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['last_year_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['last_year_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>This year</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['this_year_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['this_year_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>Last month</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['last_month_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['last_month_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>This month</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['this_month_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['this_month_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>Last 7 Days</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['last_7days_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['last_7days_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>Yesterday</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['yesterday_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['yesterday_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>Today</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                    <span>{{ data['today_statistics']['total'] }}</span>
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ currencyData['code']~data['today_statistics']['total_income'] }}</span>
+                                </td>
+                            </tr>
+                            <tr class="iedit author-self level-0 plan-1 type-plan-list status-publish format-standard hentry category-uncategorized">
+                                <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title"><strong>{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</strong>
+                                    <span>Total active subscriptions</span>
+                                </td>
+                                <td class="status column-status" data-colname="Status">
+                                </td>
+                                <td class="slug column-slug" data-colname="Slug">
+                                    <span>{{ data['total_active_subscriptions'] }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <input type="hidden" id="site_url" value="{{ site_url }}"/>
             </div>
@@ -195,6 +267,12 @@
                             <b>[AxisubsAllPlans]</b> - Helps to load all Plans
                         </div>
                         <div class="dashboard-instruc-code">
+                            <b>[AxisubsSelectedPlans id=5]</b> - Helps to load a single Plan using plan id
+                        </div>
+                        <div class="dashboard-instruc-code">
+                            <b>[AxisubsSelectedPlans id=5,6]</b> - Helps to load a multiple Plans using plan id
+                        </div>
+                        <div class="dashboard-instruc-code">
                             <b>[AxisubsAllSubscriptions]</b> - Helps to load users(own) Subscriptions
                         </div>
                         <div class="dashboard-instruc-code">
@@ -205,6 +283,7 @@
             </div>
         </div>
     </div>
+</div>
     <script type="application/javascript">
         if (typeof(axisubs) == 'undefined') {
             var axisubs = {};

@@ -1,0 +1,64 @@
+<div class="axisubs wrap">
+    <h2>{{ pagetitle }}
+    </h2>
+    <form method="post" id="tax_form" action="?page=app-index&task=appTask&p=axisubs-app-taxes">
+        <div class="axisubs-fields-con">
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_tax_tax_rate_name">Tax Name</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[tax][tax_rate_name]" id="axisub_tax_tax_rate_name" value="{{ item['tax_rate_name'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisubs_tax_tax_rate_country">Country</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    {{ data['country'] | raw }}
+                    <span class="help-text"></span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisubs_tax_tax_rate_state">Province</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    {{ data['province'] | raw }}
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_tax_tax_rate">Tax Rate (%)</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <input type="text" class="required" name="axisubs[tax][tax_rate]" id="axisub_tax_tax_rate" value="{{ item['tax_rate'] }}"/>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <input type="hidden" name="id" value="{{ item['axisubs_taxrate_id'] }}" id="tax_id"/>
+                    <input type="hidden" name="task" value="appTask"/>
+                    <input type="hidden" name="apptask" value="save"/>
+                    <input type="hidden" name="site_url" value="{{ site_url }}" id="site_url"/>
+                </div>
+                <div class="axisubs-fields-content page-btn">
+                    <button type="button" onclick="validateTaxForm()" class="btn page-title-action">Save</button>
+                    <a href="?page=app-index&task=view&p=axisubs-app-taxes" class="btn page-title-action">Cancel</a>
+                </div>
+            </div>
+        </div>
+     </form>
+</div>
+<script type="application/javascript">
+    // For validating Form
+    function validateTaxForm(){
+        (function($){
+            var valid = validateRequiredFields('#tax_form');
+            if(valid){
+                $('#tax_form').submit();
+            }
+        })(axisubs.jQuery);
+    }
+</script>

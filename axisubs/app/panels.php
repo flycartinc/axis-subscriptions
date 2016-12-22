@@ -5,7 +5,7 @@
 $panel->add([
     'type'   => 'panel',
     'as'     => 'dashboard',
-    'title'  => 'Axisubs',
+    'title'  => '<div style="padding: 0px 8px;">Axis Subscriptions</div>',
     'rename' => 'Dashboard',
     'slug'   => 'dashboard-index',
     'uses'   => __NAMESPACE__ . '\Controllers\Admin\Dashboard@execute'

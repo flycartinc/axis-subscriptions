@@ -17,6 +17,8 @@ use Axisubs\Models\Admin\Customers;
 use Axisubs\Helper\DateFormat;
 use Events\Event;
 use Axisubs\Controllers\Controller;
+use Axisubs\Helper\Apps;
+use Axisubs\Helper\Common;
 
 class Plans extends Post{
     /**
@@ -38,6 +40,7 @@ class Plans extends Post{
      * @var bool
      */
     public $timestamps = false;
+    public $additionalPrice = array();
 
     public static $_total;
     public static $_start;
@@ -115,29 +118,32 @@ class Plans extends Post{
     /**
      * Load plans for front end
      * */
-    public static function allFrontEndPlans(){
+    public static function allFrontEndPlans($ids = ''){
         $countrollerOb = new Controller();
         $items = parent::all()->where('post_type', 'axisubs_plans');
-        /*$postO = new Post();
-        $items = $postO->where('post_type', 'axisubs_plans')->meta()->where('meta_key','like','%_axisubs_plans_status')
-            ->where('meta_value',1)->get();
-        foreach ($items as $key=>$val){
-            if($key == 'ID'){
-                $valid = Post::type('axisubs_plans')->meta()->where('');
-            }
-        }
 
-        $valid = PostMeta::where('meta_key','like','%_axisubs_plans_status')
-            ->where('meta_value',1)
-            ->pluck('post_id');
-        dd($items);*/
+        $selectedIds = array();
+        if($ids != ''){
+            $selectedIds = explode(',', $ids);
+        }
 
         if(count($items)){
             foreach ($items as $key => $item){
+                $unsetRow = 0;
                 $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
                 $item->plan_url = $countrollerOb->getAxiSubsURLs('plan', 'view', $item->ID, $item->meta[$item->ID.'_axisubs_plans_slug']);
                 if($item->meta[$item->ID.'_axisubs_plans_status'] == "0"){
                     unset($items[$key]);
+                    $unsetRow = 1;
+                }
+                if(!empty($selectedIds)){
+                    if(!in_array($item->ID, $selectedIds)){
+                        unset($items[$key]);
+                        $unsetRow = 1;
+                    }
+                }
+                if(!$unsetRow) {
+                    $item = Plans::loadAddtionalPrices($item);
                 }
             }
         }
@@ -151,23 +157,40 @@ class Plans extends Post{
     public static function loadPlan($id, $backend = 0){
         $item = Post::where('post_type', 'axisubs_plans')->find($id);
         if($item) {
-            $countrollerOb = new Controller();
-            $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
-            if($backend){
-                $meta['allow_setupcost'] = 1;//count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
-            } else {
-                $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
-                $item->plan_url = $countrollerOb->getAxiSubsURLs('plan', 'view', $item->ID, $meta[$item->ID.'_axisubs_plans_slug']);
-            }
-            if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost']) && $meta['allow_setupcost']) {
-                $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'] + $meta[$item->ID . '_axisubs_plans_setup_cost'];
-            } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
-                $meta['total_price'] = $meta[$item->ID . '_axisubs_plans_price'];
-            } else {
-                $meta['total_price'] = 0;
-            }
-            $item->meta = $meta;
+            $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+            $item = Plans::loadAddtionalPrices($item, $backend);
         }
+        return $item;
+    }
+
+    /**
+     * To load additional price like tax/coupon
+     * */
+    public static function loadAddtionalPrices($item, $backend = 0){
+        $countrollerOb = new Controller();
+        $meta = $item->meta;
+        if($backend){
+            $meta['allow_setupcost'] = 1;//count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+        } else {
+            $meta['allow_setupcost'] = count(Plans::getSubscribedDetails($item->ID))? 0 : 1;
+            $item->plan_url = $countrollerOb->getAxiSubsURLs('plan', 'view', $item->ID, $meta[$item->ID.'_axisubs_plans_slug']);
+        }
+        $plansObj = Plans::getInstance();
+        if(isset($meta[$item->ID.'_axisubs_plans_price']) && isset($meta[$item->ID.'_axisubs_plans_setup_cost']) && $meta['allow_setupcost']) {
+            $plansObj->price = $meta[$item->ID . '_axisubs_plans_price'];
+            $plansObj->setup_cost = $meta[$item->ID . '_axisubs_plans_setup_cost'];
+        } else if(isset($meta[$item->ID.'_axisubs_plans_price'])){
+            $plansObj->price = $meta[$item->ID . '_axisubs_plans_price'];
+            $plansObj->setup_cost = 0;
+        } else {
+            $plansObj->price = 0;
+            $plansObj->setup_cost = 0;
+        }
+        $totalCost = $plansObj->getTotalPrice();
+        $meta['total_price'] = $totalCost;
+        $meta['original_price'] = $totalCost;
+        $item->meta = $meta;
+        $plansObj->additionalPrice($item);
         return $item;
     }
 
@@ -203,7 +226,6 @@ class Plans extends Post{
             $postTable->post_type = 'axisubs_plans';
             $postTable->save();
         }
-
         foreach ($post['axisubs']['plans'] as $key => $val) {
             $key = $postTable->ID . '_axisubs_plans_' . $key;
             if(is_array($val)){
@@ -279,6 +301,22 @@ class Plans extends Post{
             $subscribers[$key] = $item;
         }
         return $subscribers;
+    }
+
+    /**
+     * get Plan By slug
+     * */
+    public static function getPlanBySlug($slug){
+        $plans = PostMeta::where('meta_key','like','%_axisubs_plans_slug')
+            ->where('meta_value', $slug)->orderBy('post_id','desc')
+            ->pluck('post_id');
+
+        foreach($plans as $key => $value){
+            $item = Post::where('post_type', 'axisubs_plans')->find($value);
+            $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+//            $plans[$key] = $item;
+        }
+        return $item;
     }
 
     /**
@@ -365,6 +403,8 @@ class Plans extends Post{
         }
         //For storing User details
         Plans::updateUserDetails($post['axisubs']['subscribe']);
+        Common::setCustomerDetailsInSession();
+        $plans = Plans::loadPlan($plans->ID);
 
         //check already has active or future subscriptions
         $existAlready = Plans::getSubscribedDetails($plans->ID);
@@ -396,6 +436,7 @@ class Plans extends Post{
             }
 
         }
+
         //Calculate End Date
         $endDate = Plans::calculateEndDate($startDate, $plans);
 
@@ -404,7 +445,11 @@ class Plans extends Post{
         $this->existAlready = $existAlready;
 
         //calculate Total price
-        $totalCost = $this->getTotalPrice();//$price+$setup_cost;
+        if(isset($plans->meta['total_price']) && $plans->meta['total_price']>0){
+            $totalCost = $plans->meta['total_price'];
+        } else {
+            $totalCost = $this->getTotalPrice();//$price+$setup_cost;
+        }
 
         $payment_type = '';
         if(isset($post['payment'])){
@@ -422,6 +467,12 @@ class Plans extends Post{
             '_axisubs_subscribe_total_price' => $totalCost,
             '_axisubs_subscribe_payment_type' => $payment_type,
             '_axisubs_subscribe_payment_status' => "");
+
+        if(isset($plans->additionalPrice) && !empty($plans->additionalPrice)){
+            foreach ($plans->additionalPrice as $apKey => $additionalPrice) {
+                $extraFields['_axisubs_subscribe_'.$apKey] = $additionalPrice;
+            }
+        }
 
         $extraFields = array_merge($extraFields, $extraFieldsTrial);
 
@@ -810,6 +861,9 @@ class Plans extends Post{
         }
     }
 
+    /**
+     * Check for transaction ID
+     * */
     public function checkForTransactionId($trans_id){
         $subscription = PostMeta::where('meta_key','like','%_axisubs_subscribe_transaction_ref_id')
             ->where('meta_value', $trans_id)
@@ -818,6 +872,25 @@ class Plans extends Post{
             return false;
         } else {
             return $subscription;
+        }
+    }
+
+    /**
+     * Get all subscriptions based on profile Id
+     * */
+    public function getBySubscriptionProfileId($profile_id){
+        $subscription = PostMeta::where('meta_key','like','%_axisubs_subscribe_subscription_profile_id')
+            ->where('meta_value', $profile_id)
+            ->pluck('post_id');
+        if (empty($subscription)){
+            return false;
+        } else {
+            foreach($subscription as $key => $value){
+                $item[$key] = Post::where('post_type', 'axisubs_subscribe')->find($value);
+                $item[$key]->meta = $item[$key]->meta()->pluck('meta_value', 'meta_key')->toArray();
+            }
+
+            return $item;
         }
     }
 
@@ -921,8 +994,19 @@ class Plans extends Post{
                 $activeSubs = $this->checkForActiveSubscription($postDB);
                 $key = $subsPrefix.'status';
                 if(empty($activeSubs)){
-                    // Mark as Active
-                    return Plans::getInstance()->markActive($postDB);
+                    $dateFormat = DateFormat::getInstance();
+                    $todayDate = $dateFormat->getCarbonDate();
+                    $now_time = strtotime($todayDate);
+                    $key_start_date = $subsPrefix.'start_on';
+                    $startDate = $dateFormat->getCarbonDate($postDB->meta->$key_start_date);
+                    $starttime = strtotime($startDate);
+                    if($now_time>=$starttime) {
+                        // Mark as Active
+                        return Plans::getInstance()->markActive($postDB);
+                    } else {
+                        // Mark as Future
+                        return Plans::getInstance()->markFuture($postDB);
+                    }
                 } else {
                     // Mark as Future
                     return Plans::getInstance()->markFuture($postDB);
@@ -1031,6 +1115,11 @@ class Plans extends Post{
         Event::trigger( 'mailSubscriptionActive', $subscription->ID, 'filter');
         
         if($result){
+            //Trigger after Active subscription
+            $apps = new Apps();
+            //Load plugin for content after
+            $apps->loadHtml('runAfterActivateSubscription', $subscription->ID);
+
             //Add user Role
             $planKey = $subscription->ID.$subscriptionPrefix.'plan_id';
             $userKey = $subscription->ID.$subscriptionPrefix.'user_id';
@@ -1148,5 +1237,109 @@ class Plans extends Post{
         $statusKey = $subscription->ID.$subscriptionPrefix.'status';
         $subscription->meta->$statusKey = 'PENDING';
         return $subscription->save();
+    }
+
+    /**
+     * Pre process the plan
+     * */
+    public function preProcessPlan(&$item, &$data, $subscriber, $page = ''){
+        $apps = new Apps();
+        //Load plugin for content after
+        $content_in_price_list = $apps->loadHtml('loadContentInPriceList', array($item, $data, $subscriber, $page));
+        $data['content_in_price_list'] = $content_in_price_list;
+        
+        //Load plugin for content after
+        $content_after_price = $apps->loadHtml('loadContentAfterPrice', array($item, $data, $subscriber, $page));
+        $data['content_after_price'] = $content_after_price;
+    }
+
+    /**
+     * Pre process the plan
+     * */
+    public function preProcessBackendPlanListing(&$items, &$data){
+        $apps = new Apps();
+        //Load plugin for additional buttons
+        $buttons = $apps->loadHtml('loadButtonInBackendPlanList', array($items, $data));
+        $data['additional_buttons'] = $buttons;
+    }
+
+    /**
+     * Pre process the plan edit
+     * */
+    public function preProcessBackendPlanEdit(&$item, &$data){
+        $apps = new Apps();
+        //Load plugin for additional data
+        $returnData = $apps->loadHtml('loadAdditionalDataInBackendPlanEdit', array($item, $data));
+        $data['payment_additional_data'] = $returnData;
+    }
+
+    /**
+     * add Aditional price like coupon/tax
+     * */
+    public function additionalPrice(&$plan){
+//        Event::trigger( 'axisubs-app-additionalPrice', $plan, 'filter');
+        Event::trigger( 'axisubs-app-additionalPrice', array($plan));
+    }
+
+    /**
+     * To display Aditional price like coupon/tax
+     * */
+    public function preProcessSubscription(&$item, &$data){
+        $apps = new Apps();
+        //Load plugin for content after
+        $content_in_price_list = $apps->loadHtml('loadContentInSubscriptionPriceList', array($item, $data));
+        $data['aditionalPrices'] = $content_in_price_list;
+    }
+
+    /**
+     * get active subscriptions based on plan for an user
+     * */
+    public static function getActiveSubscriptionsBasedOnPlan($planId, $id = 0){
+        if($id){
+            $userId = $id;
+        } else {
+            $userId = get_current_user_id();
+            $countrollerOb = new Controller();
+        }
+        $subscribers = PostMeta::where('meta_key','like','%_axisubs_subscribe_user_id')
+            ->where('meta_value', $userId)->orderBy('post_id','desc')
+            ->pluck('post_id');
+
+        foreach($subscribers as $key => $value){
+            $item = Post::where('post_type', 'axisubs_subscribe')->find($value);
+//            if(!$id){
+//                $item->subscription_url = $countrollerOb->getAxiSubsURLs('subscribe', 'view', $value);
+//            }
+            $item->meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+//            $plan = Plans::loadPlan($item->meta[$item->ID.'_axisubs_subscribe_plan_id']);
+//            $item->plan = $plan;
+            $subscriptionPrefix = $item->ID.'_'.$item->post_type.'_';
+            if($item->meta[$subscriptionPrefix.'plan_id'] == $planId && $item->meta[$subscriptionPrefix.'status'] == 'ACTIVE'){
+                $subscribers[$key] = $item;
+            } else {
+                unset($subscribers[$key]);
+            }
+
+        }
+        return $subscribers;
+    }
+
+    /**
+     * To get all plan Names as an array
+     * */
+    public static function getAllPlanNamesByMeta(){
+        $plans = PostMeta::where('meta_key','like','%_axisubs_plans_name')
+            ->orderBy('post_id','desc')
+            ->pluck('meta_value', 'post_id')->toArray();
+
+        return $plans;
+    }
+
+    /**
+     * To display Aditional buttons like upgrade
+     * */
+    public function additionalButtonsInSubscription(&$subscribers){
+        $apps = new Apps();
+        $apps->loadHtml('loadButtonsInSubscribedList', $subscribers);
     }
 }

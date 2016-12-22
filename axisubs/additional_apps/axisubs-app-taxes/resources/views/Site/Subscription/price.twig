@@ -1,0 +1,32 @@
+{% set subscriptionPrefix = subscription['ID']~'_'~subscription['post_type']~'_' %}
+{% if(subscription['meta'][subscriptionPrefix~'tax_total']>0) %}
+    {% for key, tax_detail in data['tax_details'] %}
+        <tr>
+            <td>
+                {{ tax_detail.label~' ('~tax_detail.rate~'%)' }}
+            </td>
+            <td>
+                {{ data['currencyData']['code'] }}{{ tax_detail.price }}
+            </td>
+        </tr>
+    {% else %}
+    {% endfor %}
+    {% if(subscription['meta'][subscriptionPrefix~'discount_tax'] > 0) %}
+        <tr>
+            <td>
+                Discount Tax
+            </td>
+            <td>
+                {{ data['currencyData']['code'] }}{{ subscription['meta'][subscriptionPrefix~'discount_tax'] }}
+            </td>
+        </tr>
+    {% endif %}
+    <tr>
+        <td>
+            Total Tax
+        </td>
+        <td>
+            {{ data['currencyData']['code'] }}{{ subscription['meta'][subscriptionPrefix~'tax_total'] }}
+        </td>
+    </tr>
+{% endif %}

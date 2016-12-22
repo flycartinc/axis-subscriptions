@@ -158,6 +158,32 @@
                             </div>
                         </div>
                     </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_company">
+                                    Company
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set company = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_company'] %}
+                                <input type="text" value="{{ company }}" name="axisubs[subscribe][company]" id="axisubs_subscribe_company"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="axisubs-billinfo-f-c">
+                        <div class="axisubs-billinfo-f-i">
+                            <div class="axisubs-billinfo-f-label">
+                                <label for="axisubs_subscribe_vat_number">
+                                    Tax number
+                                </label>
+                            </div>
+                            <div class="axisubs-billinfo-f-field">
+                                {% set vat_number = user['meta'][user['ID']~'_axisubs_user_'~user_id~'_vat_number'] %}
+                                <input type="text" value="{{ vat_number }}" name="axisubs[subscribe][vat_number]" id="axisubs_subscribe_vat_number"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="axisubs-profile-message-con">
                     <div class="axisubs-profile-message-text hide message">
@@ -168,18 +194,28 @@
                     <input type="hidden" id="site_url" value="{{ site_url }}"/>
                     <div class="axisubs-profile-payment-i-block">
                         <div class="axisubs-profile-update-button hide">
-                            <button type="button" onclick="updateProfile();">Update</button>
-                            <button type="button" onclick="cancelProfileUpdate();">Cancel</button>
+                            <button class="axisubs-btn" type="button" onclick="updateProfile();">Update</button>
+                            <button class="axisubs-btn" type="button" onclick="cancelProfileUpdate();">Cancel</button>
                         </div>
                         <div class="axisubs-profile-view-button">
-                            <button type="button" onclick="editProfile();">Edit</button>
+                            <button class="axisubs-btn" type="button" onclick="editProfile();">Edit</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
         <script>
-            disableTags('#my_profile', '1');
+            if (typeof(axisubs) == 'undefined') {
+                var axisubs = {};
+            }
+            if (typeof(axisubs.jQuery) == 'undefined') {
+                axisubs.jQuery = jQuery.noConflict();
+            }
+            (function ($) {
+                $(document).ready(function () {
+                    disableTags('#my_profile', '1');
+                });
+            })(axisubs.jQuery);
         </script>
     {% else %}
         Please login to view your profile

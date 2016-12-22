@@ -6,8 +6,8 @@
 
    <div class="axisubs wrap">
       {% set user_id = customerMeta[customerPrefix~'user_id'] %}
-      <h1>{{ pagetitle }}
-      </h1>
+      <h2>{{ pagetitle }}
+      </h2>
       <form id="my_profile" method="post" action="?page=customers-index&task=edit&id={{ user_id }}">
          <div class="axisubs-fields-con">
             {% if(newuser) %}
@@ -184,7 +184,7 @@
                   <input type="hidden" name="id" value="{{ user_id }}"/>
                   <input type="hidden" id="site_url" name="site_url" value="{{ site_url }}"/>
                </div>
-               <div class="axisubs-fields-content">
+               <div class="axisubs-fields-content page-btn">
                   {% if(newuser) %}
                      <button class="btn page-title-action" type="button" onclick="addCustomer()">Save</button>
                      <input type="hidden" name="task" value="addCustomer"/>

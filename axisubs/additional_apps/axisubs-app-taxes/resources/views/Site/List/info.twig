@@ -1,0 +1,15 @@
+{% if item['additionalPrice']['tax_total'] > 0 %}
+    <div class="axisubs-plans-setup_cost">
+        <div>
+            <span class="axisubs-plans-label-block">
+            </span>
+            <span class="axisubs-plans-text">
+                {% if item['additionalPrice']['tax_type'] == 'including_tax' %}
+                    (Incl. {{ data['taxPercent'] }}% tax)
+                {% else %}
+                    (Excl. {{ data['taxPercent'] }}% tax)
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endif %}

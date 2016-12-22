@@ -14,6 +14,7 @@ use Axisubs\Helper\Pagination;
 use Axisubs\Models\Admin\Customers;
 use Axisubs\Controllers\Controller;
 use Axisubs\Helper\Currency;
+use Axisubs\Helper\PaymentPlugins;
 
 class Plan extends Controller
 {
@@ -32,10 +33,16 @@ class Plan extends Controller
         Plans::populateStates($http->all());
         // Load Listing layout
         $items = Plans::getItems();
+
+        //pre process the plan
+        $data['additional_buttons'] = '';
+        $model = $this->getModel('Plans', 'Site');
+        $model->preProcessBackendPlanListing($items, $data);
+
         $pagination = new Pagination(Plans::$_start, Plans::$_limit, Plans::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
-        return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items', 'paginationD', 'currencyData'));
+        return view('@Axisubs/Admin/plans/list.twig', compact('pagetitle', 'items', 'paginationD', 'currencyData', 'data'));
     }
 
     /**
@@ -69,7 +76,13 @@ class Plan extends Controller
                 $pagetitle = 'Edit Plan';
             }
         }
-        return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url'));
+        wp_enqueue_media();
+        $payment = new PaymentPlugins();
+        $data['plugin_url'] = AXISUBS_PLUGIN_URL;
+        $data['payment_plugins'] = $payment->getAllPaymentApps();
+        $model = $this->getModel('Plans', 'Site');
+        $model->preProcessBackendPlanEdit($item, $data);
+        return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url', 'data'));
     }
 
     /**
@@ -84,10 +97,15 @@ class Plan extends Controller
         if (isset($axisubPost['plans'])) {
             $result = Plans::savePlans($http->all());
             $pagetitle = 'Edit Plan';
+            $data['plugin_url'] = AXISUBS_PLUGIN_URL;
             if ($result) {
                 Notifier::success('Saved successfully');
                 $item = Plans::loadPlan($result);
-                return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url'));
+                $payment = new PaymentPlugins();
+                $data['payment_plugins'] = $payment->getAllPaymentApps();
+                $model = $this->getModel('Plans', 'Site');
+                $model->preProcessBackendPlanEdit($item, $data);
+                return view('@Axisubs/Admin/plan/edit.twig', compact('pagetitle', 'item', 'role_names', 'site_url', 'data'));
             } else {
                 $item = $axisubPost['plans'];
                 Notifier::error('Failed to save');

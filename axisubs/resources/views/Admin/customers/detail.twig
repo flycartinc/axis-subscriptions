@@ -1,9 +1,9 @@
 {% set customerMeta = item['meta'] %}
 {% set customerPrefix = item['ID']~'_'~item['post_type']~'_' %}
 <div class="axisubs wrap">
-   <div class="axisubs-plan_details-header">
+   <div class="axisubs-plan_details">
       <div class="axisubs-plan_details-title">
-         <h3>{{ pagetitle }}</h3>
+         <h2>{{ pagetitle }}</h2>
       </div>
       <div class="axisubs-plan-billinfo-con">
          <div class="axisubs-plan_details-title">
@@ -12,42 +12,42 @@
          <div class="axisubs-plan-billinfo-fields">
             <div class="axisubs-billinfo-f-c">
                <div class="axisubs-billinfo-f-i">
-                  <div class="axisubs-billinfo-f-label">
-                     Customer Name
-                  </div>
-                  <div class="axisubs-billinfo-f-field">
+                  <span class="axisubs-billinfo-f-label">
+                     Customer Name :
+                  </span>
+                  <span class="axisubs-billinfo-f-field">
                      {{ customerMeta[customerPrefix~'first_name'] }}
                      {{ customerMeta[customerPrefix~'last_name'] }}
-                  </div>
+                  </span>
                </div>
             </div>
             <div class="axisubs-billinfo-f-c">
                <div class="axisubs-billinfo-f-i">
-                  <div class="axisubs-billinfo-f-label">
-                     Email
-                  </div>
-                  <div class="axisubs-billinfo-f-field">
+                  <span class="axisubs-billinfo-f-label">
+                     Email :
+                  </span>
+                  <span class="axisubs-billinfo-f-field">
                      {{ customerMeta[customerPrefix~'email'] }}
-                  </div>
+                  </span>
                </div>
             </div>
             <div class="axisubs-billinfo-f-c">
                <div class="axisubs-billinfo-f-i">
-                  <div class="axisubs-billinfo-f-label">
-                     Address
-                  </div>
-                  <div class="axisubs-billinfo-f-field">
+                  <span class="axisubs-billinfo-f-label">
+                     Address :
+                  </span>
+                  <span  class="axisubs-billinfo-f-field">
                      {{ customerMeta[customerPrefix~'address_line1'] }},
                      {{ customerMeta[customerPrefix~'address_line2'] }},
                      {{ customerMeta[customerPrefix~'city'] }},
                      {{ data['province'] }},
                      {{ data['country'] }}
-                  </div>
+                  </span>
                </div>
             </div>
          </div>
          <div class="clear"></div>
-         <div class="axisubs_button_container">
+         <div class="axisubs_button_container page-btn">
             <a class="page-title-action" href="?page=customers-index&task=edit&id={{ customerMeta[customerPrefix~'user_id'] }}">Edit</a>
             <a class="btn page-title-action" href="?page=customers-index">Back</a>
          </div>
@@ -65,10 +65,10 @@
             {% set subscriptionMeta = subscription['meta'] %}
             {% set planPrefix = plan['ID']~'_axisubs_plans_' %}
             {% set subscriptionPrefix = subscription['ID']~'_axisubs_subscribe_' %}
-            <div class="item">
-               <span class="transaction-history-text">Plan Name: </span>{{ planMeta[planPrefix~'name'] }}
-               <span class="transaction-history-text">Price: </span>{{ subscriptionMeta[subscriptionPrefix~'total_price'] }}
-               <span class="transaction-history-text">Status: </span>{{ subscriptionMeta[subscriptionPrefix~'status'] }}
+            <div class="item-customer-details">
+               <span class="customer-info"><span class="transaction-history-text">Plan Name: </span>{{ planMeta[planPrefix~'name'] }}</span>
+               <span class="customer-info"><span class="transaction-history-text">Price: </span>{{ subscriptionMeta[subscriptionPrefix~'total_price'] }}</span>
+               <span class="customer-info"><span class="transaction-history-text">Status: </span>{{ subscriptionMeta[subscriptionPrefix~'status'] }}</span>
             </div>
          {% else %}
             No Subscription created

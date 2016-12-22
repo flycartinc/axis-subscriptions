@@ -2,8 +2,8 @@
 
 {% block body %}
 <div class="axisubs wrap">
-  <h1>{{ pagetitle }}
-  </h1>
+  <h2>{{ pagetitle }}
+  </h2>
   <form name="planForm" id="planForm" method="post" action="?page=plans-index" onsubmit="return validatePlan();">
      <div class="axisubs-fields-con">
          <div class="axisubs-fields">
@@ -39,6 +39,26 @@
          </div>
 
          <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_image">Image</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 {% if(item['meta'][item['ID']~'_axisubs_plans_image'] != '') %}
+                     {% set classUploadImg = 'show' %}
+                     {% set imagePath = item['meta'][item['ID']~'_axisubs_plans_image'] %}
+                 {% else %}
+                     {% set classUploadImg = 'hide' %}
+                     {% set imagePath = data['plugin_url']~'/resources/assets/images/ico_noimage.png' %}
+                 {% endif %}
+                 <button type="button" class="upload_image_button">Image</button>
+                 <img class="upload_image_preview" src="{{ imagePath }}" />
+                 <button type="button" data-path="{{ data['plugin_url'] }}/resources/assets/images/ico_noimage.png" class="upload_image_button_close {{ classUploadImg }}">X</button>
+                 <input type="hidden" name="axisubs[plans][image]" id="axisub_plan_image" value="{{ item['meta'][item['ID']~'_axisubs_plans_image'] }}"/>
+                 <input type="hidden" name="axisubs[plans][image_attachment_id]" id="axisub_plan_image_attachment_id" value="{{ item['meta'][item['ID']~'_axisubs_plans_image_attachment_id'] }}"/>
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
               <div class="axisubs-fields-label">
                   <label for="axisub_plan_description">Description</label>
               </div>
@@ -66,6 +86,21 @@
          <div class="axisubs-fields-plantypes-con-o loader-ajax-o">
              <div class="loader-ajax"></div>
              <div class="axisubs-fields-plantypes-c">
+             </div>
+         </div>
+
+         <div class="axisubs-fields">
+             <div class="axisubs-fields-label">
+                 <label for="axisub_plan_payment_plugins">Payment Plugins</label>
+             </div>
+             <div class="axisubs-fields-content">
+                 {% set paymentPlugins = item['meta'][item['ID']~'_axisubs_plans_payment_plugins']|split(',') %}
+                 <select name="axisubs[plans][payment_plugins][]" id="axisub_plan_payment_plugins" multiple size="5">
+                     {% for key, payment_plugins in data['payment_plugins'] %}
+                         <option value="{{ payment_plugins['pluginFolder'] }}" {% if payment_plugins['pluginFolder'] in paymentPlugins %} selected {% endif %}>{{ payment_plugins['Name'] }}</option>
+                     {% endfor %}
+                 </select>
+                 <span class="help-text">If not selected, it list all payment plugins in front end.</span>
              </div>
          </div>
 
@@ -105,15 +140,21 @@
                  <input type="hidden" name="post_type" value="axisubs_plans"/>
                  <input type="hidden" name="id" value="{{ item['ID'] }}"/>
              </div>
-             <div class="axisubs-fields-content">
+             <div class="axisubs-fields-content page-btn">
                  <button class="btn page-title-action" type="submit">Save</button>
                  <a href="?page=plans-index" class="btn page-title-action" >Cancel</a>
              </div>
          </div>
       </div>
       <input type="hidden" id="site_url" value="{{ site_url }}"/>
+      {{ data['payment_additional_data'] | raw }}
   </form>
     <script>
-        loadFieldsOfPlanType('{{ item['meta'][item['ID']~'_axisubs_plans_type'] }}', '{{ item['ID'] }}')
+        (function ($) {
+            $(document).ready(function () {
+                loadFieldsOfPlanType('{{ item['meta'][item['ID']~'_axisubs_plans_type'] }}', '{{ item['ID'] }}');
+            });
+        })(axisubs.jQuery);
     </script>
+</div>
 {% endblock %}

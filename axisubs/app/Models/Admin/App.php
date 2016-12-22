@@ -59,12 +59,32 @@ class App extends Post{
     /**
      * Get active payment Apps
      * */
-    public static function getActivePaymentApps(){
+    public static function getActivePaymentApps($active = 1){
         $allApps = App::getAllApps();
         $axisubsApps = array();
         foreach($allApps as $key => $value){
             $folderArray = explode('-', $value['pluginFolder']);
-            if($folderArray[2] == 'payment' && $value['active'] == '1'){
+            if($active) {
+                if ($folderArray[2] == 'payment' && $value['active'] == '1') {
+                    $axisubsApps[] = $value;
+                }
+            } else {
+                if ($folderArray[2] == 'payment') {
+                    $axisubsApps[] = $value;
+                }
+            }
+        }
+        return $axisubsApps;
+    }
+
+    /**
+     * Get active payment Apps
+     * */
+    public static function getActiveApps(){
+        $allApps = App::getAllApps();
+        $axisubsApps = array();
+        foreach($allApps as $key => $value){
+            if($value['active'] == '1'){
                 $axisubsApps[] = $value;
             }
         }

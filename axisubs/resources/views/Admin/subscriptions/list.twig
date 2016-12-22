@@ -1,79 +1,85 @@
 {% extends '@Axisubs/Admin/tabs/tab.twig' %}
 
 {% block body %}
+    {% set statusText = data['statusText'] %}
 <div class="axisubs wrap axis-head">
-    <h1>{{ pagetitle }}
-        <a class="page-title-action" href="?page=customers-index&flag=choose_customer">Add New</a>
-    </h1>
+    <h2>{{ pagetitle }}</h2>
+    <div class="page-btn">
+      <a class="page-title-action" href="?page=customers-index&flag=choose_customer">Add New</a>
+    </div>
     <form method="post" action="?page=subscriptions-index" id="axisubs_list_form">
-        {% set subscribers = items %}
-        <div class="axisubs-subscribed-con">
-            {% for subscribe in subscribers %}
-                {% set plan = subscribe['plan'] %}
-                {% set planMeta = subscribe['plan']['meta'] %}
-                {% set meta = subscribe['meta'] %}
-                <div class="axisubs-subscribed-i-con">
-                    <div class="axisubs-subscribed-i">
-                        <div class="axisubs-subscribed-i-block">
-                            <div class="axisubs-subscribed-block-data">
-                                <span class="axisubs-data-title">Subscription Id: </span>
-                                <span class="axisubs-data-content">{{ subscribe['ID'] }}</span>
+      <div class="subscriptions">
+          <div class="axisubs-list">
+              <table class="wp-list-table widefat fixed striped subscriptions">
+                  <thead>
+                    <tr>
+                        <th scope="col" id="id" class="manage-column column-name column-primary"><span>Id</span></th>
+                        <th scope="col" id="name" class="manage-column column-name column-primary"><span>Name</span></th>
+                        <th scope="col" id="date" class="manage-column column-name column-primary"><span>date</span></th>
+                        <th scope="col" id="cost" class="manage-column column-name column-primary"><span>Total cost</span></th>
+                        <th scope="col" id="status" class="manage-column column-name column-primary"><span>Status</span></th>
+                        <th scope="col" id="action" class="manage-column column-name column-primary"><span>Action</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="the-list">
+                    {% set subscribers = items %}
+                    {% for subscribe in subscribers %}
+                        {% set plan = subscribe['plan'] %}
+                        {% set planMeta = subscribe['plan']['meta'] %}
+                        {% set meta = subscribe['meta'] %}
+                        <tr id="subsription" class="iedit author-self type-plan-list status-publish format-standard hentry">
+                          <td class="id column-id has-row-actions column-primary plan-title" data-colname="Id">
+                            <strong>{{ subscribe['ID'] }}</strong>
+                            <div class="row-actions">
+                              <span>
+                                <span><a href="{{ '?page=subscriptions-index&sid='~subscribe['ID'] }}">View Details</a></span> |
+                                <span class="edit"><a href="{{ '?page=subscriptions-index&task=edit&user_id='~meta[subscribe['ID']~'_axisubs_subscribe_user_id']~'&sid='~subscribe['ID'] }}">Edit</a> | </span>
+                                <span><a href="?page=subscriptions-index&task=delete&id={{ subscribe['ID'] }}">Delete</a>  </span>
+                              </span>
                             </div>
-                            <div class="axisubs-subscribed-block-data">
-                                <span class="axisubs-data-title">Plan Name: </span>
-                                <span class="axisubs-data-content">{{ planMeta[plan['ID']~'_axisubs_plans_name'] }}</span>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                          </td>
+                          <td class="name column-name has-row-actions" data-colname="Name">
+                            {{ planMeta[plan['ID']~'_axisubs_plans_name'] }}
+                          </td>
+                          <td class="column-date has-row-actions" data-colname="Date">
+                            <div><b>Start-date:</b></div>{{ meta[subscribe['ID']~'_axisubs_subscribe_start_on'] }}
+                            <div><b>End-date:</b></div>{{ meta[subscribe['ID']~'_axisubs_subscribe_end_on'] }}
+                          </td>
+                          <td class="column-cost has-row-actions" data-colname="Total Cost">
+                            {{ currencyData['code']~meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}
+                          </td>
+                          <td class="column-status has-row-actions" data-colname="Status">
+                              <span class="axisubs-data-content">
+                                {{ statusText[meta[subscribe['ID']~'_axisubs_subscribe_status']] | raw }}
+                              </span>
+                          </td>
+                          <td class="column-action has-row-actions" data-colname="Actions">
+                            <div class="dropdown_subs">
+                                <div class="dropbtn">Select</div>
+                                <div class="dropdown-content">
+                                    {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] == 'PENDING' %}
+                                        <a href="?page=subscriptions-index&task=activate&id={{ subscribe['ID'] }}">Mark Active</a>
+                                    {% endif %}
+                                    {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] != 'PENDING' %}
+                                        <a href="?page=subscriptions-index&task=pending&id={{ subscribe['ID'] }}">Mark Pending</a>
+                                    {% endif %}
+                                    {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] != 'CANCELED' %}
+                                        <a href="?page=subscriptions-index&task=cancel&id={{ subscribe['ID'] }}">Mark Canceled</a>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="axisubs-subscribed-i-block">
-                            <div class="axisubs-subscribed-block-data">
-                                <span class="axisubs-data-title">Start Date: </span>
-                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_start_on'] }}</span>
-                            </div>
-                            <div class="axisubs-subscribed-block-data">
-                                <span class="axisubs-data-title">End Date: </span>
-                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_end_on'] }}</span>
-                            </div>
-                        </div>
-
-                        <div class="axisubs-subscribed-i-block">
-                            <div class="axisubs-subscribed-block-data">
-                                <span class="axisubs-data-title">Total Cost: </span>
-                                <span class="axisubs-data-content">{{ currencyData['code']~meta[subscribe['ID']~'_axisubs_subscribe_total_price'] }}</span>
-                            </div>
-                            <div class="axisubs-subscribed-block-data">
-                                <span class="axisubs-data-title">Status: </span>
-                                <span class="axisubs-data-content">{{ meta[subscribe['ID']~'_axisubs_subscribe_status'] }}</span>
-                            </div>
-                        </div>
-
-                        <div class="axisubs-subscribed-i-block">
-                            <div class="axisubs-subscribed-block-data">
-                                <a class="page-title-action" href="{{ '?page=subscriptions-index&sid='~subscribe['ID'] }}">View Details</a>
-                                <a class="page-title-action" href="{{ '?page=subscriptions-index&task=edit&user_id='~meta[subscribe['ID']~'_axisubs_subscribe_user_id']~'&sid='~subscribe['ID'] }}">Edit</a>
-                            </div>
-                            <div class="axisubs-subscribed-block-data">
-                                {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] == 'PENDING' %}
-                                    <a class="page-title-action" href="?page=subscriptions-index&task=activate&id={{ subscribe['ID'] }}">Mark Active</a>
-                                {% endif %}
-                                {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] != 'PENDING' %}
-                                    <a class="page-title-action" href="?page=subscriptions-index&task=pending&id={{ subscribe['ID'] }}">Mark Pending</a>
-                                {% endif %}
-                                {% if meta[subscribe['ID']~'_axisubs_subscribe_status'] != 'CANCELED' %}
-                                    <a class="page-title-action" href="?page=subscriptions-index&task=cancel&id={{ subscribe['ID'] }}">Mark Canceled</a>
-                                {% endif %}
-
-                                <a class="page-title-action" href="?page=subscriptions-index&task=delete&id={{ subscribe['ID'] }}">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="row">
-                    No subscription found.
-                </div>
-            {% endfor %}
-        </div>
+                          </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                          No subscription
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
         {{ paginationD['limitbox'] | raw }}
         {{ paginationD['links'] | raw }}
     </form>

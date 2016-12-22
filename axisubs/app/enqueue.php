@@ -1,56 +1,47 @@
 <?php namespace Axisubs;
 
 /** @var \Herbert\Framework\Enqueue $enqueue */
+class AxisubsEnqueue
+{
+    /**
+     * For loading style and script
+     * */
+    public static function axisubsEnqueueFiles()
+    {
+        if(is_admin()){
+            AxisubsEnqueue::addAdminStyle();
+        } else {
+            AxisubsEnqueue::addSiteStyle();
+        }
+    }
 
-/**
- * For Back end
-*/
-$enqueue->admin([
-    'as'  => 'adminCSS',
-    'src' => Helper::assetUrl('/css/admin.css'),
-]);
-$enqueue->admin([
-    'as'  => 'adminBootstrap3',
-    'src' => Helper::assetUrl('/css/axisubs_bootstrap.min.css'),
-]);
+    /**
+     * For loading admin style and script
+     * */
+    public static function addAdminStyle(){
+        wp_enqueue_style( 'axisubs_admin_style', Helper::assetUrl('/css/admin.css') );
+        wp_enqueue_style( 'axisubs_bootstrap_style', Helper::assetUrl('/css/axisubs_bootstrap.min.css') );
+        wp_enqueue_style( 'axisubs_jquery_style', Helper::assetUrl('/css/jquery-ui.min.css') );
 
-$enqueue->admin([
-    'as'     => 'adminJquery',
-    'src'    => Helper::assetUrl('/js/jquery-3.1.0.min.js'),
-    'filter' => [ 'panel' => '*' ]
-]);
-$enqueue->admin([
-    'as'     => 'adminDashboard',
-    'src'    => Helper::assetUrl('/js/jquery.circliful.min.js'),
-    'filter' => [ 'panel' => 'dashboard-index' ]
-]);
-$enqueue->admin([
-    'as'     => 'adminCommonJS',
-    'src'    => Helper::assetUrl('/js/common.js'),
-    'filter' => [ 'panel' => '*' ]
-]);
-$enqueue->admin([
-    'as'     => 'adminJS',
-    'src'    => Helper::assetUrl('/js/admin.js'),
-    'filter' => [ 'panel' => '*' ]
-]);
+        wp_enqueue_script("jquery");
+        wp_enqueue_script('jquery-ui-datepicker');
+        //wp_enqueue_script( 'axisubs_jquery_script', Helper::assetUrl('/js/jquery-3.1.0.min.js') );
+        wp_enqueue_script( 'axisubs_circliful_script', Helper::assetUrl('/js/jquery.circliful.min.js') );
+        wp_enqueue_script( 'axisubs_admin_script', Helper::assetUrl('/js/admin.js') );
+        wp_enqueue_script( 'axisubs_common_script', Helper::assetUrl('/js/common.js') );
 
-/**
- * For front end
- */
-$enqueue->front([
-    'as'  => 'frontCSS',
-    'src' => Helper::assetUrl('/css/style.css'),
-]);
-$enqueue->front([
-    'as'     => 'siteJquery',
-    'src'    => Helper::assetUrl('/js/jquery-3.1.0.min.js')
-]);
-$enqueue->front([
-    'as'     => 'siteCommonJS',
-    'src'    => Helper::assetUrl('/js/common.js')
-]);
-$enqueue->front([
-    'as'     => 'siteJS',
-    'src'    => Helper::assetUrl('/js/site.js')
-]);
+    }
+
+    /**
+     * For loading site style and script
+     * */
+    public static function addSiteStyle(){
+        wp_enqueue_style( 'axisubs_site_style', Helper::assetUrl('/css/style.css') );
+
+        wp_enqueue_script("jquery");
+        wp_enqueue_script('jquery-ui-datepicker');
+        //wp_enqueue_script( 'axisubs_jquery_script', Helper::assetUrl('/js/jquery-3.1.0.min.js') );
+        wp_enqueue_script( 'axisubs_site_script', Helper::assetUrl('/js/site.js') );
+        wp_enqueue_script( 'axisubs_common_script', Helper::assetUrl('/js/common.js') );
+    }
+}

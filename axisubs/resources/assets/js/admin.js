@@ -4,7 +4,6 @@ if (typeof(axisubs) == 'undefined') {
 if (typeof(axisubs.jQuery) == 'undefined') {
     axisubs.jQuery = jQuery.noConflict();
 }
-
 /* For loading fields based on plan type */
 function loadFieldsOfPlanType(val, id) {
     (function ($) {
@@ -29,6 +28,7 @@ function loadFieldsOfPlanType(val, id) {
             success: function (data) {
                 $('div.axisubs-fields-plantypes-c').html(data);
                 checkForeverIsChoosen();
+                $('#axisub_plan_name').trigger('change');
             }
         });
     })(axisubs.jQuery);
@@ -296,5 +296,72 @@ function checkForeverIsChoosen(){
                 }
             });
         });
+
+        // Uploading files
+        if(wp.media != undefined) {
+            var file_frame;
+            var btn_id;
+            var wp_media_post_id = wp.media.model.settings.post.id; // Store the old id
+            var set_to_post_id = 0; // Set this
+            $(document).on('click', '.upload_image_button_close', function (event) {
+                $(this).prev('.upload_image_preview').attr('src', $(this).attr('data-path'));
+                $("#axisub_plan_image").val('');
+                $("#axisub_plan_image_attachment_id").val('');
+                $(this).removeClass('show').addClass('hide');
+            });
+            $(document).on('click', '.upload_image_button', function (event) {
+                // btn_id = jQuery(this).attr('id');
+                // btn_id = btn_id.replace('upload_image_button_', '');
+                btn_id = 0;
+                event.preventDefault();
+                // If the media frame already exists, reopen it.
+                if (file_frame) {
+                    // Set the post ID to what we want
+                    file_frame.uploader.uploader.param('post_id', set_to_post_id);
+                    // Open frame
+                    file_frame.open();
+                    return;
+                } else {
+                    // Set the wp.media post id so the uploader grabs the ID we want when initialised
+                    wp.media.model.settings.post.id = set_to_post_id;
+                }
+                // Create the media frame.
+                file_frame = wp.media.frames.file_frame = wp.media({
+                    title: 'Select a image to upload',
+                    button: {
+                        text: 'Use this image',
+                    },
+                    multiple: true	// Set to true to allow multiple files to be selected
+                });
+                // When an image is selected, run a callback.
+                file_frame.on('select', function () {
+                    var selection = file_frame.state().get('selection');
+                    var images = '';
+                    var image_ids = '';
+                    var id_list = [];
+                    var image_list = {};
+                    var image = {};
+
+                    selection.map(function (attachment) {
+                        attachment = attachment.toJSON();
+                        //console.log(attachment);
+                        if (attachment.url != 'undefined') {
+                            image_ids += attachment.id + ',';
+                            id_list.push(attachment.id);
+                            image_list[attachment.id] = attachment.url;
+                            image.id = attachment.id;
+                            image.url = attachment.url;
+                        }
+                    });
+                    //console.log(image_list);
+                    $("#axisub_plan_image").val(image.url);
+                    $("#axisub_plan_image").prev().prev('.upload_image_preview').attr('src', image.url);
+                    $("#axisub_plan_image_attachment_id").val(image.id);
+                    $('.upload_image_button_close').removeClass('hide').addClass('show');
+                });
+                // Finally, open the modal
+                file_frame.open();
+            });
+        }
     });
 })(axisubs.jQuery);

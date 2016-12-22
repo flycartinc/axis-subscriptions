@@ -125,6 +125,18 @@ class Customers extends Post{
     }
 
     /**
+     * get Customer Details
+     * */
+    public static function getCustomerDetails($id){
+        $item = Post::where('post_type', 'axisubs_user_'.$id)->first();
+        if($item) {
+            $meta = $item->meta()->pluck('meta_value', 'meta_key')->toArray();
+            $item->meta = $meta;
+        }
+        return $item;
+    }
+
+    /**
      * load subscription with plan based on wp userid
      * */
     public static function loadSubscriptionsByUserId($id){

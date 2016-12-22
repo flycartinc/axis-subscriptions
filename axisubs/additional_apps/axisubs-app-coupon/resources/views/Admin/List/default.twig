@@ -1,0 +1,69 @@
+<div class="axisubs wrap">
+    <h2>{{ pagetitle }}
+    </h2>
+    <div class="page-btn">
+    <a class="page-title-action" href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-coupon">Add New</a>
+  </div>
+    <form method="post" id="axisubs_list_form axis_coupon_list" action="?page=app-index&task=view&p=axisubs-app-coupon">
+      <div class="axis-coupon">
+      <div class="axisubs-list">
+        <table class="wp-list-table widefat fixed striped coupons" width="100%">
+            <thead>
+                <tr>
+                    <th scope="col" id="name" class="manage-column column-name column-primary"><span>Name</span></th>
+                    <th scope="col" id="code" class="manage-column column-name column-primary"><span>Code</span></th>
+                    <th scope="col" id="status" class="manage-column column-name column-primary"><span>Status</span></th>
+                    <th scope="col" id="value-type" class="manage-column column-name column-primary"><span>Value type</span></th>
+                    <th scope="col" id="value" class="manage-column column-name column-primary"><span>Value</span></th>
+                    <th scope="col" id="v-from" class="manage-column column-name column-primary"><span>Valid from</span></th>
+                    <th scope="col" id="v-to" class="manage-column column-name column-primary"><span>Valid to</span></th>
+                </tr>
+            </thead>
+            <tbody id="the-list">
+            {% for key, item in items %}
+                {% set metaPrefix = item['ID']~'_'~item['post_type']~'_' %}
+                {% set meta = item['meta'] %}
+                <tr id="row{{ key%2 }}" class="iedit author-self status-publish format-standard hentry">
+                    <td class="title column-title has-row-actions column-primary" data-colname="Title"><div class="coupon-name">{{ meta[metaPrefix~'name'] }}</div>
+                      <div class="row-actions">
+                          <span class="edit">
+                            <a href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-coupon&id={{ item['ID'] }}">Edit</a> | </span>
+                          <a href="?page=app-index&task=appTask&apptask=delete&p=axisubs-app-coupon&id={{ item['ID'] }}">Delete</a> | </span>
+                          <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                      </div>
+                    </td>
+                    <td class="status column-id" data-colname="Id">{{ meta[metaPrefix~'code'] }}</td>
+                    <td class="status column-status" data-colname="Status">
+                        {% if meta[metaPrefix~'status'] == '1' %}
+                            Enabled
+                        {% else %}
+                            Disabled
+                        {% endif %}
+                    </td>
+                    <td class="status column-percent" data-colname="Percent">
+                        {% if meta[metaPrefix~'value_type'] == 'percent' %}
+                            Percent
+                        {% else %}
+                            Fixed
+                        {% endif %}
+                    </td>
+                    <td class="status column-value" data-colname="Value">{{ meta[metaPrefix~'value'] }}</td>
+                    <td class="status column-valid-from" data-colname="Valid from">{{ meta[metaPrefix~'valid_from'] }}</td>
+                    <td class="status column-valid-to" data-colname="Valid to">{{ meta[metaPrefix~'valid_to'] }}</td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">No coupons available</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+        {% if items|length > 5 %}
+            {{ paginationD['limitbox'] | raw }}
+            {{ paginationD['links'] | raw }}
+        {% endif %}
+     </form>
+</div>

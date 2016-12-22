@@ -9,6 +9,8 @@ namespace Axisubs\Controllers;
 
 use Herbert\Framework\Http;
 use Herbert\Framework\Notifier;
+use Axisubs\AxisubsEnqueue;
+use Axisubs\Helper\Common;
 
 class Controller
 {
@@ -16,6 +18,9 @@ class Controller
     public $_path = 'Admin';
     public $_package = 'Axisubs';
 
+    public function __construct($properties=null) {
+        AxisubsEnqueue::axisubsEnqueueFiles();
+    }
     /**
      * For ajax Call
      * */
@@ -61,6 +66,7 @@ class Controller
         if(class_exists($className)){
             $object = new $className();
             if(method_exists($object, $task)){
+                Common::setCustomerDetailsInSession();
                 return $object->$task();
             } else {
                 return $object->index(); // Load default page
@@ -107,7 +113,7 @@ class Controller
     /**
      * For get / generate dynamic url
      * */
-    public function getAxiSubsURLs($view, $task = '', $id = '', $slug = ''){
+    public function getAxiSubsURLs($view, $task = '', $id = '', $slug = '', $additionalQueryString = ''){
         $customPermalink = get_option('permalink_structure');
         $permalinkPlain = $customPermalink ? 0: 1;
         $url = get_site_url();
@@ -120,12 +126,16 @@ class Controller
                     $url .= '&slug='.$slug;
                 if($id)
                     $url .= '&id='.$id;
+                if($additionalQueryString)
+                    $url .= '&'.$additionalQueryString;
             } else if($view == 'subscribe'){
                 $url .= '/index.php?axisubs_subscribes=subscribe';
                 if($task)
                     $url .= '&task='.$task;
                 if($id)
                     $url .= '&sid='.$id;
+                if($additionalQueryString)
+                    $url .= '&'.$additionalQueryString;
             }
         } else {
             $prefix = '';
@@ -141,12 +151,16 @@ class Controller
                     $url .= '/'.$slug;
                 if($id)
                     $url .= '/'.$id;
+                if($additionalQueryString)
+                    $url .= '?'.$additionalQueryString;
             } else if($view == 'subscribe'){
                 $url .= $prefix.'/axisubs/subscribe';
                 if($task)
                     $url .= '/'.$task;
                 if($id)
                     $url .= '/'.$id;
+                if($additionalQueryString)
+                    $url .= '?'.$additionalQueryString;
             }
         }
         return $url;

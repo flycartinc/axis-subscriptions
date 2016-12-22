@@ -11,6 +11,20 @@
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Axisubs\Models\Admin\Setup;
 
+if (version_compare(phpversion(), '5.6.0', '<')) {
+    axisub_trigger_error('This Plugin support only in PHP v5.6.0 and higher.', E_USER_ERROR);
+}
+
+function axisub_trigger_error($message, $errno) {
+    if(isset($_GET['action'])
+        && $_GET['action'] == 'error_scrape') {
+        echo '<strong>' . $message . '</strong>';
+        exit;
+    } else {
+        trigger_error($message, $errno);
+    }
+}
+
 Capsule::schema()->dropIfExists('axisubs_zones');
 Capsule::schema()->create('axisubs_zones', function($table)
 {

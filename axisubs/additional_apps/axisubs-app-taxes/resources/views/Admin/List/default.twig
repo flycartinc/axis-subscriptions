@@ -1,0 +1,51 @@
+<div class="axisubs wrap">
+    <h2>{{ pagetitle }}
+    </h2>
+    <div class="page-btn">
+    <a class="page-title-action" href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-taxes">Add New</a>
+    <a class="page-title-action" href="?page=app-index&task=appTask&apptask=editConfig&p=axisubs-app-taxes">Tax Settings</a>
+  </div>
+    <form method="post" id="axisubs_list_form axis_coupon_list" action="?page=app-index&task=view&p=axisubs-app-taxes">
+      <div class="axis-coupon">
+      <div class="axisubs-list">
+        <table class="wp-list-table widefat fixed striped coupons" width="100%">
+            <thead>
+                <tr>
+                    <th scope="col" id="name" class="manage-column column-name column-primary"><span>Tax Name</span></th>
+                    <th scope="col" id="code" class="manage-column column-name column-primary"><span>Country</span></th>
+                    <th scope="col" id="status" class="manage-column column-name column-primary"><span>Province</span></th>
+                    <th scope="col" id="value-type" class="manage-column column-name column-primary"><span>Tax Rate (%)</span></th>
+                </tr>
+            </thead>
+            <tbody id="the-list">
+            {% for key, item in items %}
+                <tr id="row{{ key%2 }}" class="iedit author-self status-publish format-standard hentry">
+                    <td class="title column-title has-row-actions column-primary" data-colname="Title"><div class="coupon-name">{{ item['tax_rate_name'] }}</div>
+                      <div class="row-actions">
+                          <span class="edit">
+                            <a href="?page=app-index&task=appTask&apptask=edit&p=axisubs-app-taxes&id={{ item['axisubs_taxrate_id'] }}">Edit</a> | </span>
+                          <a href="?page=app-index&task=appTask&apptask=delete&p=axisubs-app-taxes&id={{ item['axisubs_taxrate_id'] }}">Delete</a> | </span>
+                          <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                      </div>
+                    </td>
+                    <td class="status column-id" data-colname="Id">
+                        {{ data['countries'][item['tax_rate_country']] }}
+                    </td>
+                    <td class="status column-value" data-colname="Value">{{ item['province_name'] }}</td>
+                    <td class="status column-valid-from" data-colname="Valid from">{{ item['tax_rate'] }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No Tax available</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+        {% if items|length > 5 %}
+            {{ paginationD['limitbox'] | raw }}
+            {{ paginationD['links'] | raw }}
+        {% endif %}
+     </form>
+</div>

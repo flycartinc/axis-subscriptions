@@ -1,6 +1,6 @@
 <div class="axisubs wrap">
-    <h1>{{ pagetitle }}
-    </h1>
+    <h2>{{ pagetitle }}
+    </h2>
     {% set metaPrefix = item['ID']~'_axis_paypal_config_' %}
     <form method="post" action="?page=app-index&task=appTask&p=axisubs-app-payment-paypal">
         <div class="axisubs-fields-con">
@@ -128,7 +128,7 @@
                     <input type="hidden" name="task" value="appTask"/>
                     <input type="hidden" name="apptask" value="save"/>
                 </div>
-                <div class="axisubs-fields-content">
+                <div class="axisubs-fields-content page-btn">
                     <button type="submit" class="btn page-title-action">Save</button>
                     <a href="?page=app-index" class="btn page-title-action">Cancel</a>
                 </div>

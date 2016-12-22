@@ -1,0 +1,11 @@
+{% set subscriptionPrefix = subscription['ID']~'_'~subscription['post_type']~'_' %}
+{% if(subscription['meta'][subscriptionPrefix~'discount']>0) %}
+    <tr>
+        <td>
+            Discount
+        </td>
+        <td>
+            {{ data['currencyData']['code'] }}{{ subscription['meta'][subscriptionPrefix~'discount'] }}
+        </td>
+    </tr>
+{% endif %}

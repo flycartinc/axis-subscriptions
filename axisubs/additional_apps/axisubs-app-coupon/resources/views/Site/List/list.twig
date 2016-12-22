@@ -1,0 +1,96 @@
+<style>
+    .axisubs_coupon_remove {
+        color: red;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: bold;
+    }
+    .axisubs_coupon_code_con {
+        background: #08c none repeat scroll 0 0;
+        border-radius: 2px;
+        color: #fff;
+        display: inline-block;
+        padding: 0 5px;
+    }
+</style>
+{% if(couponCode != '') %}
+    {% set itemPrefix = item['ID']~'_'~item['post_type']~'_' %}
+<div class="content-plan">
+    <div class="plan_list">
+        <div class="axisubs-plan-total-fee-text">
+            <strong>Discount</strong>
+            <span class="axisubs_coupon_amount_con">
+                <span>
+                    {% if(item['meta'][itemPrefix~'value_type'] == 'percent') %}
+                        {{ item['meta'][itemPrefix~'value'] }}%
+                    {% else %}
+                        {{ data['currencyData']['code'] }}{{ item['meta'][itemPrefix~'value'] }}
+                    {% endif %}
+                </span>
+            </span>
+                <span class="axisubs_coupon_code_con">
+                    <span>{{ item['meta'][itemPrefix~'code'] }}</span>
+                    <span title="Remove coupon" onclick="removeCoupon()" class="axisubs_coupon_remove hastip">X</span>
+                </span>
+        </div>
+    </div>
+    <div class="axisubs-plan-prices">
+        <div class="axisubs-plan-total-fee-amt">
+           - {{ data['currencyData']['code'] }}{{ discountValue }}
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    if(typeof(axisubs) == 'undefined') {
+        var axisubs = {};
+    }
+    if(typeof(axisubs.jQuery) == 'undefined') {
+        axisubs.jQuery = jQuery.noConflict();
+    }
+
+    function removeCoupon(){
+        (function ($) {
+            var data = {
+                action: 'axisubs_ajax',
+                view: 'Plan', task: 'app',
+                app: 'axisubs-app-coupon',
+                apptask: 'removeCoupon'}
+            $.ajax({
+                type: 'post',
+                url: $('#site_url').val()+'/wp-admin/admin-ajax.php',
+                data: data,
+                dataType: 'json',
+                beforeSend: function () {
+                    $('.axisubs_coupon_remove').attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    {% if(data['page'] == 'confirm') %}
+                        window.history.back();
+                    {% else %}
+                        window.location.reload();
+                    {% endif %}
+                }
+            });
+        })(axisubs.jQuery);
+    }
+    /*For refresh the page while remove coupon in confirm page.*/
+    (function ($) {
+        $(document).ready(function()
+        {
+            var d = new Date();
+            d = d.getTime();
+            if ($('#reloadValue').val().length == 0)
+            {
+                $('#reloadValue').val(d);
+                $('body').show();
+            }
+            else
+            {
+                $('#reloadValue').val('');
+                location.reload();
+            }
+        });
+    })(axisubs.jQuery);
+</script>
+    <input id="reloadValue" type="hidden" name="reloadValue" value="" />
+{% endif %}

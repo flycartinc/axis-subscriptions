@@ -10,10 +10,28 @@ namespace Axisubs\Helper;
 
 class Status
 {
+    /**
+     * get status text
+     * */
     public function getStatusText($code){
         return $this->getTextFromCode($code);
     }
 
+    /**
+     * get status text in HTML
+     * */
+    public function getStatusTextInHTML($code){
+        $status = Status::getAllStatusCodesWithHtml();
+        if(isset($status[$code])){
+            return $status[$code];
+        } else {
+            return $code;
+        }
+    }
+
+    /**
+     * Status codes
+     * */
     public static function getAllStatusCodes(){
         $status = array('ORDER_PAGE' => 'New',
             'ACTIVE' => 'Active',
@@ -22,6 +40,20 @@ class Status
             'EXPIRED' => 'Expired',
             'CANCELED' => 'Canceled',
             'FUTURE' => 'Future');
+        return $status;
+    }
+
+    /**
+     * Status codes with html
+     * */
+    public static function getAllStatusCodesWithHtml(){
+        $status = array('ORDER_PAGE' => '<span class="label new">New</span>',
+            'ACTIVE' => '<span class="label active">Active</span>',
+            'PENDING' => '<span class="label pending">Pending</span>',
+            'TRIAL' => '<span class="label in-trial">In Trial</span>',
+            'EXPIRED' => '<span class="label expired">Expired</span>',
+            'CANCELED' => '<span class="label canceled">Canceled</span>',
+            'FUTURE' => '<span class="label future">Future</span>');
         return $status;
     }
 

@@ -1,35 +1,33 @@
 .axisubs-plans-con {
-    background: #f5f5f5 none repeat scroll 0 0;
+    background: #fff none repeat scroll 0 0;
     border: 1px solid #ddd;
-    border-radius: 5px;
     display: inline-block;
     margin: 10px 0;
     width: 230px;
 }
+.axisubs-subscribed-title h3{
+  font-weight: 500 !important;
+  margin-bottom: 15px !important;
+  text-transform: uppercase;
+  font-size: 18px !important;
+}
 .axisubs-plans-con-i {
-    padding: 10px;
     text-align: center;
 }
 .axisubs-plans-title > h3 {
     margin: 10px 0 !important;
 }
-.axisubs-plans-description > p {
-    font-size: 12px;
-    margin: 5px 0;
-}
-.axisubs-plans-duration {
-    padding: 10px 0;
-}
+
 .axisubs-plans-label-block {
     font-weight: bold;
 }
 .axisubs-btn {
     background: #007acc none repeat scroll 0 0;
-    border-radius: 5px;
     color: #fff;
     display: inline-block;
     padding: 5px 10px;
     text-decoration: none;
+    border-radius: 3px;
 }
 .axisubs-btn:hover,
 .axisubs-btn:focus{
@@ -40,15 +38,10 @@
     display: inline-block;
     width: 49%;
 }
-.axisubs-plan_details-title {
-    background: #000 none repeat scroll 0 0;
-    color: #fff;
-    padding: 0 10px;
-}
+
 .axisubs-plan_details-summary,
 .axisubs-plan-billinfo-fields{
-    background: #ddd none repeat scroll 0 0;
-    padding: 10px;
+    background: #fff none repeat scroll 0 0;
 }
 .axisubs-plan-billinfo-con {
     margin: 15px 0;
@@ -62,10 +55,8 @@
 }
 .axisubs-billinfo-f-field {
     display: inline-block;
-}
-.axisubs-plan-payment-i-block{
-    background: #ddd none repeat scroll 0 0;
-    padding: 10px;
+    color: #555;
+    font-size: 14px;
 }
 .axisubs-subscribed-i-block {
     display: inline-block;
@@ -73,17 +64,30 @@
     padding: 5px 10px;
 }
 .axisubs-subscribed-i-con{
-    background: #ddd none repeat scroll 0 0;
-    border-top: 2px solid;
+  border-top: 2px solid #eee;
+  padding: 10px 0;
 }
 .axisubs-subscribed-i-con:last-child{
     border-bottom: 2px solid;
 }
 .axisubs-data-title {
-    font-weight: bold;
+    font-weight: 500;
+    color: #333333;
+}
+.axisubs-data-content{
+  color: #585858;
+}
+.status-content{
+  color: #000;
 }
 .axisubs-subscribed-block-data {
     font-size: 13px;
+}
+.axisubs-subscribed-block-data.row1{
+  padding-bottom: 10px;
+}
+.axisubs-subscribed-block-data a{
+  box-shadow: none !important;
 }
 .axisubs .invalid-field{
     border: 1px solid red !important;
@@ -157,7 +161,7 @@
 }
 .axisubs_payment_each_block {
     display: inline-block;
-    margin: 5px 0;
+    margin: 5px 10px;
 }
 /* pagination */
 .axisubs ul.pagination-ul > li {
@@ -188,6 +192,266 @@
     display: inline-block;
 }
 .axisubs-pagination-cont select {
-    display: inline-block;
-    width: auto;
+  border: 1px solid #dddddd;
+border-radius: 0;
+display: inline-block;
+height: 34px;
+text-align: center;
+width: 55px;
+}
+/* ***** Plan List ***** */
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-con-i .axisubs-plan-title h3{
+  color: #007acc;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 5px;
+}
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-con-i .axisubs-plan-title{
+  background: #ffffff none repeat scroll 0 0;
+  border-bottom: 1px solid #eeeeee;
+  padding: 15px 0px 10px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-con-i .axisubs-price-text{
+  font-size: 25px;
+}
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-description > p {
+    font-size: 12px;
+    line-height: 2;
+    color: #555;
+    margin-bottom: 0px;
+}
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-duration {
+    padding: 8px 0;
+}
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-label-block{
+  font-size: 14px;
+  font-weight: normal;
+}
+.axisubs-plans-lists .axisubs-plans-con .axisubs-plans-text{
+  color: #555;
+}
+.axisubs-plans-lists .axisubs-plans-con-i .axisubs-plans-cost{
+  padding-top: 10px;
+}
+/* ****** My Profile ******** */
+#my_profile .axisubs-plan-billinfo-con .axisubs-plan_details-title h3{
+ margin-bottom: 0px;
+ font-size: 16px;
+ text-transform: uppercase;
+ font-weight: 600;
+}
+#my_profile .axisubs-plan-billinfo-con .axisubs-plan-billinfo-fields{
+  padding: 10px 0;
+}
+#my_profile .axisubs-billinfo-f-c .axisubs-billinfo-f-i .axisubs-billinfo-f-field input{
+  width: 100%;
+  height: 34px;
+  padding: 5px;
+  font-size: 14px;
+  opacity: 1;
+  color: #555;
+  max-width: 212px;
+  border-radius: 0;
+}
+#my_profile .axisubs-billinfo-f-c .axisubs-billinfo-f-i .axisubs-billinfo-f-field select{
+  max-width: 212px;
+  width: 100%;
+  border-radius: 0;
+  border: 1px solid #ddd;
+  height: 34px;
+}
+#my_profile .axisubs-plan-billinfo-con .axisubs-profile-payment-i-block .axisubs-btn{
+  height: 34px;
+  font-size: 14px;
+  outline: none;
+}
+@media(max-width: 307px){
+  .axisubs-billinfo-f-c {
+    width: 100%;
+  }
+}
+
+/* ---- plan checkout  ----*/
+.single-axisubs_plan .axisubs-plan_details{
+  width: 100%;
+  margin-top: 10px;
+}
+.single-axisubs_plan .axisubs-plan_details .axisubs-plan_details-title, .single-axisubs_plan .axisubs-plan_details-header .axisubs-plan-price-title {
+    float: left;
+    color:#999;
+    padding: 0 10px;
+}
+.single-axisubs_plan .axisubs-plan_details .axisubs-plan_details-title{
+    border-right: 1px solid #dddddd;
+    text-align: left;
+    width: 60%;
+}
+.single-axisubs_plan .axisubs-plan_details .axisubs-plan-price-title{
+  width: 40%;
+  margin-right: 5px;
+  color: #999;
+}
+.single-axisubs_plan .axisubs-plan_details .plans-header{
+  display: inline-flex;
+  border: 1px solid #ddd;
+  line-height: 2.6;
+  width: 100%;
+  text-align: right;
+  font-size: 16px;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .content-plan{
+  border-bottom: 1px solid #dddddd;
+  display: inline-flex;
+  width: 100%;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .plan_list{
+  border-color: #dddddd;
+  border-style: solid;
+  border-width: 0 1px 0px;
+  width: 60%;
+  margin-left: 0px;
+  margin-right: 5px;
+    padding: 5px;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .plan_list .list-image{
+  max-width: 115px;
+  width: 100%;
+  float: left;
+  margin-right: 10px;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .plan_list .list-content{
+  display: block;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .plan_list .desc{
+  display: block;
+  font-size: 14px;
+  color: #555;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .axisubs-plan-prices{
+  border-right: 1px solid #dddddd;
+  float: right;
+    padding: 5px 10px 5px 5px;
+  text-align: right;
+  width: 40%;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .axisubs-plan-basic-fee span, .single-axisubs_plan .axisubs-plan_details-summary .axisubs-plan-setup-fee span{
+  color: #1a1a1a;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .axisubs-plan-total-fee{
+  border-color: #dddddd;
+  border-style: solid;
+  border-width: 0 1px 1px;
+  text-align: right;
+  line-height: 2.3;
+  padding-right: 10px;
+  margin-bottom: 20px;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .axisubs-plan-total-fee .axisubs-plan-total-fee-text{
+  line-height: 2.6;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .axisubs-plan-total-fee .axisubs-plan-total-fee-text span{
+  color: #1a1a1a;
+}
+.single-axisubs_plan .axisubs-plan_details-summary #axisub_coupon_code{
+  padding: 7px;
+}
+.single-axisubs_plan .axisubs-plan_details-summary .axisub_coupon_code_btn{
+  background: #007acc;
+  font-size: 14px;
+}
+.single-axisubs_plan .login_registration_tab .login_registration_tab_ul{
+  border-bottom: 1px solid #ddd;
+}
+.single-axisubs_plan .login_registration_tab .login_registration_tab_ul li{
+  margin-bottom: -1px;
+  background: transparent;
+  border-bottom: 3px solid #999999;
+  border-left:1px solid transparent;
+  border-right:1px solid transparent;
+  border-top:1px solid transparent;
+  color: #292d33;
+  font-weight: bold;
+  border-radius: 0;
+  text-transform: uppercase;
+  margin-right: 0;
+  font-size: 14px;
+}
+.single-axisubs_plan .login_registration_tab .login_registration_tab_ul li:hover{
+  border-left:1px solid #ddd;
+  border-right:1px solid #ddd;
+  border-top:1px solid #ddd;
+}
+.single-axisubs_plan .login_registration_tab .login_registration_tab_ul .active{
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  color: #292d33;
+  margin-bottom: -3px;
+  border: 1px solid #ddd;
+  border-bottom: 3px solid #0052cc;
+  border-left:1px solid #ddd;
+  border-right:1px solid #ddd;
+  border-top:1px solid #ddd;
+}
+.single-axisubs_plan .axisubs-plan-payment-button > button{
+  background-color: #007acc;
+  font-size: 14px;
+}
+.single-axisubs_plan .axisubs_registration_form_con #register_user .axisubs-plan-payment-con .payment-method{
+  border: 1px solid #dddddd;
+  padding: 10px;
+}
+
+/* ******* Subscription list ******* */
+.table{
+border-collapse: collapse;
+ border-spacing: 0;
+ border-width: 1px 0 0 1px;
+ margin: 0 0 1.75em;
+ table-layout: fixed;
+ width: 100%;
+}
+#axisubs_list_form{
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+#axisubs_list_form .subscription-list.table{
+  min-width: 500px;
+}
+#axisubs_list_form .subscription-list.table tbody tr td{
+  font-size: 13px;
+}
+#axisubs_list_form .subscription-list .label{
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: #ffffff;
+  background-color: #555;
+}
+#axisubs_list_form .subscription-list .new{
+  background-color: #FDA900
+}
+#axisubs_list_form .subscription-list .active {
+  background-color: #68ac23
+}
+#axisubs_list_form .subscription-list .pending{
+  background-color: #0098CC;
+}
+#axisubs_list_form .subscription-list .in-trial{
+  background-color: #008000;
+}
+#axisubs_list_form .subscription-list .expired{
+  background-color: #B81C36;
+}
+#axisubs_list_form .subscription-list .canceled{
+  background-color: #ff0000;
+}
+#axisubs_list_form .subscription-list .future{
+  background-color: #936DC0;
+}
+.single-axisubs_subscribes .axisubs-plan_details-summary table{
+  margin: 10px 0;
+}
+.axisubs-btn.axisubs-upgrade-btn {
+    background: green none repeat scroll 0 0;
+    margin: 5px 0;
 }

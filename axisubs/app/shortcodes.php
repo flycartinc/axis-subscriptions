@@ -11,6 +11,24 @@ $shortcode->add(
     ]
 );
 
+//For displaying selected plans
+$shortcode->add(
+    'AxisubsSelectedPlans',
+    __NAMESPACE__ . '\Controllers\Site\Plan@selectedPlans',
+    [
+        'id' => 'id'
+    ]
+);
+
+//For Loading Subscribe button [AxisubsSubscribeButton id=5]
+$shortcode->add(
+    'AxisubsSubscribeButton',
+    __NAMESPACE__ . '\Controllers\Site\Plan@showSubscribeButton',
+    [
+        'id' => 'id'
+    ]
+);
+
 //For displaying Subscriptions
 $shortcode->add(
     'AxisubsAllSubscriptions',

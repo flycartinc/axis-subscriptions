@@ -133,6 +133,11 @@ function submitSubscriptions(){
                         meesageText.addClass('message-success');
                         window.location.href = json['redirect'];
                     } else {
+                        if(json['invalidfields'] != undefined){
+                            $.each( json['invalidfields'], function( key, value ) {
+                                $('#axisubs_subscribe_'+key).addClass('invalid-field')
+                            });
+                        }
                         meesageText.addClass('message-danger');
                     }
                 },

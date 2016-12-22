@@ -24,14 +24,30 @@ class PaymentPlugins
     }
 
     /**
+     * Get All payment apps
+     * */
+    public function getAllPaymentApps(){
+        $apps = App::getActivePaymentApps(0);
+
+        return $apps;
+    }
+
+    /**
      * Get payment radio buttons
      * */
-    public function loadPaymentOptions(){
+    public function loadPaymentOptions($item){
         $apps = $this->getActivePaymentApps();
         $html = '';
+        $planPrefix = $item->ID.'_'.$item->post_type.'_';
+        $selectedPayment = isset($item->meta[$planPrefix.'payment_plugins']) ? $item->meta[$planPrefix.'payment_plugins'] : '';
         if(count($apps)){
             foreach ($apps as $key => $value){
-                $html .= Event::trigger( $value['pluginFolder'].'_paymentOptionRadio', '', 'filter');
+                if($selectedPayment == ''){
+                    $html .= Event::trigger( $value['pluginFolder'].'_paymentOptionRadio', '', 'filter');
+                } else if(in_array($value['pluginFolder'], explode(",", $selectedPayment))){
+                    $html .= Event::trigger( $value['pluginFolder'].'_paymentOptionRadio', '', 'filter');
+                }
+
             }
         }
         return $html;

@@ -42,6 +42,11 @@ function disableTags(id, val){
 
 (function ($) {
     $(document).ready(function () {
+        if($('.axisubs_date').length) {
+            $('.axisubs_date').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        }
         $('.axisubs_country').change(function() {
             var postData = {
                 code: jQuery(this).val(),

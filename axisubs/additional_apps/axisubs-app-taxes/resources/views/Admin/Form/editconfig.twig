@@ -1,0 +1,145 @@
+<div class="axisubs wrap">
+    <h2>{{ pagetitle }}
+    </h2>
+    {% set metaPrefix = item['ID']~'_'~item['post_type']~'_' %}
+    <form method="post" id="tax_form" action="?page=app-index&task=appTask&p=axisubs-app-taxes">
+        <div class="axisubs-fields-con">
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_enable">Enable Tax</label>
+                </div>
+                {% set enable_tax = item['meta'][metaPrefix~'enable'] %}
+                {% if(enable_tax == '') %}
+                    {% set enable_tax = 1 %}
+                {% endif %}
+                <div class="axisubs-fields-content">
+                    <input type="radio" name="axisubs[config][enable]" id="axisub_config_enable1" value="1" {% if enable_tax == '1' %} checked {% endif %}>
+                    <label for="axisub_config_enable1">Yes</label>
+                    <input type="radio" name="axisubs[config][enable]" id="axisub_config_enable0" value="0" {% if enable_tax == '0' %} checked {% endif %}>
+                    <label for="axisub_config_enable0">No</label>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_tax_type">Tax type</label>
+                </div>
+                <div class="axisubs-fields-content">
+                    <select name="axisubs[config][tax_type]" id="axisub_config_tax_type" >
+                        <option value="excluding_tax" {% if item['meta'][metaPrefix~'tax_type'] == 'excluding_tax' %} selected {% endif %}>Excluding tax</option>
+                        <option value="including_tax" {% if item['meta'][metaPrefix~'tax_type'] == 'including_tax' %} selected {% endif %}>Including tax</option>
+                    </select>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_display_tax_info">Display tax information below the prices</label>
+                </div>
+                {% set display_tax_info = item['meta'][metaPrefix~'display_tax_info'] %}
+                {% if(display_tax_info == '') %}
+                    {% set display_tax_info = 1 %}
+                {% endif %}
+                <div class="axisubs-fields-content">
+                    <input type="radio" name="axisubs[config][display_tax_info]" id="axisub_config_display_tax_info1" value="1" {% if display_tax_info == '1' %} checked {% endif %}>
+                    <label for="axisub_config_display_tax_info1">Yes</label>
+                    <input type="radio" name="axisubs[config][display_tax_info]" id="axisub_config_display_tax_info0" value="0" {% if display_tax_info == '0' %} checked {% endif %}>
+                    <label for="axisub_config_display_tax_info0">No</label>
+                    <span class="help-text">Example: (Incl. 19% tax). NOTE: This applies only to Plan pages.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <h3>EU Vat Settings</h3>
+                </div>
+                <div class="axisubs-fields-content">
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_enable_eu_vat">Enable EU Vat</label>
+                </div>
+                {% set enable_eu_vat = item['meta'][metaPrefix~'enable_eu_vat'] %}
+                {% if(enable_eu_vat == '') %}
+                    {% set enable_eu_vat = 0 %}
+                {% endif %}
+                <div class="axisubs-fields-content">
+                    <input type="radio" name="axisubs[config][enable_eu_vat]" id="axisub_config_enable_eu_vat1" value="1" {% if enable_eu_vat == '1' %} checked {% endif %}>
+                    <label for="axisub_config_enable_eu_vat1">Yes</label>
+                    <input type="radio" name="axisubs[config][enable_eu_vat]" id="axisub_config_enable_eu_vat0" value="0" {% if enable_eu_vat == '0' %} checked {% endif %}>
+                    <label for="axisub_config_enable_eu_vat0">No</label>
+                    <span class="help-text"></span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_no_tax_for_non_eu">No tax for Non-EU</label>
+                </div>
+                {% set no_tax_for_non_eu = item['meta'][metaPrefix~'no_tax_for_non_eu'] %}
+                {% if(no_tax_for_non_eu == '') %}
+                    {% set no_tax_for_non_eu = 0 %}
+                {% endif %}
+                <div class="axisubs-fields-content">
+                    <input type="radio" name="axisubs[config][no_tax_for_non_eu]" id="axisub_config_no_tax_for_non_eu1" value="1" {% if no_tax_for_non_eu == '1' %} checked {% endif %}>
+                    <label for="axisub_config_no_tax_for_non_eu1">Yes</label>
+                    <input type="radio" name="axisubs[config][no_tax_for_non_eu]" id="axisub_config_no_tax_for_non_eu0" value="0" {% if no_tax_for_non_eu == '0' %} checked {% endif %}>
+                    <label for="axisub_config_no_tax_for_non_eu0">No</label>
+                    <span class="help-text">Choose yes, if you DONT want to charge tax for the Non-EU customers</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_apply_digital_rules">Apply Digital Rules</label>
+                </div>
+                {% set apply_digital_rules = item['meta'][metaPrefix~'apply_digital_rules'] %}
+                {% if(apply_digital_rules == '') %}
+                    {% set apply_digital_rules = 0 %}
+                {% endif %}
+                <div class="axisubs-fields-content">
+                    <input type="radio" name="axisubs[config][apply_digital_rules]" id="axisub_config_apply_digital_rules1" value="1" {% if apply_digital_rules == '1' %} checked {% endif %}>
+                    <label for="axisub_config_apply_digital_rules1">Yes</label>
+                    <input type="radio" name="axisubs[config][apply_digital_rules]" id="axisub_config_apply_digital_rules0" value="0" {% if apply_digital_rules == '0' %} checked {% endif %}>
+                    <label for="axisub_config_apply_digital_rules0">No</label>
+                    <span class="help-text">Choose yes, only for digital product subscriptions.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <label for="axisub_config_validate_vat_number">Validate Tax Number field</label>
+                </div>
+                {% set validate_vat_number = item['meta'][metaPrefix~'validate_vat_number'] %}
+                {% if(validate_vat_number == '') %}
+                    {% set validate_vat_number = 1 %}
+                {% endif %}
+                <div class="axisubs-fields-content">
+                    <input type="radio" name="axisubs[config][validate_vat_number]" id="axisub_config_validate_vat_number1" value="1" {% if validate_vat_number == '1' %} checked {% endif %}>
+                    <label for="axisub_config_validate_vat_number1">Yes</label>
+                    <input type="radio" name="axisubs[config][validate_vat_number]" id="axisub_config_validate_vat_number0" value="0" {% if validate_vat_number == '0' %} checked {% endif %}>
+                    <label for="axisub_config_validate_vat_number0">No</label>
+                    <span class="help-text">If yes, Tax Number field will validate and shows error before submitting.</span>
+                </div>
+            </div>
+            <div class="axisubs-fields">
+                <div class="axisubs-fields-label">
+                    <input type="hidden" name="id" value="{{ item['ID'] }}" id="config_id"/>
+                    <input type="hidden" name="task" value="appTask"/>
+                    <input type="hidden" name="apptask" value="saveConfig"/>
+                    <input type="hidden" name="site_url" value="{{ site_url }}" id="site_url"/>
+                </div>
+                <div class="axisubs-fields-content page-btn">
+                    <button type="button" onclick="validateTaxForm()" class="btn page-title-action">Save</button>
+                    <a href="?page=app-index&task=view&p=axisubs-app-taxes" class="btn page-title-action">Cancel</a>
+                </div>
+            </div>
+        </div>
+     </form>
+</div>
+<script type="application/javascript">
+    // For validating Form
+    function validateTaxForm(){
+        (function($){
+            var valid = validateRequiredFields('#tax_form');
+            if(valid){
+                $('#tax_form').submit();
+            }
+        })(axisubs.jQuery);
+    }
+</script>

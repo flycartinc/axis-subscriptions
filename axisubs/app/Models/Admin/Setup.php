@@ -13,7 +13,7 @@ class Setup extends Post
 {
 
     /**
-     * Cart constructor.
+     * constructor.
      */
     public function __construct()
     {
@@ -25,8 +25,8 @@ class Setup extends Post
      */
     public static function installAdditionalPlugins()
     {
-        $oldfolderpath = __DIR__ . '/../../../additional_apps/';
-        $newfolderpath = __DIR__ . '/../../../../';
+        $oldfolderpath = AXISUBS_PLUGIN_PATH . 'additional_apps/';
+        $newfolderpath = WP_PLUGIN_DIR;
         if (self::full_copy($oldfolderpath, $newfolderpath)) {
             self::activatePlugins();
         }
@@ -39,7 +39,11 @@ class Setup extends Post
     public static function getPluginList()
     {
         return [
-            'axisubs-app-payment-paypal' => 'axisubs-app-payment-paypal/plugin.php'
+            'axisubs-app-payment-paypal' => 'axisubs-app-payment-paypal/plugin.php',
+            'axisubs-app-coupon' => 'axisubs-app-coupon/plugin.php',
+            'axisubs-app-content-restriction' => 'axisubs-app-content-restriction/plugin.php',
+            'axisubs-app-payment-stripe' => 'axisubs-app-payment-stripe/plugin.php',
+            'axisubs-app-taxes' => 'axisubs-app-taxes/plugin.php'
         ];
     }
 
@@ -50,9 +54,9 @@ class Setup extends Post
      */
     public static function verifyExistence(&$folders)
     {
-        $path = __DIR__ . '/../../../../';
+        $path = WP_PLUGIN_DIR;
         foreach ($folders as $index => $folder) {
-            if (!file_exists($path . $folder)) {
+            if (!file_exists($path .'/'. $folder)) {
                 unset($folders[$index]);
             }
         }

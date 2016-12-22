@@ -2,76 +2,90 @@
 
 {% block body %}
 <div class="axisubs wrap">
-    <h1>{{ pagetitle }}
-        <a class="page-title-action" href="?page=plans-index&task=edit">Add New</a>
-    </h1>
+    <h2>{{ pagetitle }}
+    </h2>
+    <div class="page-btn">
+    <a class="page-title-action" href="?page=plans-index&task=edit">Add New</a>
+    {{ data['additional_buttons'] | raw }}
+    <div class="axisubs-message-ajax">
+    </div>
+  </div>
 
     <form method="post" action="?page=plans-index" id="axisubs_list_form">
         <div class="axisubs-plans">
-            <div class="axisubs-plans">
-                {% for item in items %}
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="col-data">
-                                <span class="col-data-title">Name: </span>
-                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</span>
-                            </div>
-                            <div class="col-data">
-                                <span class="col-data-title">Status: </span>
+            <div class="axisubs-list">
+                <table class="wp-list-table widefat fixed striped plans">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="name" class="manage-column column-name column-primary"><span>Name</span></th>
+
+                        <th scope="col" id="status" class="manage-column column-status"><span>Status</span></th>
+
+                        <th scope="col" id="p-slug" class="manage-column column-planslug"><span>Slug</span></th>
+
+                        <th scope="col" id="period" class="manage-column column-period"><span>Period</span></th>
+
+                        <th scope="col" id="country" class="manage-column column-country"><span>Price</span></th>
+
+                        <th scope="col" id="setup-cost" class="manage-column column-setupcost"><span>Setup cost</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="the-list">
+                    {% for item in items %}
+                        <tr id="plan-1" class="iedit author-self type-plan-list status-publish format-standard hentry">
+                            <td class="title column-title has-row-actions column-primary plan-title" data-colname="Title">
+                              <div class="plane-name">{{ item['meta'][item['ID']~'_axisubs_plans_name'] }}</div>
+                                <div class="plan_id">
+                                Plan Id: {{ item['ID'] }}
+                                </div>
+                                <div class="row-actions">
+                                    <span class="edit"><a href="?page=plans-index&task=edit&id={{ item['ID'] }}">Edit</a> | </span>
+                                    <a href="?page=plans-index&task=delete&id={{ item['ID'] }}">Delete</a> | </span>
+                                </div>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                            </td>
+                            <td class="status column-status" data-colname="Status">
                                 {% if(item['meta'][item['ID']~'_axisubs_plans_status'] == 1) %}
                                     {% set statusTest = 'Enabled' %}
                                 {% else %}
                                     {% set statusTest = 'Disabled' %}
                                 {% endif %}
-                                <span class="col-data-content">{{ statusTest }}</span>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="col-data">
-                                <span class="col-data-title">Slug: </span>
-                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}</span>
-                            </div>
-                            <div class="col-data">
-                                <span class="col-data-title">Period: </span>
-                                <span class="col-data-content">{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}</span>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="col-data">
-                                <span class="col-data-title">Price: </span>
+                                <span>{{ statusTest }}  </span>
+                            </td>
+                            <td class="slug column-slug" data-colname="Slug">
+                                <span>{{ item['meta'][item['ID']~'_axisubs_plans_slug'] }}</span>
+                            </td>
+                            <td class="period column-period" data-colname="Period">
+                                <span>{{ item['meta'][item['ID']~'_axisubs_plans_period'] }}</span>
+                            </td>
+                            <td class="price column-price" data-colname="price">
                                 {% if item['meta'][item['ID']~'_axisubs_plans_price'] %}
                                     {% set price = currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_price'] %}
                                 {% else %}
                                     {% set price = '-' %}
                                 {% endif %}
-                                <span class="col-data-content">{{ price }}</span>
-                            </div>
-                            <div class="col-data">
-                                <span class="col-data-title">Setup cost: </span>
+                                <span>{{ price }}</span>
+                            </td>
+                            <td class="setup-cost column-cost" data-colname="cost">
                                 {% if item['meta'][item['ID']~'_axisubs_plans_setup_cost'] %}
                                     {% set setupcost = currencyData['code']~item['meta'][item['ID']~'_axisubs_plans_setup_cost'] %}
                                 {% else %}
                                     {% set setupcost = '-' %}
                                 {% endif %}
-                                <span class="col-data-content">{{ setupcost }}</span>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="col-data">
-                                <span class="col-data-content">
-                                    <a class="page-title-action" href="?page=plans-index&task=edit&id={{ item['ID'] }}">Edit</a>
-                                </span>
-                                 <span class="col-data-content">
-                                    <a class="page-title-action" href="?page=plans-index&task=delete&id={{ item['ID'] }}">Delete</a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="row">
-                        No plans added.
-                    </div>
-                {% endfor %}
+                                <span>{{ setupcost }}</span>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6">
+                                <div class="row">
+                                    No plans added.
+                                </div>
+                            <td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
             {{ paginationD['limitbox'] | raw }}
             {{ paginationD['links'] | raw }}

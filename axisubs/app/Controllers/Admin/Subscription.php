@@ -17,6 +17,7 @@ use Axisubs\Helper\Pagination;
 use Axisubs\Controllers\Controller;
 use Axisubs\Models\Admin\Customers;
 use Axisubs\Helper\Countries;
+use Axisubs\Models\Site\Plans;
 
 class Subscription extends Controller
 {
@@ -40,12 +41,14 @@ class Subscription extends Controller
                 $planDetails = Subscriptions::loadPlan($subscriber->meta[$subscriber->ID.'_axisubs_subscribe_plan_id']);
                 $status = new Status();
                 $statusCode = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_status'];
-                $statusText = $status->getStatusText($statusCode);
+                $statusText = $status->getStatusTextInHTML($statusCode);
                 $custCountry = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_country'];
                 $custProvince = $subscriber->meta[$subscriber->ID.'_axisubs_subscribe_province'];
                 $data['country'] = Countries::getCountryName($custCountry);
                 $modelZone = $this->getModel('Zones');
                 $data['province'] = $modelZone->getProvinceName($custProvince, $custCountry);
+                $planModel = new Plans();
+                $planModel->preProcessSubscription($subscriber, $data);
             }
 
             return view('@Axisubs/Admin/subscriptions/detail.twig', compact('pagetitle', 'subscriber', 'currencyData', 'site_url', 'planDetails', 'statusText', 'data'));
@@ -53,10 +56,11 @@ class Subscription extends Controller
         Subscriptions::populateStates($http->all());
         // Load Listing layout
         $items = Subscriptions::all();
+        $data['statusText'] = Status::getAllStatusCodesWithHtml();
         $pagination = new Pagination(Subscriptions::$_start, Subscriptions::$_limit, Subscriptions::$_total);
         $paginationD['limitbox'] = $pagination->getLimitBox();
         $paginationD['links'] = $pagination->getPaginationLinks();
-        return view('@Axisubs/Admin/subscriptions/list.twig', compact('pagetitle', 'items', 'paginationD', 'currencyData'));
+        return view('@Axisubs/Admin/subscriptions/list.twig', compact('pagetitle', 'items', 'paginationD', 'currencyData', 'data'));
     }
 
     /**

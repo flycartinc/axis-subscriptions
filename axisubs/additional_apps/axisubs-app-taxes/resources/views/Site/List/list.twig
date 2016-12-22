@@ -1,0 +1,43 @@
+{% for key, tax_detail in tax_details %}
+    <div class="content-plan">
+        <div class="plan_list">
+            <div class="axisubs-plan-total-fee-text">
+                <strong>{{ tax_detail.label~' ('~tax_detail.rate~'%)' }}</strong>
+            </div>
+        </div>
+        <div class="axisubs-plan-prices">
+            <div class="axisubs-plan-total-fee-amt">
+                {{ data['currencyData']['code'] }}{{ tax_detail.price }}
+            </div>
+        </div>
+    </div>
+{% else %}
+{% endfor %}
+{% if(plan['additionalPrice']['discount_tax']) %}
+    <div class="content-plan">
+        <div class="plan_list">
+            <div class="axisubs-plan-total-fee-text">
+                <strong>Discount Tax</strong>
+            </div>
+        </div>
+        <div class="axisubs-plan-prices">
+            <div class="axisubs-plan-total-fee-amt">
+                {{ data['currencyData']['code'] }}{{ plan['additionalPrice']['discount_tax'] }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if(plan['additionalPrice']['tax_total'] > 0) %}
+<div class="content-plan">
+    <div class="plan_list">
+        <div class="axisubs-plan-total-fee-text">
+            <strong>Total Tax</strong>
+        </div>
+    </div>
+    <div class="axisubs-plan-prices">
+        <div class="axisubs-plan-total-fee-amt">
+            {{ data['currencyData']['code'] }}{{ plan['additionalPrice']['tax_total'] }}
+        </div>
+    </div>
+</div>
+{% endif %}
